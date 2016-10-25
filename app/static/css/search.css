@@ -1,0 +1,29 @@
+body {
+	/*
+	 * https://commons.wikimedia.org/wiki/File%3AAerial_View_of_Bellingham%2C_Washington.jpg
+	 *
+	 * By Nick Kelly / Faithlife Corporation (Faithlife Corporation)
+	 * [CC BY-SA 4.0 (http://creativecommons.org/licenses/by-sa/4.0)],
+	 * via Wikimedia Commons
+	 */
+	background-image: url("../images/aerialbellingham.jpg");
+	background-size: 100%;
+}
+
+#search-form {
+	text-align: center;
+	padding: 10% 0;
+}
+
+#search-form form {
+	padding: 10% 0;
+}
+
+#search-form form h1 {
+	text-align: center;
+	font-family: sans-serif;
+	color: white;
+	font-size: 50px;
+	margin-bottom: 20px;
+	margin-top: 20px;
+}
