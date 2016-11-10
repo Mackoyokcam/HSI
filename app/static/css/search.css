@@ -38,8 +38,9 @@ input[type="text"] {
 	height: 40px;
 	font-size: 18pt;
 	font-family: sans-serif;
-	border: solid black 2px;
-	border-radius: 2px;
+	/*border: solid black 2px;*/
+	border-radius: 5px;
+	/*margin-right: 0;*/
 }
 
 input[type="submit"] {
@@ -47,6 +48,7 @@ input[type="submit"] {
 	height: 46px;
 	font-family: sans-serif;
 	font-size: 16pt;
-	border: solid black 2px;
+	/*border: solid black 2px;*/
 	border-radius: 2px;
+	/*margin-left: 0;*/
 }
