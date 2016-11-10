@@ -14,3 +14,7 @@ def about():
 @app.route('/account')
 def account():
 	return  render_template("account.html")
+
+@app.route('/properties/<property_string>')
+def properties(property_string=""):
+	return render_template("properties.html", property_string=property_string)
