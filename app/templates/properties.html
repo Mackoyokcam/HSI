@@ -1,5 +1,22 @@
 {% extends "base.html" %}
+{% block nav_bar %}
+	<link rel="stylesheet" type="text/css" href="../static/css/nav_bar.css">
+	<div id="nav-bar">
+		<div id="account">
+			<a href="account">My Account</a>
+		</div>
+	</div>
+{% endblock %}
 {% block content %}
-<img src="https://maps.googleapis.com/maps/api/streetview?size=640x640&location={{search_string}}
+<link rel="stylesheet" type="text/css" href="../static/css/properties.css">
+<div id="side-bar">
+	<img id="street-view" src="https://maps.googleapis.com/maps/api/streetview?size=300x300&location={{search_string}}
 &key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA"></img>
+</div>
+<div id="map">
+	<iframe src="//www.google.com/maps/embed/v1/place?q={{search_string}}
+      &zoom=17
+      &key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA">
+  </iframe>
+<div>
 {% endblock %}
