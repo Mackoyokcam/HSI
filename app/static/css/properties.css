@@ -5,6 +5,15 @@
 	height: 900px;
 }
 
+#saerch-form input[type="text"] {
+	font-family: sans-serif;
+	width: 200px;
+}
+
+#side-form input[type="submit"] {
+
+}
+
 #map iframe {
 	float: right;
 	height: 900px;

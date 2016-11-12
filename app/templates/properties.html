@@ -4,6 +4,14 @@
 <div id="side-bar">
 	<img id="street-view" src="https://maps.googleapis.com/maps/api/streetview?size=300x300&location={{search_string}}
 &key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA"></img>
+	<div id="search-form">
+		<form action="/properties" method="get">
+			<div>
+				<input type="text" name="search_string">
+				<input type="submit" value="search">
+			</div>
+		</form>
+	</div>
 </div>
 <div id="map">
 	<iframe src="//www.google.com/maps/embed/v1/place?q={{search_string}}
