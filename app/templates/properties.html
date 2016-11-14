@@ -1,4 +1,7 @@
 {% extends "minimal_base.html" %}
+{% block navbar %}
+<a href="/account">My Account</a>
+{% endblock %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="../static/css/properties.css">
 <div id="side-bar">
@@ -14,7 +17,7 @@
 	</div>
 </div>
 <div id="map">
-	<iframe src="//www.google.com/maps/embed/v1/place?q={{search_string}}
+	<iframe src="https://www.google.com/maps/embed/v1/place?q={{search_string}}
       &zoom=17
       &key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA">
   </iframe>

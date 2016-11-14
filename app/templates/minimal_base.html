@@ -7,6 +7,9 @@
 		<link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
 	</head>
 	<body>
+		<div id="nav-bar">
+			{% block navbar %}{% endblock %}
+		</div>
 		<div id="content-body">
 			{% block content %}{% endblock %}
 		</div>

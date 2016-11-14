@@ -3,6 +3,7 @@
 	background-color: #3590FF;
 	width: 300px;
 	height: 900px;
+	border: solid 2px #444444;
 }
 
 #saerch-form input[type="text"] {
