@@ -1,0 +1,27 @@
+#side-bar {
+	float: left;
+	background-color: #3590FF;
+	width: 300px;
+	height: 900px;
+	border: solid 2px #444444;
+}
+
+#street-view {
+	width: 300px;
+	height: 300px;
+}
+
+#saerch-form input[type="text"] {
+	font-family: sans-serif;
+	width: 200px;
+}
+
+#side-form input[type="submit"] {
+
+}
+
+#map iframe {
+	float: right;
+	height: 900px;
+	width: 790px;
+}

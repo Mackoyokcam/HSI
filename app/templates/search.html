@@ -1,13 +1,30 @@
 {% extends "base.html" %}
+{% block nav_bar %}
+	<link rel="stylesheet" type="text/css" href="../static/css/nav_bar.css">
+	<div id="nav-bar">
+		<div id="account">
+			<a href="account">My Account</a>
+		</div>
+	</div>
+{% endblock %}
 {% block content %}
 	<link rel="stylesheet" type="text/css" href="../static/css/search.css"/>
 	<div id="search-form">
-		<form action="" method="get">
+		<form action="/properties" method="get">
 			<div>
 				<h1>Search HSI</h1>
-				<input type="text">
+				<input type="text" name="search_string">
 				<input type="submit" value="search">
 			</div>
 		</form>
+	</div>
+{% endblock %}
+{% block end_banner %}
+	<link rel="stylesheet" type="text/css" href="../static/css/end_banner.css">
+	<div id="end-banner">
+		<a href="about">About HSI</a>
+		<a href="">Privacy Policy</a>
+		<a href="">Terms of Use</a>
+		<a href="">Contact Us</a>
 	</div>
 {% endblock %}
