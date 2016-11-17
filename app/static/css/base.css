@@ -4,6 +4,33 @@ p {
 }
 
 #content-body {
-	margin: 0;
-	padding: 0;
+	text-align: center;
+	width: 1100px;
+	margin: auto;
+}
+
+#links {
+	float: left;
+	margin-left: 10px;
+}
+
+#tools {
+	float: right;
+	margin-right: 10px;
+}
+
+#nav-bar a {
+	text-decoration: none;
+	font-family: sans-serif;
+	color: white;
+}
+
+#nav-bar {
+	text-align: center;
+	margin: auto;
+	background-color: #3590FF;
+	height: 25px;
+	width: 1096px;
+	margin-bottom: 2px;
+	border: solid 2px #444444;
 }

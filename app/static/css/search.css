@@ -12,6 +12,26 @@ body {
 	background-repeat: no-repeat; 
 }
 
+p {
+	margin: 0;
+	padding: 0;
+}
+
+#nav-bar a {
+	font-family: sans-serif;
+	text-decoration: none;
+	font-size: 18pt;
+	color: white;
+}
+
+#links {
+	float: left;
+}
+
+#tools {
+	float: right;
+}
+
 #search-form {
 	text-align: center;
 	padding: 10% 0;

@@ -1,13 +1,20 @@
-{% extends "minimal_base.html" %}
+{% extends "base.html" %}
 {% block navbar %}
-<a href="/account">My Account</a>
+<div id="links">
+	<a href="about">About HSI</a>
+	<a href="">Privacy Policy</a>
+	<a href="">Terms of Use</a>
+	<a href="">Contact Us</a>
+</div>
+<div id="tools">
+	<div id="account">
+		<a href="account">My Account</a>
+	</div>
+</div>
 {% endblock %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="../static/css/properties.css">
-<script type="text/javascript" src="../javascript/properties.js"></script>
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA&callback=initialize()">
-    </script>
+<script type="text/javascript" src="../static/javascript/properties.js"></script>
 <div id="side-bar">
 	<img id="street-view" src="https://maps.googleapis.com/maps/api/streetview?size=600x600&location={{search_string}}
 &key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA"></img>
@@ -21,12 +28,16 @@
 	</div> -->
 	<div id="search-area">
 		<input id="address" type="textbox">
-		<input type="button" value="search">
+		<input id="search-button" type="button" value="search" onclick="searchAddress()">
 	</div>
 </div>
 <div id="map">
-	<!-- <iframe src="https://www.google.com/maps/embed/v1/place?q={{search_string}}
+	<iframe src="https://www.google.com/maps/embed/v1/place?q={{search_string}}
 &key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA">
-	</iframe> -->
+	</iframe>
 <div>
+<script
+async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA&callback=initialize()">
+</script>
 {% endblock %}

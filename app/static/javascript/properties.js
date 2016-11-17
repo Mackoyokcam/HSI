@@ -26,6 +26,6 @@ function searchAddress() {
 	});
 }
 
-window.onload = function() {
-	id("address").onclick = searchAddress;
-}
+// window.onload = function() {
+// 	id("search-button").onclick = searchAddress;
+// }
