@@ -20,7 +20,14 @@
 
 }
 
-#map iframe {
+/*#map iframe {
+	float: right;
+	height: 900px;
+	width: 790px;
+}*/
+
+#map {
+	border: solid 2px #444444;
 	float: right;
 	height: 900px;
 	width: 790px;

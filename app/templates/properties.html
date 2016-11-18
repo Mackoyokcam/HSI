@@ -14,7 +14,6 @@
 {% endblock %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="../static/css/properties.css">
-<script type="text/javascript" src="../static/javascript/properties.js"></script>
 <div id="side-bar">
 	<img id="street-view" src="https://maps.googleapis.com/maps/api/streetview?size=600x600&location={{search_string}}
 &key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA"></img>
@@ -27,17 +26,19 @@
 		</form>
 	</div> -->
 	<div id="search-area">
-		<input id="address" type="textbox">
-		<input id="search-button" type="button" value="search" onclick="searchAddress()">
+		<input id="search-box" type="textbox">
+		<input id="search-button" type="button" value="search">
 	</div>
 </div>
-<div id="map">
+<div id="map"> <!-- filled with js --> </div>
+<!-- <div id="map">
 	<iframe src="https://www.google.com/maps/embed/v1/place?q={{search_string}}
 &key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA">
 	</iframe>
-<div>
+<div> -->
+<script type="text/javascript" src="../static/javascript/properties.js"></script>
 <script
 async defer
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA&callback=initialize()">
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA&callback=initMap">
 </script>
 {% endblock %}
