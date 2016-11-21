@@ -9,14 +9,27 @@ p {
 	margin: auto;
 }
 
+#tools, #links {
+	margin-top: 3px;
+}
+
 #links {
 	float: left;
 	margin-left: 10px;
 }
 
+#search-form input {
+	border-radius: 0px;
+	border: none;
+}
+
 #tools {
 	float: right;
 	margin-right: 10px;
+}
+
+#tools div {
+	display: inline-block;
 }
 
 #nav-bar a {

@@ -12,6 +12,11 @@ function initMap() {
 		zoom: 12,
 		center: bellingham
 	});
+	var marker = new google.maps.Marker({
+		position: bellingham,
+		map: map,
+		title: 'downtown bellingham'
+	});
 }
 
 function searchAddress() {
@@ -20,6 +25,11 @@ function searchAddress() {
 		if (status == "OK") {
 			var loc = results[0].geometry.location;
 			map.setCenter(loc);
+			var marker = new google.maps.Marker({
+				position: loc,
+				map: map,
+				title: addressText
+			});
 		} else {
 			alert("Geocode was not successful for the folowing reason:" + status);
 		}

@@ -11,13 +11,14 @@
 	height: 300px;
 }
 
-#saerch-form input[type="text"] {
-	font-family: sans-serif;
-	width: 200px;
+#search-area input {
+	border: none;
+	border-radius: 0px;
 }
 
-#side-form input[type="submit"] {
-
+#search-area input[type="text"] {
+	font-family: sans-serif;
+	width: 200px;
 }
 
 /*#map iframe {
