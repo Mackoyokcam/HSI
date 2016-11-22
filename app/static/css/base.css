@@ -4,23 +4,20 @@ p {
 }
 
 #content-body {
-	text-align: center;
 	width: 1100px;
 	margin: auto;
 }
 
-#tools, #links {
-	margin-top: 3px;
-}
-
 #links {
+	margin-top: 3px;
 	float: left;
 	margin-left: 10px;
 }
 
 #search-form input {
+	margin-top: 1px;
 	border-radius: 0px;
-	border: none;
+	border: solid 2px #444444;
 }
 
 #tools {
@@ -32,10 +29,16 @@ p {
 	display: inline-block;
 }
 
+#tools a {
+	margin-top: 3px;
+}
+
 #nav-bar a {
 	text-decoration: none;
 	font-family: sans-serif;
 	color: white;
+	margin-right: 4px;
+	margin-left: 4px;
 }
 
 #nav-bar {

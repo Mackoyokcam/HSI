@@ -21,6 +21,7 @@ function initMap() {
 
 function searchAddress() {
 	var addressText = id("search-box").value;
+	// id("street-view").src = "https://maps.googleapis.com/maps/api/streetview?size=600x600&location=" + addressText + "&key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA";
 	geocoder.geocode( {"address": addressText}, function(results, status) {
 		if (status == "OK") {
 			var loc = results[0].geometry.location;
