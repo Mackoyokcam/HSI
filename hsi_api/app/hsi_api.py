@@ -1,6 +1,8 @@
 from app import Util
 import json,requests
 from app.googlemaps import client,distance_matrix,geocoding
+from pymongo import MongoClient
+
 
 
 class Hsi_Api:
@@ -9,7 +11,7 @@ class Hsi_Api:
     WALKSCORE_URL ="http://api.walkscore.com/score"
     GOOGLE_CLIENT = None
     MAX_COMPARES = 0
-
+    
     def __init__(self, config_file_url):
         json_obj = Util.get_JSON_Obj(config_file_url)
         self.GOOGLE_API_KEY = json_obj["GOOGLE_API_KEY"]
@@ -17,8 +19,8 @@ class Hsi_Api:
         self.GOOGLE_CLIENT = client.Client(key=self.GOOGLE_API_KEY)
         self.MAX_COMPARES = json_obj['max_compares']
 
-
-
+        
+        
     def compare(self, home_addresses, list_destinations):
         if type(home_addresses) is not list or type(list_destinations) is not list:
             return '{"error":"origins and destinations must be in list form"}'
@@ -32,7 +34,7 @@ class Hsi_Api:
     lat=""
     lon=""
     apikey=""
-
+    
     200 	1 	Walk Score successfully returned.
     200 	2 	Score is being calculated and is not currently available.
     404 	30 	Invalid latitude/longitude.
@@ -101,10 +103,10 @@ class Hsi_Api:
 
 
     '''
-
+    
     :param origins
     :type list
-
+    
     :param destinations
     :type list
     '''
@@ -114,14 +116,14 @@ class Hsi_Api:
         return distance_matrix.distance_matrix(self.GOOGLE_CLIENT, origins, destinations, mode, language, avoid,
                                                units, departure_time, arrival_time, transit_mode,
                                                transit_routing_preference, traffic_model)
-
-
+    
+    
     '''
-
-
+    
+    
     :param address a required parameter that specifies an address to search for
     :type string
-
+    
     :returns returns a json string containing results. the schema of the response will be
     {"count": int, "results":[{"lat":"","lng":"","formatted_address":""}...n]}. If there
     :type string or None
@@ -144,3 +146,39 @@ class Hsi_Api:
         else:
             return_value = '{"status":"'+status_code+'"}'
         return return_value
+    #hsi_api.py 
+
+
+    '''''
+    Format for origins is a list, each index a list containing a latitude and a longitude, both calculated by Google's geocoding in views.py (which itself calls Hsi_Api class). Will need to change that, when changes to instanciating hsi_api are implemented
+    
+    Can be extended to gather more than just the last updated information, if average cost numbers were implemented later
+    '''''
+    def utilQuery(self, origins):        
+        MDBclient = MongoClient()
+        db = MDBclient.test
+        data = ""
+        j = 0
+        for i in origins:
+            print(type(i))
+            cursor = db.util.find(i).sort("updateDate", -1).limit(1)
+            cursor = next(cursor, None)
+            if cursor is not None:
+                if j != 0:
+                    data = data + ":"            
+                data = data + str(cursor)
+                j = j+1
+        return data
+        
+    '''''
+    Format for util_info is a string formatted like a json document.
+    Returns true/false depending on success of data entry (will implement more extensive error reporting later).
+    '''''
+    def utilAdd(self, util_info):
+        MDBclient = MongoClient()
+        db = MDBclient.test
+        result = db.util.insert_one(util_info)
+        if result.acknowledged is False:
+            return False
+        return True
+
