@@ -9,6 +9,7 @@ VALIDATION_ERROR = '{"error": "validation failed, make sure you are not above yo
 FORMAT_ERROR = '{"error": "Formatting is incorrect"}'
 ADD_ERROR = '{"error": "Error in adding entry to database"}'
 WRITE_ERROR = '{"error": "Error writing to DB"}'
+LIMIT_EXCEEDED = '{"error": "Too many queries"}'
 
 '''
 compare
@@ -71,10 +72,11 @@ def utilQuery():
                 coordinates = {}
                 geo = json.loads(api.get_location_data(i))
                 if "status" in geo:
-                    return geo["status"]
-                geo = geo["results"]
-                coordinates.update({"lat":geo[0]["lat"]})
-                coordinates.update({"long":geo[0]["lng"]})
+                    coordinates.update({"status": geo["status"]})
+                else:
+                    geo = geo["results"]
+                    coordinates.update({"lat":geo[0]["lat"]})
+                    coordinates.update({"long":geo[0]["lng"]})
                 locations.append(coordinates)
             result = api.utilQuery(locations)
             return str(result)
@@ -147,12 +149,12 @@ def utilAdd():
     if sane:
         util_info = utilCombine(param_keys)
         if "status" in util_info:
-            return util_info["status"]
+            return '{"error": "'+ util_info["status"] + '"}'
         api = hsi_api.Hsi_Api(CONFIG_FILE_URL)
         res = api.utilAdd(util_info)
         if res is False:
             return WRITE_ERROR
-        return "True"
+        return '{ "status":"True"}'
     return FORMAT_ERROR
 
                  

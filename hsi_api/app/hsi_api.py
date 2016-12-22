@@ -150,24 +150,26 @@ class Hsi_Api:
 
 
     '''''
-    Format for origins is a list, each index a list containing a latitude and a longitude, both calculated by Google's geocoding in views.py (which itself calls Hsi_Api class). Will need to change that, when changes to instanciating hsi_api are implemented
+    Format for origins is a list, the contents of each index being a dict containing a latitude and a longitude of the original addres, calculated by Google's geocoding in views.py
+
+    Returns a dict that, for every index in origins, returns a dict entry of format "addr#": #Mongo return json#, the # in addr corresponding to the index in which each address was originally referenced in the POST parameters. addresses that return in error in Google's geocoding will contain a dict with entry "status", with the value being the error message in that address' corresponding dict entry.
     
     Can be extended to gather more than just the last updated information, if average cost numbers were implemented later
     '''''
     def utilQuery(self, origins):        
         MDBclient = MongoClient()
         db = MDBclient.test
-        data = ""
+        data = {}
         j = 0
         for i in origins:
-            print(type(i))
-            cursor = db.util.find(i).sort("updateDate", -1).limit(1)
-            cursor = next(cursor, None)
-            if cursor is not None:
-                if j != 0:
-                    data = data + ":"            
-                data = data + str(cursor)
-                j = j+1
+            if "status" in i:
+                data.update({"addr"+str(j):{"status":i["status"]}})
+            else:
+                cursor = db.util.find(i, { "_id":0, "lat":0, "long":0 }).sort("updateDate", -1).limit(1)
+                cursor = next(cursor, None)
+                if cursor is not None:
+                    data.update({"addr"+str(j): cursor})
+            j = j+1
         return data
         
     '''''
