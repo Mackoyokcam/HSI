@@ -169,6 +169,8 @@ class Hsi_Api:
                 cursor = next(cursor, None)
                 if cursor is not None:
                     data.update({"addr"+str(j): cursor})
+                else:
+                    data.update({"addr"+str(j): {"status":"ZERO DB RESULTS"}})
             j = j+1
         return data
         
