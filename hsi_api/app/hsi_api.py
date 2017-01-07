@@ -1,6 +1,7 @@
 from app import Util
 import json,requests
 from app.googlemaps import client,distance_matrix,geocoding
+from pymongo import errors as mongoerrors
 from pymongo import MongoClient
 
 
@@ -181,8 +182,9 @@ class Hsi_Api:
     def utilAdd(self, util_info):
         MDBclient = MongoClient()
         db = MDBclient.test
-        result = db.util.insert_one(util_info)
-        if result.acknowledged is False:
-            return False
+        try:
+            result = db.util.insert_one(util_info)
+        except mongoerrors.PyMongoError:
+            return False        
         return True
 

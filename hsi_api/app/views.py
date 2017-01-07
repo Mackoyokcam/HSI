@@ -153,8 +153,8 @@ def utilAdd():
         api = hsi_api.Hsi_Api(CONFIG_FILE_URL)
         res = api.utilAdd(util_info)
         if res is False:
-            return WRITE_ERROR
-        return '{ "status":"True"}'
+            return str('{"error": "Error Writing to DB"}') 
+        return '{"status":"True"}'
     return FORMAT_ERROR
 
                  
