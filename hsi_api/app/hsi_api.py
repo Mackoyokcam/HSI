@@ -147,8 +147,7 @@ class Hsi_Api:
         else:
             return_value = '{"status":"'+status_code+'"}'
         return return_value
-    #hsi_api.py 
-
+ 
 
     '''''
     Format for origins is a list, the contents of each index being a dict containing a latitude and a longitude of the original addres, calculated by Google's geocoding in views.py
@@ -163,18 +162,21 @@ class Hsi_Api:
         data = {}
         j = 0
         for i in origins:
-            if "status" in i:
-                data.update({"addr"+str(j):{"status":i["status"]}})
+            apt = db.util.distinct("apt", i)
+            if len(apt) is 0:
+                data.update({"addr"+str(j):{"status":"ZERO DB RESULTS"}})
             else:
-                cursor = db.util.find(i, { "_id":0, "lat":0, "long":0 }).sort("updateDate", -1).limit(1)
-                cursor = next(cursor, None)
-                if cursor is not None:
-                    data.update({"addr"+str(j): cursor})
-                else:
-                    data.update({"addr"+str(j): {"status":"ZERO DB RESULTS"}})
+                apt_data={}                    
+                for k in apt:
+                    new_i = i
+                    new_i.update({"apt":k})                        
+                    cursor = db.util.find(new_i, { "_id":0, "lat":0, "long":0, "apt":0 }).sort("updateDate", -1).limit(1)
+                    cursor = next(cursor, None)
+                    apt_data.update({k: cursor})                        
+                data.update({"addr"+str(j):apt_data})    
             j = j+1
         return data
-        
+                
     '''''
     Format for util_info is a string formatted like a json document.
     Returns true/false depending on success of data entry (will implement more extensive error reporting later).
@@ -187,4 +189,3 @@ class Hsi_Api:
         except mongoerrors.PyMongoError:
             return False        
         return True
-

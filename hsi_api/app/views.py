@@ -82,23 +82,6 @@ def utilQuery():
             return str(result)
     return FORMAT_ERROR
     
-def utilAddSanity(param_keys):
-    if param_keys is not None and 'address' in param_keys and \
-       'city' in param_keys and \
-       'state' in param_keys and \
-       'zip' in param_keys and \
-       'apt' in param_keys and \
-       'updateDate' in param_keys and \
-       'rent' in param_keys and \
-       'gas' in param_keys and \
-       'water' in param_keys and \
-       'heating' in param_keys and \
-       'electrical' in param_keys and \
-       'recycle' in param_keys and \
-       'compost' in param_keys:
-        return True
-    return False
-
 '''''
 Converts param_keys into a dict with all the needed values.
 A Sanity check is performed before utilCombine is called, no none is necessary here (except in the case of the geocode errors)
@@ -143,21 +126,39 @@ NOTE: Does not deal with duplicate key errors yet
 @app.route('/utilDB/add', methods = ['POST'])
 def utilAdd():
     param_keys = MultiDict.to_dict(request.form).keys()
+    api = hsi_api.Hsi_Api(CONFIG_FILE_URL)
     if 'key' not in param_keys or ('key' in param_keys and valid(request.form['key']) == False):
-        return VALIDATION_ERROR
-    sane = utilAddSanity(param_keys)
-    if sane:
+        return VALIDATION_ERROR    
+    if utilAddSanity(param_keys):
         util_info = utilCombine(param_keys)
         if "status" in util_info:
             return '{"error": "'+ util_info["status"] + '"}'
-        api = hsi_api.Hsi_Api(CONFIG_FILE_URL)
         res = api.utilAdd(util_info)
         if res is False:
-            return str('{"error": "Error Writing to DB"}') 
+            return WRITE_ERROR 
         return '{"status":"True"}'
     return FORMAT_ERROR
 
-                 
+'''
+utilAdd sanity check, to make sure all relevent keys are in param_keys
+'''
+def utilAddSanity(param_keys):
+    if param_keys is not None and 'address' in param_keys and \
+       'city' in param_keys and \
+       'state' in param_keys and \
+       'zip' in param_keys and \
+       'apt' in param_keys and \
+       'updateDate' in param_keys and \
+       'rent' in param_keys and \
+       'gas' in param_keys and \
+       'water' in param_keys and \
+       'heating' in param_keys and \
+       'electrical' in param_keys and \
+       'recycle' in param_keys and \
+       'compost' in param_keys:
+        return True
+    return False
+
 '''
 valid
 
