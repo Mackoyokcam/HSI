@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block navbar %}
+<div id="links">
+	<a href="about">About HSI</a>
+	<a href="">Privacy Policy</a>
+	<a href="">Terms of Use</a>
+	<a href="">Contact Us</a>
+</div>
+<div id="tools">
+	<div id="search-form">
+		<form action="/properties" method="get">
+			<div>
+				<input type="text" name="search_string">
+				<input type="submit" value="search">
+			</div>
+		</form>
+	</div>
+	<div id="account">
+		<a href="account">My Account</a>
+	</div>
+</div>
+{% endblock %}
+{% block content  %}
+<h1>Account Creation</h1>
+<hr>
+<form name="account_data" action="{{ url_for('account') }}" method="POST">
+    <div>
+        {{  form.hidden_tag()  }}
+        {%  for field in form._fields if form[field].widget.input_type != 'hidden' %}
+            {% if form[field].type == 'BooleanField' %}
+                {{ form[field].label }}
+            {%  endif %}
+            {{ form[field] }}
+            {%  for error in form[field].errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            <br>
+        {%  endfor  %}
+        <br>
+        <button type="submit">Submit</button>
+    </div>
+</form>
+{% endblock %}
