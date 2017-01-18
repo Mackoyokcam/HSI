@@ -49,5 +49,3 @@ class AddressForm(Form):
                             render_kw={"placeholder": "Electrical Bill"})
     recycle = BooleanField('Recycle?')
     compost = BooleanField('Compost?')
-
-

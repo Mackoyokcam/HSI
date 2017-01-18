@@ -47,7 +47,12 @@ def account():
 @app.route('/properties', methods=['GET'])
 def properties():
 	search_string = request.args.get('search_string')
-	return render_template("properties.html", search_string=search_string)
+	data = {
+		"key" : "",
+		"origins" : search_string
+	}
+	res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
+	return render_template("properties.html", search_string=search_string, res=res)
 
 
 @app.route('/test', methods=['POST'])
