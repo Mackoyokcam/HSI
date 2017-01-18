@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block navbar %}
+<div id="links">
+	<a href="about">About HSI</a>
+	<a href="">Privacy Policy</a>
+	<a href="">Terms of Use</a>
+	<a href="">Contact Us</a>
+</div>
+<div id="tools">
+	<div id="search-form">
+		<form action="/properties" method="get">
+			<div>
+				<input type="text" name="search_string">
+				<input type="submit" value="search">
+			</div>
+		</form>
+	</div>
+	<div id="account">
+		<a href="account">My Account</a>
+	</div>
+</div>
+{% endblock %}
+{% block content  %}
+<h1>Response Page</h1>
+<hr>
+{{ res.text }}
+{% endblock %}

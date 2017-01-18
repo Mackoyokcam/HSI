@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block navbar %}
+<div id="links">
+	<a href="about">About HSI</a>
+	<a href="">Privacy Policy</a>
+	<a href="">Terms of Use</a>
+	<a href="">Contact Us</a>
+</div>
+<div id="tools">
+	<div id="search-form">
+		<form action="/properties" method="get">
+			<div>
+				<input type="text" name="search_string">
+				<input type="submit" value="search">
+			</div>
+		</form>
+	</div>
+	<div id="account">
+		<a href="account">My Account</a>
+	</div>
+</div>
+{% endblock %}
+{% block content  %}
+<h1>Account Creation</h1>
+<hr>
+<form name="account_data" action="{{ url_for('account') }}" method="POST">
+    <h2>User</h2>
+    <hr>
+    <div id="userdata">
+        {{  form.hidden_tag()  }}
+        {%  for field in form if field.widget.input_type != 'hidden' %}
+
+            {{ field.label }}
+
+            {% if field.type != 'BooleanField' %}
+                <br>
+            {%  endif %}
+
+            {{ field }}
+
+            {%  for error in field.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            <br>
+            <br>
+        {%  endfor  %}
+
+    </div>
+    <hr>
+    <h2>Address</h2>
+    <hr>
+    <div id="addressdata">
+
+        {%  for field in addressform if field.widget.input_type != 'hidden' %}
+
+            {{ field.label }}
+
+            {% if field.type != 'BooleanField' %}
+                <br>
+            {%  endif %}
+
+            {{ field }}
+
+            {%  for error in field.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            <br>
+            <br>
+        {%  endfor  %}
+
+        <br>
+        <button type="submit">Submit</button>
+    </div>
+</form>
+{% endblock %}

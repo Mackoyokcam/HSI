@@ -4,6 +4,49 @@ p {
 }
 
 #content-body {
-	margin: 0;
-	padding: 0;
+	width: 1100px;
+	margin: auto;
+}
+
+#links {
+	margin-top: 3px;
+	float: left;
+	margin-left: 10px;
+}
+
+#search-form input {
+	margin-top: 1px;
+	border-radius: 0px;
+	border: solid 2px #444444;
+}
+
+#tools {
+	float: right;
+	margin-right: 10px;
+}
+
+#tools div {
+	display: inline-block;
+}
+
+#tools a {
+	margin-top: 3px;
+}
+
+#nav-bar a {
+	text-decoration: none;
+	font-family: sans-serif;
+	color: white;
+	margin-right: 4px;
+	margin-left: 4px;
+}
+
+#nav-bar {
+	text-align: center;
+	margin: auto;
+	background-color: #3590FF;
+	height: 25px;
+	width: 1096px;
+	margin-bottom: 2px;
+	border: solid 2px #444444;
 }

@@ -1,13 +1,34 @@
-{% extends "base.html" %}
-{% block content %}
-	<link rel="stylesheet" type="text/css" href="../static/css/search.css"/>
-	<div id="search-form">
-		<form action="" method="get">
-			<div>
-				<h1>Search HSI</h1>
-				<input type="text">
-				<input type="submit" value="search">
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>HSI</title>
+		<meta charset= "UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="../static/css/search.css"/>
+		<link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+	</head>
+	<body>
+		<div id="nav-bar">
+			<div id="links">
+				<a href="about">About HSI</a>
+				<a href="">Privacy Policy</a>
+				<a href="">Terms of Use</a>
+				<a href="">Contact Us</a>
 			</div>
-		</form>
-	</div>
-{% endblock %}
+			<div id="tools">
+				<a href="account">My Account</a>
+			</div>
+		</div>
+		<div id="content-body">
+			<link rel="stylesheet" type="text/css" href="../static/css/search.css"/>
+			<div id="search-form">
+				<form action="/properties" method="get">
+					<div>
+						<h1>Search HSI</h1>
+						<input type="text" name="search_string">
+						<input type="submit" value="search">
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
