@@ -1,7 +1,8 @@
 from flask import render_template, request, flash, url_for, redirect
 from app import app
-from .forms import AccountCreationForm
+from .forms import AccountCreationForm, AddressForm
 from flask_wtf.csrf import CsrfProtect
+import requests
 
 
 CsrfProtect(app)
@@ -28,13 +29,19 @@ def about():
 
 @app.route('/account', methods=['GET', 'POST'])
 def account():
-	form = AccountCreationForm()
-	if form.validate_on_submit():
+	userform = AccountCreationForm()
+	addressform = AddressForm()
+	if userform.validate_on_submit() & addressform.validate_on_submit():
+		post_data = addressform.data
+		post_data['key'] = ""
+
 		# Add User to DB.
+
 		# Add Info to UtilDB
-		flash("Thanks for registering")
-		return redirect(url_for('search'))
-	return render_template("account_creation.html", form=form)
+		res = requests.post('http://140.160.142.77:5000/utilDB/add', data=post_data)
+		return render_template('response.html', res=addressform)
+
+	return render_template("account_creation.html", form=userform, addressform=addressform)
 
 
 @app.route('/properties', methods=['GET'])

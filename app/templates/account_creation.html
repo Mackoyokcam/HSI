@@ -24,18 +24,50 @@
 <h1>Account Creation</h1>
 <hr>
 <form name="account_data" action="{{ url_for('account') }}" method="POST">
-    <div>
+    <h2>User</h2>
+    <hr>
+    <div id="userdata">
         {{  form.hidden_tag()  }}
-        {%  for field in form._fields if form[field].widget.input_type != 'hidden' %}
-            {% if form[field].type == 'BooleanField' %}
-                {{ form[field].label }}
+        {%  for field in form if field.widget.input_type != 'hidden' %}
+
+            {{ field.label }}
+
+            {% if field.type != 'BooleanField' %}
+                <br>
             {%  endif %}
-            {{ form[field] }}
-            {%  for error in form[field].errors %}
+
+            {{ field }}
+
+            {%  for error in field.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
             <br>
+            <br>
         {%  endfor  %}
+
+    </div>
+    <hr>
+    <h2>Address</h2>
+    <hr>
+    <div id="addressdata">
+
+        {%  for field in addressform if field.widget.input_type != 'hidden' %}
+
+            {{ field.label }}
+
+            {% if field.type != 'BooleanField' %}
+                <br>
+            {%  endif %}
+
+            {{ field }}
+
+            {%  for error in field.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            <br>
+            <br>
+        {%  endfor  %}
+
         <br>
         <button type="submit">Submit</button>
     </div>
