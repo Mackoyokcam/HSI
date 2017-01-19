@@ -1,12 +1,23 @@
 {% extends "base.html" %}
 {% block navbar %}
-<div id="links">
-	<a href="about">About HSI</a>
-	<a href="">Privacy Policy</a>
-	<a href="">Terms of Use</a>
-	<a href="">Contact Us</a>
-</div>
-<div id="tools">
+	{% include "navbar.html" %}
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="../static/css/properties.css">
+<div id="side-bar">
+	{% if not search_string %} <!-- checks for empty string -->
+	<!-- given empty string the image loaded is of downtown bellingham -->
+	<img id="street-view" src="https://maps.googleapis.com/maps/api/streetview?size=600x600&location=48.7510528,-122.4812339
+	&heading=15
+	&fov=120
+	&key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA"></img>
+	{% else %}
+	<img id="street-view" src="https://maps.googleapis.com/maps/api/streetview?size=600x600&location={{search_string}}
+	&key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA"></img>
+	{% endif %}
+	<div>
+		<h3 id="address-text">{{ search_string }}</h3>
+	</div>
 	<div id="search-form">
 		<form action="/properties" method="get">
 			<div>
@@ -15,37 +26,12 @@
 			</div>
 		</form>
 	</div>
-	<div id="account">
-		<a href="account">My Account</a>
-	</div>
-</div>
-{% endblock %}
-{% block content %}
-<link rel="stylesheet" type="text/css" href="../static/css/properties.css">
-<div id="side-bar">
-	{% if not search_string %} <!-- checks for empty string -->
-	<div id="empty-string"><p>No image to display</p></div>
-	{% else %}
-	<img id="street-view" src="https://maps.googleapis.com/maps/api/streetview?size=600x600&location={{search_string}}
-&key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA" alt="No image to display"></img>
-	{% endif %}
-	<div>
-		<h3 id="address-text">{{ search_string }}</h3>
-	</div>
-	<!-- <div id="search-form">
-		<form action="/properties" method="get">
-			<div>
-				<input type="text" name="search_string">
-				<input type="submit" value="search">
-			</div>
-		</form>
-	</div> -->
-	<div id="search-bar">
+	<!-- <div id="search-bar">
 		<input type="text">
 		<button id="search-button">search</button>
-	</div>
-	<div id="address-data">
-		{{ res.text }}
+	</div> -->
+	<div id="address-data"> <!-- temporary until browser access to server -->
+		<p>Data</p>
 	</div>
 </div>
 <div id="map"> <!-- filled with js --> </div>

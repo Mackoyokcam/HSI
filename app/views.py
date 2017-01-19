@@ -26,6 +26,18 @@ def search():
 def about():
 	return render_template("about.html")
 
+@app.route('/privacy')
+def privacy():
+	return render_template("privacy.html")
+
+@app.route('/terms')
+def terms():
+	return render_template("terms.html")
+
+@app.route('/contact')
+def contact():
+	return render_template("contact.html")
+
 
 @app.route('/account', methods=['GET', 'POST'])
 def account():
@@ -51,9 +63,9 @@ def properties():
 		"key" : "",
 		"origins" : search_string
 	}
-	res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
-	return render_template("properties.html", search_string=search_string, res=res)
-
+	# res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
+	# return render_template("properties.html", search_string=search_string, res=res)
+	return render_template("properties.html", search_string=search_string)
 
 @app.route('/test', methods=['POST'])
 def test():
