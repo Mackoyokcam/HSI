@@ -4,6 +4,10 @@
 {% endblock %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="../static/css/properties.css">
+<script
+async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA&callback=initMap">
+</script>
 <div id="side-bar">
 	{% if not search_string %} <!-- checks for empty string -->
 	<!-- given empty string the image loaded is of downtown bellingham -->
@@ -15,7 +19,7 @@
 	<img id="street-view" src="https://maps.googleapis.com/maps/api/streetview?size=600x600&location={{search_string}}
 	&key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA"></img>
 	{% endif %}
-	<div>
+	<div id="address-text-box">
 		<h3 id="address-text">{{ search_string }}</h3>
 	</div>
 	<div id="search-form">
@@ -35,14 +39,5 @@
 	</div>
 </div>
 <div id="map"> <!-- filled with js --> </div>
-<!-- <div id="map">
-	<iframe src="https://www.google.com/maps/embed/v1/place?q={{search_string}}
-&key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA">
-	</iframe>
-<div> -->
 <script type="text/javascript" src="../static/javascript/properties.js"></script>
-<script
-async defer
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA&callback=initMap">
-</script>
 {% endblock %}

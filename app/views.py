@@ -1,11 +1,11 @@
 from flask import render_template, request, flash, url_for, redirect
 from app import app
 from .forms import AccountCreationForm, AddressForm
-from flask_wtf.csrf import CsrfProtect
+from flask_wtf.csrf import CSRFProtect
 import requests
 
 
-CsrfProtect(app)
+CSRFProtect(app)
 
 
 ''''
@@ -18,6 +18,7 @@ def csrf_error(reason):
 @app.route('/')
 @app.route('/index')
 @app.route('/search')
+@app.route('/main')
 def search():
 	return render_template("search.html")
 
@@ -56,7 +57,7 @@ def account():
 	return render_template("account_creation.html", form=userform, addressform=addressform)
 
 
-@app.route('/properties', methods=['GET'])
+@app.route('/properties', methods=['GET', 'POST'])
 def properties():
 	search_string = request.args.get('search_string')
 	data = {

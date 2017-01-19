@@ -5,7 +5,7 @@ function id(element) {
 var geocoder;
 var map;
 
-function initMap() {
+window.initMap = function() {
 	geocoder = new google.maps.Geocoder();
 	var addressText = id("address-text").innerText;
 	if (addressText == null || addressText.trim() == '') {
@@ -37,7 +37,10 @@ function initMap() {
 					title: addressText
 				});
 			} else {
-				alert("Geocode was not successful for the folowing reason:" + status);
+				console.log("Geocode was not successful for the folowing reason:" + status);
+				var sorryMessage = document.createElement("p");
+				sorryMessage.appendChild(document.createTextNode("Sorry, Google couldn't figure that address out..."));
+				id("map").appendChild(sorryMessage);
 			}
 		});
 	}

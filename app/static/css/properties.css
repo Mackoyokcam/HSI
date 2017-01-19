@@ -51,15 +51,27 @@
 	margin-right: -3px;
 }
 
-/*#map iframe {
-	float: right;
-	height: 900px;
-	width: 790px;
-}*/
+#address-text-box {
+	max-width: 300px;
+	height: 50px;
+	overflow: hidden;
+}
+
+#address-text {
+	width: 100%;
+}
 
 #map {
 	border: solid 2px #444444;
 	float: right;
 	height: 900px;
 	width: 790px;
+	background-color: #eff0f1; /* stack overflow code background color */
+	text-align: center;
+}
+
+#map p {
+	margin-top: 400px;
+	font-family: sans-serif;
+	font-size: 30px;
 }
