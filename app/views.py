@@ -68,6 +68,11 @@ def properties():
 	# return render_template("properties.html", search_string=search_string, res=res)
 	return render_template("properties.html", search_string=search_string)
 
+@app.route('/compare', methods=['GET'])
+def compare():
+	properties = request.args.get('properties').split(':')
+	return render_template("compare.html", properties=properties)
+
 @app.route('/test', methods=['POST'])
 def test():
 	account_data = request.args.get('account_data')
