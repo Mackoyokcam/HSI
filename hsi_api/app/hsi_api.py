@@ -156,25 +156,61 @@ class Hsi_Api:
     
     Can be extended to gather more than just the last updated information, if average cost numbers were implemented later
     '''''
-    def utilQuery(self, origins):        
-        MDBclient = MongoClient()
-        db = MDBclient.test
+    def utilQuery(self, origins, geocode):        
+        if (origins is not None) and (geocode is not None):
+            return '{"status": "Error: all params not null"}'
+        try:
+            MDBclient = MongoClient()
+            db = MDBclient.test
+        except mongoerrors.PyMongoError:
+            return '{"status":"'+str(db.command("getLastError"))+'"}'
         data = {}
         j = 0
-        for i in origins:
-            apt = db.util.distinct("apt", i)
-            if len(apt) is 0:
-                data.update({"addr"+str(j):{"status":"ZERO DB RESULTS"}})
-            else:
-                apt_data={}                    
-                for k in apt:
-                    new_i = i
-                    new_i.update({"apt":k})                        
-                    cursor = db.util.find(new_i, { "_id":0, "lat":0, "long":0, "apt":0 }).sort("updateDate", -1).limit(1)
-                    cursor = next(cursor, None)
-                    apt_data.update({k: cursor})                        
+        if (origins is not None):
+            for i in origins:
+                try:
+                    apt = db.util.distinct("apt", i)
+                except mongoerrors.PyMongoError:
+                    return '{"status":"'+str(db.command("getLastError"))+'"}'
+                if len(apt) is 0:
+                    data.update({"addr"+str(j):{"status":"ZERO DB RESULTS"}})
+                else:
+                    apt_data={}                    
+                    for k in apt:
+                        new_i = i
+                        new_i.update({"apt":k})
+                        cursor = 0
+                        try:
+                            cursor = db.util.find(new_i, { "_id":0, "apt":0, "address":0, "state":0, "city":0, "zip":0 }).sort("updateDate", -1).limit(1)
+                            cursor = next(cursor, None)
+                        except mongoerrors.PyMongoError:
+                            apt_data.update({"status":str(db.command("getLastError"))})
+                        else:
+                            apt_data.update({k: cursor})                        
                 data.update({"addr"+str(j):apt_data})    
-            j = j+1
+                j = j+1
+        elif (geocode is not None):
+            geocode = list(geocode)
+            for g in geocode:
+                unit = {}
+                apt_data = {}
+                geo = json.loads(g)             
+                for l in geo['results'][0]['address_components']:
+                    if 'subpremise' in l['types']:
+                        unit.update({'apt':l['short_name']})
+                        break
+                geo = geo['results'][0]['geometry']['location']
+                unit.update({'long':geo['lng']})
+                unit.update({'lat':geo['lat']})
+                try:
+                    db.util.find(unit, { "_id":0, "heating":0}).sort("updateDate", -1).limit(1)
+                    cursor = next(cursor, None)
+                except mongoerrors.PyMongoError:
+                    apt_data.update({"status":str(db.command("getLastError"))})
+                else:
+                    apt_data.update({k: cursor})
+                data.update({"addr"+str(j):apt_data})    
+                j = j+1
         return data
                 
     '''''
@@ -182,10 +218,10 @@ class Hsi_Api:
     Returns true/false depending on success of data entry (will implement more extensive error reporting later).
     '''''
     def utilAdd(self, util_info):
-        MDBclient = MongoClient()
-        db = MDBclient.test
         try:
+            MDBclient = MongoClient()
+            db = MDBclient.test
             result = db.util.insert_one(util_info)
         except mongoerrors.PyMongoError:
-            return False        
-        return True
+            return {"error": str(db.command("getLastError")) }
+        return '{"status":"True}'

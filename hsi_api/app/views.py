@@ -1,6 +1,7 @@
 from app import app
 from app import hsi_api
 import json
+import usaddress as usad
 from flask import request
 from werkzeug.datastructures import MultiDict
 
@@ -50,10 +51,13 @@ def compare():
                 return response
     return FORMAT_ERROR
 
-######################################################
 '''''
 Format for Query can be multiple origin addresses, such that:
  origins="address1:address2:address3"
+
+OR format can be json String that is a Google geocode result (See Google's Geocode API for details).
+
+If both or neither origins and geocode contains data, utilQuery will return a FORMAT_ERROR
 
 Returns a string consisting of dicts, separated by the : character
 '''''
@@ -75,40 +79,67 @@ def utilQuery():
                     coordinates.update({"status": geo["status"]})
                 else:
                     geo = geo["results"]
-                    coordinates.update({"lat":geo[0]["lat"]})
-                    coordinates.update({"long":geo[0]["lng"]})
+                    for j in geo['results'][0]['address_components']:
+                        if 'subpremise' in j['types']:
+                            coordinates.update({'apt':j[short_name]})
+                    coordinates.update({"lat":geo[0]['geomertry']['location']["lat"]})
+                    coordinates.update({"long":geo[0]['geomertry']['location']["lng"]})
                 locations.append(coordinates)
-            result = api.utilQuery(locations)
+            result = api.utilQuery(locations, None)
             return str(result)
     return FORMAT_ERROR
-    
+
+
+
 '''''
 Converts param_keys into a dict with all the needed values.
-A Sanity check is performed before utilCombine is called, no none is necessary here (except in the case of the geocode errors)
+A Sanity check is performed before utilCombine is called, so none is necessary here (except in the case of the geocode errors)
 '''''
 def utilCombine(param_keys):
     data = {}
-    data.update({"address":request.form['address']})
-    data.update({"city":request.form['city']})
-    data.update({"state":request.form['state']})
-    data.update({"zip":request.form['zip']})
-    add = data["address"] + " " + data["city"] + " " + data["state"] + " " + data["zip"]
+    add = request.form['address'] + " "
+    
+    apt = request.form['apt']
+    if apt is not 'N/A':
+        add += "apt " + apt + " "
+    add += request.form['city'] + " "
+    add += request.form['state'] + " "
+    add += request.form['zip']
+
     api = hsi_api.Hsi_Api(CONFIG_FILE_URL)    
     geo = json.loads(api.get_location_data(add))
 
     if "status" not in geo:
-        result = geo["results"]
-        data.update({"lat":result[0]["lat"]})
-        data.update({"long":result[0]["lng"]})
+        result = geo["results"][0]['geometry']['location']
+        data.update({"lat":result["lat"]})
+        data.update({"long":result["lng"]})
+        result = geo['results'][0]['address_components']
+        for i in result:
+            if "subpremise" in result[i]["types"] :
+                data.update({"apt":result[i]["short_name"]})
+            elif "street_number" in result[i]["types"] :
+                if "address" in data:
+                    data["address"] = result[i]["short_name"]+" "+data["address"]
+                else:
+                    data.update({"address":result[i]["short_name"]})
+            elif "route" in result[i]["types"] :
+                if "address" in data:
+                    data["address"] = data["address"] + " " + result[i]["short_name"]
+                else:
+                    data.update({"address": result[i]["short_name"]})
+            elif "locality" in result[i]['types']:
+                data.update({"city":result[i]['short_name']})
+            elif "administrative_area_level_1" in result[i]['types']:
+                data.update({"state": result[i]['short_name']})
+            elif "postal_code" in result[i]['types']:
+                data.update({"zip": result[i]['short_name']})
     else:
         return geo #Google geocode error
     
-    data.update({"apt":request.form['apt']})
     data.update({"updateDate":request.form['updateDate']})
     data.update({"rent":request.form['rent']})
     data.update({"gas":request.form['gas']})
     data.update({"water":request.form['water']})
-    data.update({"heating":request.form['heating']})
     data.update({"electrical":request.form['electrical']})
     data.update({"recycle":request.form['recycle']})
     data.update({"compost":request.form['compost']})
@@ -127,15 +158,16 @@ NOTE: Does not deal with duplicate key errors yet
 def utilAdd():
     param_keys = MultiDict.to_dict(request.form).keys()
     api = hsi_api.Hsi_Api(CONFIG_FILE_URL)
+    result = {}
     if 'key' not in param_keys or ('key' in param_keys and valid(request.form['key']) == False):
         return VALIDATION_ERROR    
     if utilAddSanity(param_keys):
         util_info = utilCombine(param_keys)
         if "status" in util_info:
-            return '{"error": "'+ util_info["status"] + '"}'
+            return '{"error": "' + util_info["status"] + '"}'
         res = api.utilAdd(util_info)
-        if res is False:
-            return WRITE_ERROR 
+        if "error" in res:
+            return str(res) 
         return '{"status":"True"}'
     return FORMAT_ERROR
 
@@ -152,7 +184,6 @@ def utilAddSanity(param_keys):
        'rent' in param_keys and \
        'gas' in param_keys and \
        'water' in param_keys and \
-       'heating' in param_keys and \
        'electrical' in param_keys and \
        'recycle' in param_keys and \
        'compost' in param_keys:
