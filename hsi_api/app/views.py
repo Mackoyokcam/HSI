@@ -74,16 +74,19 @@ def utilQuery():
             locations = list()
             for i in origins:
                 coordinates = {}
-                geo = json.loads(api.get_location_data(i))
+                geo = api.get_location_data(i)
+                geo = json.loads(geo)
+                print(str(geo))
                 if "status" in geo:
                     coordinates.update({"status": geo["status"]})
-                else:
-                    geo = geo["results"]
-                    for j in geo['results'][0]['address_components']:
+                else:                    
+                    addr = geo['results'][0]['address_components']
+                    for j in addr:
                         if 'subpremise' in j['types']:
                             coordinates.update({'apt':j[short_name]})
-                    coordinates.update({"lat":geo[0]['geomertry']['location']["lat"]})
-                    coordinates.update({"long":geo[0]['geomertry']['location']["lng"]})
+                            break
+                    coordinates.update({"lat":geo['results'][0]["lat"]})
+                    coordinates.update({"long":geo['results'][0]["lng"]})
                 locations.append(coordinates)
             result = api.utilQuery(locations, None)
             return str(result)
@@ -109,30 +112,30 @@ def utilCombine(param_keys):
     api = hsi_api.Hsi_Api(CONFIG_FILE_URL)    
     geo = json.loads(api.get_location_data(add))
 
-    if "status" not in geo:
-        result = geo["results"][0]['geometry']['location']
-        data.update({"lat":result["lat"]})
-        data.update({"long":result["lng"]})
+    if "status" not in geo:       
+        data.update({"lat":geo['results'][0]["lat"]})
+        data.update({"long":geo['results'][0]["lng"]})
         result = geo['results'][0]['address_components']
+        print(str(result[0]))
         for i in result:
-            if "subpremise" in result[i]["types"] :
+            if "subpremise" in i :
                 data.update({"apt":result[i]["short_name"]})
-            elif "street_number" in result[i]["types"] :
+            elif "street_number" in i['types'] :
                 if "address" in data:
-                    data["address"] = result[i]["short_name"]+" "+data["address"]
+                    data["address"] = i["short_name"]+" "+data["address"]
                 else:
-                    data.update({"address":result[i]["short_name"]})
-            elif "route" in result[i]["types"] :
+                    data.update({"address":i["short_name"]})
+            elif "route" in i["types"] :
                 if "address" in data:
-                    data["address"] = data["address"] + " " + result[i]["short_name"]
+                    data["address"] = data["address"] + " " + i["short_name"]
                 else:
-                    data.update({"address": result[i]["short_name"]})
-            elif "locality" in result[i]['types']:
-                data.update({"city":result[i]['short_name']})
-            elif "administrative_area_level_1" in result[i]['types']:
-                data.update({"state": result[i]['short_name']})
-            elif "postal_code" in result[i]['types']:
-                data.update({"zip": result[i]['short_name']})
+                    data.update({"address": i["short_name"]})
+            elif "locality" in i['types']:
+                data.update({"city":i['short_name']})
+            elif "administrative_area_level_1" in i['types']:
+                data.update({"state": i['short_name']})
+            elif "postal_code" in i['types']:
+                data.update({"zip": i['short_name']})
     else:
         return geo #Google geocode error
     

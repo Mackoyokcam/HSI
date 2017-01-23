@@ -139,7 +139,8 @@ class Hsi_Api:
             return_value['results'] = list()
             for x in relevant_info:
                 temp = dict()
-                temp['formatted_address'] = x['formatted_address']
+                temp['address'] = x['formatted_address']
+                temp['address_components'] = x['address_components']
                 temp['lat'] = x['geometry']['location']['lat']
                 temp['lng'] = x['geometry']['location']['lng']
                 return_value['results'].append(temp)
@@ -195,11 +196,10 @@ class Hsi_Api:
                 unit = {}
                 apt_data = {}
                 geo = json.loads(g)             
-                for l in geo['results'][0]['address_components']:
+                for l in geo['address_components']:
                     if 'subpremise' in l['types']:
                         unit.update({'apt':l['short_name']})
                         break
-                geo = geo['results'][0]['geometry']['location']
                 unit.update({'long':geo['lng']})
                 unit.update({'lat':geo['lat']})
                 try:
