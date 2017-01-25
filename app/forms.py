@@ -50,4 +50,6 @@ class AddressForm(Form):
     recycle = BooleanField('Recycle?')
     compost = BooleanField('Compost?')
 
-
+# not currently used
+class AddressSearchForm(Form):
+    address = StringField('Address', validators=[DataRequired()], render_kw={})

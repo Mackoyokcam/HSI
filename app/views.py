@@ -1,11 +1,11 @@
 from flask import render_template, request, flash, url_for, redirect
 from app import app
 from .forms import AccountCreationForm, AddressForm
-from flask_wtf.csrf import CsrfProtect
+from flask_wtf.csrf import CSRFProtect
 import requests
 
 
-CsrfProtect(app)
+CSRFProtect(app)
 
 
 ''''
@@ -18,6 +18,7 @@ def csrf_error(reason):
 @app.route('/')
 @app.route('/index')
 @app.route('/search')
+@app.route('/main')
 def search():
 	return render_template("search.html")
 
@@ -25,6 +26,18 @@ def search():
 @app.route('/about')
 def about():
 	return render_template("about.html")
+
+@app.route('/privacy')
+def privacy():
+	return render_template("privacy.html")
+
+@app.route('/terms')
+def terms():
+	return render_template("terms.html")
+
+@app.route('/contact')
+def contact():
+	return render_template("contact.html")
 
 
 @app.route('/account', methods=['GET', 'POST'])
@@ -44,11 +57,21 @@ def account():
 	return render_template("account_creation.html", form=userform, addressform=addressform)
 
 
-@app.route('/properties', methods=['GET'])
+@app.route('/properties', methods=['GET', 'POST'])
 def properties():
 	search_string = request.args.get('search_string')
+	data = {
+		"key" : "",
+		"origins" : search_string
+	}
+	# res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
+	# return render_template("properties.html", search_string=search_string, res=res)
 	return render_template("properties.html", search_string=search_string)
 
+@app.route('/compare', methods=['GET'])
+def compare():
+	properties = request.args.get('properties').split(':')
+	return render_template("compare.html", properties=properties)
 
 @app.route('/test', methods=['POST'])
 def test():
