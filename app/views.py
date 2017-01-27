@@ -67,7 +67,8 @@ def properties():
 		"origins" : search_string
 	}
 	res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
-	return render_template("properties.html", search_string=search_string, res=res)
+	addressData = res.json()
+	return render_template("properties.html", search_string=search_string, addressData=addressData)
 
 @app.route('/compare', methods=['GET'])
 def compare():
