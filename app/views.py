@@ -68,6 +68,9 @@ def properties():
 	}
 	res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
 	addressData = res.json()
+	# NOTE: this is kind of hacky but necessary until we figure out multiple apartments
+	# with the back end
+	addressData = addressData["addr0"]["N/A"]
 	return render_template("properties.html", search_string=search_string, addressData=addressData)
 
 @app.route('/compare', methods=['GET'])
