@@ -60,9 +60,8 @@ def account():
 @app.route('/properties', methods=['GET', 'POST'])
 def properties():
 	search_string = request.args.get('search_string')
-	if (search_string == "") {
-		return render_template("properties.html", search_string=search_string) 
-	}
+	if (search_string == ""):
+		return render_template("properties.html", search_string=search_string)
 	data = {
 		"key" : "",
 		"origins" : search_string
