@@ -76,7 +76,6 @@ def utilQuery():
                 coordinates = {}
                 geo = api.get_location_data(i)
                 geo = json.loads(geo)
-                print(str(geo))
                 if "status" in geo:
                     coordinates.update({"status": geo["status"]})
                 else:                    
@@ -88,8 +87,8 @@ def utilQuery():
                     coordinates.update({"lat":geo['results'][0]["lat"]})
                     coordinates.update({"long":geo['results'][0]["lng"]})
                 locations.append(coordinates)
-            result = api.utilQuery(locations, None)
-            return str(result)
+            result = str(api.utilQuery(locations, None)).replace('\'', '\"')
+            return result.replace('""', '"')
     return FORMAT_ERROR
 
 
@@ -136,6 +135,8 @@ def utilCombine(param_keys):
                 data.update({"state": i['short_name']})
             elif "postal_code" in i['types']:
                 data.update({"zip": i['short_name']})
+        if "apt" not in data:
+            data.update({"apt": "N/A"})
     else:
         return geo #Google geocode error
     

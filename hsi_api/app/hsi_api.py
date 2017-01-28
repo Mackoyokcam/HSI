@@ -3,7 +3,7 @@ import json,requests
 from app.googlemaps import client,distance_matrix,geocoding
 from pymongo import errors as mongoerrors
 from pymongo import MongoClient
-
+from bson.json_util import dumps
 
 
 class Hsi_Api:
@@ -188,7 +188,7 @@ class Hsi_Api:
                             apt_data.update({"status":str(db.command("getLastError"))})
                         else:
                             apt_data.update({k: cursor})                        
-                data.update({"addr"+str(j):apt_data})    
+                    data.update({"addr"+str(j):apt_data})    
                 j = j+1
         elif (geocode is not None):
             geocode = list(geocode)
@@ -205,10 +205,11 @@ class Hsi_Api:
                 try:
                     db.util.find(unit, { "_id":0, "heating":0}).sort("updateDate", -1).limit(1)
                     cursor = next(cursor, None)
+                    jcur = dumps(cursor)
                 except mongoerrors.PyMongoError:
                     apt_data.update({"status":str(db.command("getLastError"))})
                 else:
-                    apt_data.update({k: cursor})
+                    apt_data.update({k: jcur})
                 data.update({"addr"+str(j):apt_data})    
                 j = j+1
         return data
