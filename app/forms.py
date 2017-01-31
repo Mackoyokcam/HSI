@@ -52,4 +52,4 @@ class AddressForm(Form):
 
 # not currently used
 class AddressSearchForm(Form):
-    address = StringField('Address', validators=[DataRequired()], render_kw={})
+    address = StringField('Address', validators=[DataRequired()], render_kw={"placeholder" : "Search Address"})

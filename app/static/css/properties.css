@@ -26,29 +26,18 @@
 	display: inline-block;
 }
 
-#search-area input {
-	border-bottom: solid 2px #444444;
-	border-radius: 0px;
-	border-top: none;
+#search-form {
+	margin-top: -4px;
 }
 
-#search-area input[type="textbox"] {
-	font-family: sans-serif;
-	width: 227px;
-	border-right: solid 1px #444444;
-	border-left: none;
-	margin-right: -3px;
+#search-form input {
+	border: solid 2px #444444;
 }
 
-#search-area input[type="button"] {
-	float: none;
-	vertical-align: bottom;
-	border-left: solid 1px #444444;
-	border-right: none;
-	width: 70px;
-	height: 22px;
-	margin-left: -2px;
-	margin-right: -3px;
+#search-form input[type="text"] {
+	width: 220px;
+	margin-top: 1px;
+	margin-left: 1px;
 }
 
 #address-text-box {

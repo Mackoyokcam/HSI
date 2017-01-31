@@ -19,9 +19,6 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkC
 	<img id="street-view" src="https://maps.googleapis.com/maps/api/streetview?size=600x600&location={{search_string}}
 	&key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA"></img>
 	{% endif %}
-	<div id="address-text-box">
-		<h3 id="address-text">{{ search_string }}</h3>
-	</div>
 	<div id="search-form">
 		<form action="/properties" method="get">
 			<div>
@@ -30,11 +27,10 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkC
 			</div>
 		</form>
 	</div>
-	<!-- <div id="search-bar">
-		<input type="text">
-		<button id="search-button">search</button>
-	</div> -->
-	<div id="address-data"> <!-- temporary until browser access to server -->
+	<div id="address-text-box">
+		<h3 id="address-text">{{ search_string }}</h3>
+	</div>
+	<div id="address-data">
 		{% if addressData %}
 		<p>Updated: {{ addressData["updateDate"] }}</p>
 		<p>Rent: {{ addressData["rent"] }}</p>
@@ -44,6 +40,8 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkC
 		<p>Water: {{ addressData["water"] }}</p>
 		<p>Recycle: {% if addressData["recycle"]|string() == "True" %}yes{% else %}none{% endif %}</p>
 		<p>Compost: {% if addressData["compost"]|string() == "True" %}yes{% else %}none{% endif %}</p>
+		{% else %}
+		<p> Sorry, there's no data on this proprty, or we couldn't display it</p>
 		{% endif %}
 	</div>
 </div>
