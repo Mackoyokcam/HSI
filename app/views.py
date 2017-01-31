@@ -73,6 +73,20 @@ def properties():
 	addressData = addressData["addr0"]["N/A"]
 	return render_template("properties.html", search_string=search_string, addressData=addressData)
 
+# for just viewing the json results of querying the database
+@app.route('/simple', methods=['GET'])
+def simple():
+	search_string = request.args.get('search_string')
+	if (search_string == "" || search_string == None):
+		return render_template("simple.html")
+	data = {
+		"key" : "",
+		"origins" : search_string
+	}
+	res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
+	addressData = res.json()
+	return render_template("simple.html", addressData=addressData)
+
 @app.route('/compare', methods=['GET'])
 def compare():
 	properties = request.args.get('properties').split(':')
