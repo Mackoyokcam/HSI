@@ -77,7 +77,7 @@ def properties():
 @app.route('/simple', methods=['GET'])
 def simple():
 	search_string = request.args.get('search_string')
-	if (search_string == "" || search_string == None):
+	if (search_string == "" or search_string == None):
 		return render_template("simple.html")
 	data = {
 		"key" : "",
