@@ -1,75 +1,109 @@
 {% extends "base.html" %}
 {% block navbar %}
-<div id="links">
-	<a href="about">About HSI</a>
-	<a href="">Privacy Policy</a>
-	<a href="">Terms of Use</a>
-	<a href="">Contact Us</a>
-</div>
-<div id="tools">
-	<div id="search-form">
-		<form action="/properties" method="get">
-			<div>
-				<input type="text" name="search_string">
-				<input type="submit" value="search">
-			</div>
-		</form>
-	</div>
-	<div id="account">
-		<a href="account">My Account</a>
-	</div>
-</div>
+    {% include "navbar.html" %}
 {% endblock %}
 {% block content  %}
-<h1>Account Creation</h1>
-<hr>
-<form name="account_data" action="{{ url_for('account') }}" method="POST">
-    <h2>User</h2>
-    <hr>
-    <div id="userdata">
-        {{  form.hidden_tag()  }}
-        {%  for field in form if field.widget.input_type != 'hidden' %}
+    <link rel="stylesheet" type="text/css" href="../static/css/account_creation.css"/>
+    <script type="text/javascript" src="../static/javascript/account_creation.js"></script>
 
-            {{ field.label }}
+    <h1>Account Creation</h1>
 
-            {% if field.type != 'BooleanField' %}
+    <ul class="tab">
+      <li><a href="javascript:void(0)" id="defaultOpen" class="tablinks" onclick="openTab(event, 'Create')">Create Account</a></li>
+      <li><a href="javascript:void(0)" id="loginOpen" class="tablinks" onclick="openTab(event, 'Login')">Login</a></li>
+    </ul>
+
+    <div id="Create" class="tabcontent">
+        <form name="account_data" action="{{ url_for('account') }}" method="POST">
+            <h2>User</h2>
+            <hr>
+            <div id="userdata">
+                {{  form.hidden_tag()  }}
+                {%  for field in form if field.widget.input_type != 'hidden' %}
+
+                    {{ field.label }}
+
+                    {% if field.type != 'BooleanField' %}
+                        <br>
+                    {%  endif %}
+
+                    {{ field }}
+
+                    {%  for error in field.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                    <br>
+                    <br>
+                {%  endfor  %}
+
+            </div>
+            <hr>
+            <h2>Address</h2>
+            <hr>
+            <div id="addressdata">
+
+                {%  for field in addressform if field.widget.input_type != 'hidden' %}
+
+                    {{ field.label }}
+
+                    {% if field.type != 'BooleanField' %}
+                        <br>
+                    {%  endif %}
+
+                    {{ field }}
+
+                    {%  for error in field.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                    <br>
+                    <br>
+                {%  endfor  %}
+
                 <br>
-            {%  endif %}
-
-            {{ field }}
-
-            {%  for error in field.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-            <br>
-            <br>
-        {%  endfor  %}
-
+                <div id="buttonCenter">
+                    <button class="submitButton" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
     </div>
-    <hr>
-    <h2>Address</h2>
-    <hr>
-    <div id="addressdata">
 
-        {%  for field in addressform if field.widget.input_type != 'hidden' %}
+    <div id="Login" class="tabcontent">
+        <form name="login_data" action="{{ url_for('login') }}" method="POST">
+            <div id="logindata">
+                {{  form.hidden_tag()  }}
+                {%  for field in loginform if field.widget.input_type != 'hidden' %}
 
-            {{ field.label }}
+                    {{ field.label }}
 
-            {% if field.type != 'BooleanField' %}
+                    {% if field.type != 'BooleanField' %}
+                        <br>
+                    {%  endif %}
+
+                    {{ field }}
+
+                    {%  for error in field.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                    <br>
+                    <br>
+                {%  endfor  %}
+
                 <br>
-            {%  endif %}
-
-            {{ field }}
-
-            {%  for error in field.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-            <br>
-            <br>
-        {%  endfor  %}
-
-        <br>
-        <button type="submit">Submit</button>
+                <div id="buttonCenter">
+                    <button class="submitButton" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
     </div>
-</form>
+
+    <script>
+        document.getElementById("defaultOpen").click();
+    </script>
+
+    {% if login_error %}
+      <script>
+          document.getElementById("loginOpen").click();
+      </script>
+    {% endif %}
+
 {% endblock %}

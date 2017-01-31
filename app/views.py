@@ -1,11 +1,11 @@
 from flask import render_template, request, flash, url_for, redirect
 from app import app
-from .forms import AccountCreationForm, AddressForm
-from flask_wtf.csrf import CsrfProtect
+from .forms import AccountCreationForm, AddressForm, Login
+from flask_wtf.csrf import CSRFProtect
 import requests
 
 
-CsrfProtect(app)
+CSRFProtect(app)
 
 
 ''''
@@ -18,6 +18,7 @@ def csrf_error(reason):
 @app.route('/')
 @app.route('/index')
 @app.route('/search')
+@app.route('/main')
 def search():
 	return render_template("search.html")
 
@@ -26,11 +27,24 @@ def search():
 def about():
 	return render_template("about.html")
 
+@app.route('/privacy')
+def privacy():
+	return render_template("privacy.html")
+
+@app.route('/terms')
+def terms():
+	return render_template("terms.html")
+
+@app.route('/contact')
+def contact():
+	return render_template("contact.html")
+
 
 @app.route('/account', methods=['GET', 'POST'])
 def account():
 	userform = AccountCreationForm()
 	addressform = AddressForm()
+	loginform = Login()
 	if userform.validate_on_submit() & addressform.validate_on_submit():
 		post_data = addressform.data
 		post_data['key'] = ""
@@ -39,18 +53,66 @@ def account():
 
 		# Add Info to UtilDB
 		res = requests.post('http://140.160.142.77:5000/utilDB/add', data=post_data)
-		return render_template('response.html', res=addressform)
+		return render_template('response.html', res=res)
 
-	return render_template("account_creation.html", form=userform, addressform=addressform)
+	return render_template("account_creation.html", form=userform, addressform=addressform, loginform=loginform,
+						   login_error = False)
 
 
-@app.route('/properties', methods=['GET'])
+@app.route('/properties', methods=['GET', 'POST'])
 def properties():
 	search_string = request.args.get('search_string')
-	return render_template("properties.html", search_string=search_string)
+	if (search_string == ""):
+		return render_template("properties.html", search_string=search_string)
+	data = {
+		"key" : "",
+		"origins" : search_string
+	}
+	res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
+	addressData = res.json()
+	# NOTE: this is kind of hacky but necessary until we figure out multiple apartments
+	# with the back end
+	addressData = addressData["addr0"]["N/A"]
+	return render_template("properties.html", search_string=search_string, addressData=addressData)
 
+# for just viewing the json results of querying the database
+@app.route('/simple', methods=['GET'])
+def simple():
+	search_string = request.args.get('search_string')
+	if (search_string == "" or search_string == None):
+		return render_template("simple.html")
+	data = {
+		"key" : "",
+		"origins" : search_string
+	}
+	res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
+	addressData = res.json()
+	return render_template("simple.html", addressData=addressData)
+
+@app.route('/compare', methods=['GET'])
+def compare():
+	properties = request.args.get('properties').split(':')
+	return render_template("compare.html", properties=properties)
 
 @app.route('/test', methods=['POST'])
 def test():
 	account_data = request.args.get('account_data')
 	return render_template("test.html", account_data=account_data)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+	userform = AccountCreationForm()
+	addressform = AddressForm()
+	loginform = Login()
+
+	if loginform.validate_on_submit():
+		get_data = loginform.data
+
+		#login user
+		#res = requests.post('http//140.160.142.77:5000/<insert function name here>?=get_data)
+
+		return render_template('search.html') #insert res=res at end.
+
+	return render_template("account_creation.html", form=userform, addressform=addressform, loginform=loginform,
+						   login_error = True)

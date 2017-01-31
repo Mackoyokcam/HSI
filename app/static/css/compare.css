@@ -1,0 +1,10 @@
+#property-columns {
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+}
+
+.property-column {
+	display: table-cell;
+	text-align: center;
+}

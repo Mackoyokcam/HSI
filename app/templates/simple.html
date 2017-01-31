@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>HSI</title>
+		<meta charset= "UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+	</head>
+	<body>
+		<form action="/simple" method="get">
+			<div>
+				<input type="text" name="search_string">
+				<input type="submit" value="search">
+			</div>
+		</form>
+		{% if addressData %}
+			<p>{{ addressData }}</p>
+		{% endif %}
+	</body>
+</html>

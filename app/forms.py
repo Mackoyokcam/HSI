@@ -3,51 +3,43 @@ from wtforms import StringField, PasswordField, BooleanField, FloatField, Hidden
 from wtforms.validators import DataRequired, Email, Length, EqualTo, Regexp
 
 
+class Login(Form):
+    email = StringField('Email', validators=[DataRequired(), Email(), Length(max=35)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
+    rememberMe = BooleanField('Remember me')
+
+
 class AccountCreationForm(Form):
     first_name = StringField('First Name', validators=[DataRequired(), Length(max=25),
                                                        Regexp('^[a-zA-Z0-9\s]*$',
-                                                              message="Please use only alphanumeric characters.")],
-                             render_kw={"placeholder": "First Name"})
+                                                              message="Please use only alphanumeric characters.")])
     last_name = StringField('Last Name', validators=[DataRequired(), Length(max=25),
                                                      Regexp('^[a-zA-Z0-9\s]*$',
-                                                            message="Please use only alphanumeric characters.")],
-                            render_kw={"placeholder": "Last Name"})
-    email = StringField('Email', validators=[DataRequired(), Email(), Length(max=35)],
-                        render_kw={"placeholder": "Email Address"})
+                                                            message="Please use only alphanumeric characters.")])
+    email = StringField('Email', validators=[DataRequired(), Email(), Length(max=35)])
     password = PasswordField('New Password', validators=[DataRequired(), Length(min=6),
-                                                         EqualTo('confirm', message='Passwords must match')],
-                             render_kw={"placeholder": "New Password"})
-    confirm = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=6)],
-                            render_kw={"placeholder": "Confirm Password"})
+                                                         EqualTo('confirm', message='Passwords must match')])
+    confirm = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=6)])
 
 
 class AddressForm(Form):
     address = StringField('Address', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
-                                                                        message="Please use only alphanumeric characters.")],
-                          render_kw={"placeholder": "Address"})
+                                                                        message="Please use only alphanumeric characters.")])
     apt = StringField('Apartment', validators=[DataRequired(), Regexp('^[a-zA-Z0-9]*$',
-                                                                        message="Please use only alphanumeric characters.")],
-                      render_kw={"placeholder": "Apartment #"})
+                                                                        message="Please use only alphanumeric characters.")])
     city = StringField('City', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
-                                                                        message="Please use only alphanumeric characters.")],
-                       render_kw={"placeholder": "City"})
+                                                                        message="Please use only alphanumeric characters.")])
     state = StringField('State', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
-                                                                        message="Please use only alphanumeric characters.")],
-                        render_kw={"placeholder": "State"}, )
+                                                                        message="Please use only alphanumeric characters.")])
     zip = StringField('Zip', validators=[DataRequired(), Regexp('^\d{5}(?:[-\s]\d{4})?$',
-                                                                        message="Not a valid zip code.")],
-                      render_kw={"placeholder": "Zip"})
-    rent = FloatField('Rent', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')],
-                      render_kw={"placeholder": "Rent"})
-    gas = FloatField('Gas', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')],
-                     render_kw={"placeholder": "Gas Bill"})
-    water = FloatField('Water', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')],
-                       render_kw={"placeholder": "Water Bill"})
-    heating = FloatField('Heating', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')],
-                         render_kw={"placeholder": "Heating Bill"})
-    electrical = FloatField('Electrical', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')],
-                            render_kw={"placeholder": "Electrical Bill"})
+                                                                        message="Not a valid zip code.")])
+    rent = FloatField('Rent', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')])
+    gas = FloatField('Gas', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')])
+    water = FloatField('Water', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')])
+    electrical = FloatField('Electrical', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')])
     recycle = BooleanField('Recycle?')
     compost = BooleanField('Compost?')
 
-
+# not currently used
+class AddressSearchForm(Form):
+    address = StringField('Address', validators=[DataRequired()], render_kw={"placeholder" : "Search Address"})
