@@ -1,6 +1,6 @@
 from flask import render_template, request, flash, url_for, redirect
 from app import app
-from .forms import AccountCreationForm, AddressForm
+from .forms import AccountCreationForm, AddressForm, Login
 from flask_wtf.csrf import CSRFProtect
 import requests
 
@@ -44,6 +44,7 @@ def contact():
 def account():
 	userform = AccountCreationForm()
 	addressform = AddressForm()
+	loginform = Login()
 	if userform.validate_on_submit() & addressform.validate_on_submit():
 		post_data = addressform.data
 		post_data['key'] = ""
@@ -52,9 +53,10 @@ def account():
 
 		# Add Info to UtilDB
 		res = requests.post('http://140.160.142.77:5000/utilDB/add', data=post_data)
-		return render_template('response.html', res=addressform)
+		return render_template('response.html', res=res)
 
-	return render_template("account_creation.html", form=userform, addressform=addressform)
+	return render_template("account_creation.html", form=userform, addressform=addressform, loginform=loginform,
+						   login_error = False)
 
 
 @app.route('/properties', methods=['GET', 'POST'])
@@ -96,3 +98,21 @@ def compare():
 def test():
 	account_data = request.args.get('account_data')
 	return render_template("test.html", account_data=account_data)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+	userform = AccountCreationForm()
+	addressform = AddressForm()
+	loginform = Login()
+
+	if loginform.validate_on_submit():
+		get_data = loginform.data
+
+		#login user
+		#res = requests.post('http//140.160.142.77:5000/<insert function name here>?=get_data)
+
+		return render_template('search.html') #insert res=res at end.
+
+	return render_template("account_creation.html", form=userform, addressform=addressform, loginform=loginform,
+						   login_error = True)
