@@ -63,8 +63,7 @@ def account():
 		util_add = requests.post('http://requestb.in/16s31qr1', data=util_post_data)
 		return render_template('response.html', util_add=util_add) #add user_add=useradd
 
-	return render_template("account_creation.html", form=userform, addressform=addressform, loginform=loginform,
-						   login_error = False)
+	return render_template("account_creation.html", form=userform, addressform=addressform)
 
 
 @app.route('/account_view', methods=['GET', 'POST'])
@@ -86,9 +85,11 @@ def properties():
 	}
 	res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
 	addressData = res.json()
-	# NOTE: this is kind of hacky but necessary until we figure out multiple apartments
-	# with the back end
-	addressData = addressData["addr0"]["N/A"]
+	# NOTE: this is kind of hacky but it's only temporary until we figure out
+	# some data formatting issues with the back end
+	if 'status' in addressData['addr0']:
+		return render_template("properties.html", search_string=search_string)
+	addressData = addressData['addr0']
 	return render_template("properties.html", search_string=search_string, addressData=addressData)
 
 
@@ -148,3 +149,4 @@ def login():
 def logout():
 	# logout(user)
 	return redirect(url_for('index'))
+
