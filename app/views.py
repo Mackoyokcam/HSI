@@ -59,10 +59,10 @@ def account():
 		# user_add = requests.post('http://140.160.142.77:5000/<insert user add call>', data=post_data)
 
 		# Add Info to UtilDB
-		util_add = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
+		# util_add = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
 
 		# test bin
-		# util_add = requests.post('http://requestb.in/16s31qr1', data=util_post_data)
+		util_add = requests.post('http://requestb.in/16s31qr1', data=util_post_data)
 
 		return render_template('response.html', util_add=util_add) #add user_add=useradd
 

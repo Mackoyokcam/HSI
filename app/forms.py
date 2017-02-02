@@ -40,7 +40,7 @@ class AddressForm(Form):
     electrical = FloatField('Electrical', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')])
     recycle = BooleanField('Recycle?')
     compost = BooleanField('Compost?')
-    updateDate = DateField('Date', format='%Y.%m.%d', render_kw={"value": time.strftime("%Y.%m.%d")})
+    updateDate = StringField('', render_kw={"value": time.strftime("%Y.%m.%d"), "hidden": True})
 
 # not currently used
 class AddressSearchForm(Form):
