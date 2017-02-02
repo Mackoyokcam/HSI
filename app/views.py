@@ -2,6 +2,8 @@ from flask import render_template, request, flash, url_for, redirect
 from app import app
 from .forms import AccountCreationForm, AddressForm, Login
 from flask_wtf.csrf import CSRFProtect
+from flask_login import login_user, login_required
+from .redirects import get_redirect_target, redirect_back
 import requests
 
 
@@ -27,13 +29,16 @@ def search():
 def about():
 	return render_template("about.html")
 
+
 @app.route('/privacy')
 def privacy():
 	return render_template("privacy.html")
 
+
 @app.route('/terms')
 def terms():
 	return render_template("terms.html")
+
 
 @app.route('/contact')
 def contact():
@@ -44,19 +49,30 @@ def contact():
 def account():
 	userform = AccountCreationForm()
 	addressform = AddressForm()
-	loginform = Login()
+	loginform = Login(request.form)
 	if userform.validate_on_submit() & addressform.validate_on_submit():
-		post_data = addressform.data
-		post_data['key'] = ""
+		user_post_data = {}
+		util_post_data = addressform.data
+		util_post_data['key'] = ''
 
 		# Add User to DB.
+		# user_add = requests.post('http://140.160.142.77:5000/<insert user add call>', data=post_data)
 
 		# Add Info to UtilDB
-		res = requests.post('http://140.160.142.77:5000/utilDB/add', data=post_data)
-		return render_template('response.html', res=res)
+		util_add = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
 
-	return render_template("account_creation.html", form=userform, addressform=addressform, loginform=loginform,
-						   login_error = False)
+		# test bin
+		# util_add = requests.post('http://requestb.in/16s31qr1', data=util_post_data)
+		return render_template('response.html', util_add=util_add) #add user_add=useradd
+
+	return render_template("account_creation.html", form=userform, addressform=addressform)
+
+
+@app.route('/account_view', methods=['GET', 'POST'])
+@login_required
+def account_view():
+	#code for viewing account
+	return render_template("account.html")
 
 
 @app.route('/properties', methods=['GET', 'POST'])
@@ -70,10 +86,13 @@ def properties():
 	}
 	res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
 	addressData = res.json()
-	# NOTE: this is kind of hacky but necessary until we figure out multiple apartments
-	# with the back end
-	addressData = addressData["addr0"]["N/A"]
+	# NOTE: this is kind of hacky but it's only temporary until we figure out
+	# some data formatting issues with the back end
+	if 'status' in addressData['addr0']:
+		return render_template("properties.html", search_string=search_string)
+	addressData = addressData['addr0']
 	return render_template("properties.html", search_string=search_string, addressData=addressData)
+
 
 # for just viewing the json results of querying the database
 @app.route('/simple', methods=['GET'])
@@ -89,10 +108,12 @@ def simple():
 	addressData = res.json()
 	return render_template("simple.html", addressData=addressData)
 
+
 @app.route('/compare', methods=['GET'])
 def compare():
 	properties = request.args.get('properties').split(':')
 	return render_template("compare.html", properties=properties)
+
 
 @app.route('/test', methods=['POST'])
 def test():
@@ -105,14 +126,28 @@ def login():
 	userform = AccountCreationForm()
 	addressform = AddressForm()
 	loginform = Login()
+	next = get_redirect_target()
 
 	if loginform.validate_on_submit():
-		get_data = loginform.data
+		# user_data =
 
-		#login user
-		#res = requests.post('http//140.160.142.77:5000/<insert function name here>?=get_data)
+		# requires user class import and API call function.
+		'''
+		user = requests.get('http://140.160.142.77:5000/<userdb function>', data=user_data)
+		if get request for user successful...
+			login_user(user)
+			flash('Logged in successfully.')
+		'''
 
-		return render_template('search.html') #insert res=res at end.
+		return redirect_back('index')
 
 	return render_template("account_creation.html", form=userform, addressform=addressform, loginform=loginform,
 						   login_error = True)
+
+
+@app.route('/logout', methods=['GET'])
+@login_required
+def logout():
+	# logout(user)
+	return redirect(url_for('index'))
+

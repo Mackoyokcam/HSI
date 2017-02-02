@@ -1,6 +1,7 @@
 from flask_wtf import Form
-from wtforms import StringField, PasswordField, BooleanField, FloatField, HiddenField, validators
+from wtforms import StringField, PasswordField, BooleanField, FloatField, HiddenField, validators, DateField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, Regexp
+import time
 
 
 class Login(Form):
@@ -39,7 +40,8 @@ class AddressForm(Form):
     electrical = FloatField('Electrical', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')])
     recycle = BooleanField('Recycle?')
     compost = BooleanField('Compost?')
+    updateDate = DateField('Date', format='%Y.%m.%d', render_kw={"value": time.strftime("%Y.%m.%d"), "disabled": "True"})
 
 # not currently used
 class AddressSearchForm(Form):
-    address = StringField('Address', validators=[DataRequired()], render_kw={"placeholder" : "Search Address"})
+    address = StringField('Address', validators=[DataRequired()], render_kw={"placeholder": "Search Address"})
