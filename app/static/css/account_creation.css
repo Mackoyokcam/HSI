@@ -84,9 +84,10 @@ input[type=checkbox]:hover {
 }
 
 input[type=checkbox] {
-  width: 30px; /*Desired width*/
-  height: 30px; /*Desired height*/
-  -webkit-appearance: none;
-  appearance: none;
+    width: 1.5em;
+     height: 1.5em;
+    vertical-align: bottom;
+    /*-webkit-appearance: none;
+    appearance: none;*/
 }
 
