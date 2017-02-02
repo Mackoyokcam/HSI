@@ -1,7 +1,11 @@
 # Code snippet taken from Armin Ronacher: http://flask.pocoo.org/snippets/62/
 # Labeled as public domain.
+'''
 
-from urlparse import urlparse, urljoin
+ISSUES with this code right now, commented out.
+
+
+import urllib3
 from flask import request, url_for, redirect
 
 
@@ -24,3 +28,4 @@ def redirect_back(endpoint, **values):
     if not target or not is_safe_url(target):
         target = url_for(endpoint, **values)
     return redirect(target)
+'''

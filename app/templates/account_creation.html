@@ -40,8 +40,8 @@
             <hr>
             <h2>Address</h2>
             <hr>
-            <div id="addressdata">
-
+           <div id="addressdata">
+                {{ form.hidden_tag() }}
                 {%  for field in addressform if field.widget.input_type != 'hidden' %}
 
                     {{ field.label }}
