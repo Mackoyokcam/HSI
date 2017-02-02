@@ -3,11 +3,11 @@ from app import app
 from .forms import AccountCreationForm, AddressForm, Login
 from flask_wtf.csrf import CSRFProtect
 from flask_login import login_user, login_required
-from .redirects import get_redirect_target, redirect_back
+# from .redirects import get_redirect_target, redirect_back
 import requests
 
 
-CSRFProtect(app)
+# CSRFProtect(app)
 
 
 ''''
@@ -47,9 +47,9 @@ def contact():
 
 @app.route('/account', methods=['GET', 'POST'])
 def account():
-	userform = AccountCreationForm()
-	addressform = AddressForm()
-	loginform = Login(request.form)
+	userform = AccountCreationForm(csrf_enabled=False)
+	addressform = AddressForm(csrf_enabled=False)
+	loginform = Login(csrf_enabled=False)
 	if userform.validate_on_submit() & addressform.validate_on_submit():
 		user_post_data = {}
 		util_post_data = addressform.data
@@ -63,9 +63,10 @@ def account():
 
 		# test bin
 		# util_add = requests.post('http://requestb.in/16s31qr1', data=util_post_data)
+
 		return render_template('response.html', util_add=util_add) #add user_add=useradd
 
-	return render_template("account_creation.html", form=userform, addressform=addressform)
+	return render_template("account_creation.html", form=userform, addressform=addressform, loginform=loginform)
 
 
 @app.route('/account_view', methods=['GET', 'POST'])
@@ -123,10 +124,9 @@ def test():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	userform = AccountCreationForm()
-	addressform = AddressForm()
-	loginform = Login()
-	next = get_redirect_target()
+	userform = AccountCreationForm(csrf_enabled=False)
+	addressform = AddressForm(csrf_enabled=False)
+	loginform = Login(csrf_enabled=False)
 
 	if loginform.validate_on_submit():
 		# user_data =
@@ -139,7 +139,7 @@ def login():
 			flash('Logged in successfully.')
 		'''
 
-		return redirect_back('index')
+		return render_template('search.html')
 
 	return render_template("account_creation.html", form=userform, addressform=addressform, loginform=loginform,
 						   login_error = True)
@@ -149,5 +149,5 @@ def login():
 @login_required
 def logout():
 	# logout(user)
-	return redirect(url_for('index'))
+	return render_template("search.html")
 
