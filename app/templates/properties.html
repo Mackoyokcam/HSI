@@ -32,7 +32,16 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkC
 		<div id="address-text-box">
 			<h3 id="address-text">{{ search_string }}</h3>
 		</div>
-		{% if addressData["units"]|length > 1%}
+		{% if single_unit %}
+		<p>Updated: {{ addressData["units"][0]["updateDate"] }}</p>
+		<p>Rent: {{ addressData["units"][0]["rent"] }}</p>
+		<p>Heating: {{ addressData["units"][0]["heating"] }}</p>
+		<p>Gas: {{ addressData["units"][0]["gas"] }}</p>
+		<p>Electrical: {{ addressData["units"][0]["electrical"] }}</p>
+		<p>Water: {{ addressData["units"][0]["water"] }}</p>
+		<p>Recycle: {% if addressData["units"][0]["recycle"]|string() == "True" %}yes{% else %}none{% endif %}</p>
+		<p>Compost: {% if addressData["units"][0]["compost"]|string() == "True" %}yes{% else %}none{% endif %}</p>
+		{% else %}
 		<script type="text/javascript">
 			var addressData = "{{ addressData }}"
 		</script>
@@ -43,15 +52,6 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkC
 				{% endfor %}
 			</select>
 		</div>
-		{% else %}
-		<p>Updated: {{ addressData["units"][0]["updateDate"] }}</p>
-		<p>Rent: {{ addressData["units"][0]["rent"] }}</p>
-		<p>Heating: {{ addressData["units"][0]["heating"] }}</p>
-		<p>Gas: {{ addressData["units"][0]["gas"] }}</p>
-		<p>Electrical: {{ addressData["units"][0]["electrical"] }}</p>
-		<p>Water: {{ addressData["units"][0]["water"] }}</p>
-		<p>Recycle: {% if addressData["units"][0]["recycle"]|string() == "True" %}yes{% else %}none{% endif %}</p>
-		<p>Compost: {% if addressData["units"][0]["compost"]|string() == "True" %}yes{% else %}none{% endif %}</p>
 		{% endif %}
 	{% else %}
 		<p> Sorry, there's no data on this proprty, or we couldn't display it</p>
