@@ -27,13 +27,15 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkC
 			</div>
 		</form>
 	</div>
-	<div>
 	<div id="address-data">
 	{% if addressData %}
 		<div id="address-text-box">
 			<h3 id="address-text">{{ search_string }}</h3>
 		</div>
 		{% if addressData|length > 1%}
+		<script type="text/javascript">
+			var addressData = "{{ addressData }}"
+		</script>
 		<div>
 			<select>
 				{% for apartment in addressData %}

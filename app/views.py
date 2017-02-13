@@ -89,10 +89,11 @@ def properties():
 	addressData = res.json()
 	# NOTE: this is kind of hacky but it's only temporary until we figure out
 	# some data formatting issues with the back end
-	if 'status' in addressData['addr0']:
+	if addressData['addr0']['status'] == 'True':
+		addressData = addressData['addr0']
+		return render_template("properties.html", search_string=search_string, addressData=addressData)
+	else:
 		return render_template("properties.html", search_string=search_string)
-	addressData = addressData['addr0']
-	return render_template("properties.html", search_string=search_string, addressData=addressData)
 
 
 # for just viewing the json results of querying the database
