@@ -91,7 +91,10 @@ def properties():
 	# some data formatting issues with the back end
 	if addressData['addr0']['status'] == 'True':
 		addressData = addressData['addr0']
-		return render_template("properties.html", search_string=search_string, addressData=addressData)
+		if len(addressData["units"] == 1):
+			return render_template("properties.html", search_string=search_string, addressData=addressData, single_unit="true")
+		else:
+			return render_template("properties.html", search_string=search_string, addressData=addressData)
 	else:
 		return render_template("properties.html", search_string=search_string)
 
