@@ -78,16 +78,18 @@ def utilQuery():
                 geo = json.loads(geo)
                 if "status" in geo:
                     coordinates.update({"status": geo["status"]})
-                else:                    
+                else:
                     addr = geo['results'][0]['address_components']
+                    coordinates.update({"address":geo['results'][0]['address']})
                     for j in addr:
                         if 'subpremise' in j['types']:
-                            coordinates.update({'apt':j[short_name]})
+                            coordinates.update({'apt':j['short_name']})
                             break
                     coordinates.update({"lat":geo['results'][0]["lat"]})
                     coordinates.update({"long":geo['results'][0]["lng"]})
                 locations.append(coordinates)
             result = str(api.utilQuery(locations, None)).replace('\'', '\"')
+            print(str(result))
             return result.replace('""', '"')
     return FORMAT_ERROR
 
@@ -102,7 +104,7 @@ def utilCombine(param_keys):
     add = request.form['address'] + " "
     
     apt = request.form['apt']
-    if apt is not 'N/A':
+    if apt != 'N/A':
         add += "apt " + apt + " "
     add += request.form['city'] + " "
     add += request.form['state'] + " "
@@ -115,10 +117,10 @@ def utilCombine(param_keys):
         data.update({"lat":geo['results'][0]["lat"]})
         data.update({"long":geo['results'][0]["lng"]})
         result = geo['results'][0]['address_components']
-        print(str(result[0]))
+        
         for i in result:
-            if "subpremise" in i :
-                data.update({"apt":result[i]["short_name"]})
+            if "subpremise" in i['types']:
+                data.update({"apt":i["short_name"]})
             elif "street_number" in i['types'] :
                 if "address" in data:
                     data["address"] = i["short_name"]+" "+data["address"]
@@ -135,6 +137,8 @@ def utilCombine(param_keys):
                 data.update({"state": i['short_name']})
             elif "postal_code" in i['types']:
                 data.update({"zip": i['short_name']})
+        
+        
         if "apt" not in data:
             data.update({"apt": "N/A"})
     else:

@@ -147,8 +147,7 @@ class Hsi_Api:
             return_value = json.JSONEncoder().encode(return_value)
         else:
             return_value = '{"status":"'+status_code+'"}'
-        return return_value
- 
+        return return_value 
 
     '''''
     Format for origins is a list, the contents of each index being a dict containing a latitude and a longitude of the original addres, calculated by Google's geocoding in views.py
@@ -169,26 +168,37 @@ class Hsi_Api:
         j = 0
         if (origins is not None):
             for i in origins:
-                try:
-                    apt = db.util.distinct("apt", i)
-                except mongoerrors.PyMongoError:
-                    return '{"status":"'+str(db.command("getLastError"))+'"}'
-                if len(apt) is 0:
-                    data.update({"addr"+str(j):{"status":"ZERO DB RESULTS"}})
-                else:
-                    apt_data={}                    
-                    for k in apt:
-                        new_i = i
-                        new_i.update({"apt":k})
-                        cursor = 0
-                        try:
-                            cursor = db.util.find(new_i, { "_id":0, "apt":0, "address":0, "state":0, "city":0, "zip":0 }).sort("updateDate", -1).limit(1)
-                            cursor = next(cursor, None)
-                        except mongoerrors.PyMongoError:
-                            apt_data.update({"status":str(db.command("getLastError"))})
+                if ('status' in i):
+                    data.update({'addr'+str(j):i['status']})
+                else:    
+                    form_addr = i.pop('address')
+                    try:
+                        apt = db.util.distinct("apt", i)
+                    except mongoerrors.PyMongoError:
+                        return '{"status":"'+str(db.command("getLastError"))+'"}'
+                    if len(apt) is 0:
+                        data.update({"addr"+str(j):{"status":"ZERO DB RESULTS"}})
+                    else:
+                        units= {}
+                        apt_data={"status":'True'}                    
+                        for k in apt:
+                            new_i = i
+                            new_i.update({"apt":k})
+                            cursor = 0
+                            try:
+                                cursor = db.util.find(new_i, { "_id":0, "apt":0, "address":0, "state":0, "city":0, "zip":0 }).sort("updateDate", -1).limit(1)
+                                cursor = next(cursor, None)
+                            except mongoerrors.PyMongoError:
+                                units.update({k:{"status":str(db.command("getLastError"))}})
+                            else:                            
+                                units.update({k: cursor})
+                        apt_data.update({'units':units})
+                        ws = json.loads(self.get_single_walkscore(form_addr, i['lat'], i['long']))
+                        if ws['status'] == 1:
+                            apt_data.update({'walkscore':{'status':1,'score':ws['walkscore'], 'description':ws['description']}})
                         else:
-                            apt_data.update({k: cursor})                        
-                    data.update({"addr"+str(j):apt_data})    
+                            apt_data.update({'walkscore':{'status':ws['status']}})
+                        data.update({"addr"+str(j):apt_data})                    
                 j = j+1
         elif (geocode is not None):
             geocode = list(geocode)
