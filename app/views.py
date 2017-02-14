@@ -177,7 +177,8 @@ def simpleadd():
 			"compost" : request.args.get('compost')
 		}
 		res = requests.post('http://140.160.142.77:5000/utilDB/add', data=data)
-		return render_template("simpleadd.html", res=res)
+		reponseText = res.text
+		return render_template("simpleadd.html", responseText=responseText)
 	else:
 		return render_template("simpleadd.html")
 
