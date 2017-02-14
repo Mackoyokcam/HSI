@@ -143,19 +143,42 @@ def properties():
 
 
 # for just viewing the json results of querying the database
-@app.route('/simple', methods=['GET'])
-def simple():
+@app.route('/simplesearch', methods=['GET'])
+def simplesearch():
 	search_string = request.args.get('search_string')
 	if (search_string == "" or search_string == None):
-		return render_template("simple.html")
+		return render_template("simplesearch.html")
 	data = {
 		"key" : "",
 		"origins" : search_string
 	}
 	res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
 	addressData = res.json()
-	return render_template("simple.html", addressData=addressData)
+	return render_template("simplesearch.html", addressData=addressData)
 
+# for adding to the db without having to wget
+@app.route('/simpleadd', methods=['GET'])
+def simpleadd():
+	if 'address' in request.args:
+		data = {
+			"key" : "",
+			"updateDate" : time.strftime("%Y.%m.%d"),
+			"address" : request.args.get('address'),
+			"city" : request.args.get('city'),
+			"state" : request.args.get('state'),
+			"zip" : request.args.get('zip'),
+			"apt" : request.args.get('apt'),
+			"rent" : request.args.get('rent'),
+			"gas" : request.args.get('gas'),
+			"electrical" : request.args.get('electrical'),
+			"water" : request.args.get('water'),
+			"recycle" : request.args.get('recycle'),
+			"compost" : request.args.get('compost')
+		}
+		res = requests.post('http://140.160.142.77:5000/utilDB/add', data=data)
+		return render_template("simplesearch.html", res=res)
+	else:
+		return render_template("simplesearch.html")
 
 @app.route('/compare', methods=['GET'])
 def compare():
