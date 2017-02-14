@@ -89,7 +89,6 @@ def utilQuery():
                     coordinates.update({"long":geo['results'][0]["lng"]})
                 locations.append(coordinates)
             result = str(api.utilQuery(locations, None)).replace('\'', '\"')
-            print(str(result))
             return result.replace('""', '"')
     return FORMAT_ERROR
 
