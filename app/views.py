@@ -5,6 +5,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_login import login_user, login_required
 # from .redirects import get_redirect_target, redirect_back
 import requests
+import json
 
 
 # CSRFProtect(app)
@@ -78,25 +79,67 @@ def account_view():
 
 @app.route('/properties', methods=['GET', 'POST'])
 def properties():
-	search_string = request.args.get('search_string')
-	if (search_string == ""):
+	searchString = request.args.get('search_string')
+	if (searchString == ""):
 		return render_template("properties.html", search_string=search_string)
 	data = {
 		"key" : "",
-		"origins" : search_string
+		"origins" : searchString
 	}
-	res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
-	addressData = res.json()
+	# res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
+	testingDataSingleUnit = {"addr0": {"walkscore": {"status": "Key is invalid"},
+									   "status": "True",
+									   "units": {"N/A": {"rent": "500.0",
+									   					 "gas": "10.0",
+									   					 "lat": 48.7228498,
+									   					 "compost": "False",
+									   					 "long": -122.4862003,
+									   					 "electrical": "10.0",
+									   					 "updateDate": "2017.02.14",
+									   					 "recycle": "False",
+									   					 "water": "10.0"}}}}
+	testingDataMultiUnit = {"addr0": {"walkscore": {"status": "Key is invalid"},
+									   "status": "True",
+									   "units": {"N/A": {"rent": "500.0",
+									   					 "gas": "10.0",
+									   					 "lat": 48.7228498,
+									   					 "compost": "False",
+									   					 "long": -122.4862003,
+									   					 "electrical": "10.0",
+									   					 "updateDate": "2017.02.14",
+									   					 "recycle": "False",
+									   					 "water": "10.0"},
+									   			 "B201" : {"rent": "350.0",
+									   					 "gas": "45.0",
+									   					 "lat": 48.7228498,
+									   					 "compost": "True",
+									   					 "long": -122.4862003,
+									   					 "electrical": "34.0",
+									   					 "updateDate": "2017.02.14",
+									   					 "recycle": "True",
+									   					 "water": "15.0"}}}}
+	
+	# addressData = testingDataSingleUnit
+	addressData = testingDataMultiUnit
+	jsonUnitData = json.dumps(addressData["addr0"]["units"])
+	print(jsonUnitData)
+	# addressData = res.json()
 	# NOTE: this is kind of hacky but it's only temporary until we figure out
 	# some data formatting issues with the back end
 	if addressData['addr0']['status'] == 'True':
 		addressData = addressData['addr0']
-		if len(addressData["units"] == 1):
-			return render_template("properties.html", search_string=search_string, addressData=addressData, single_unit="true")
+		if len(addressData["units"]) == 1:
+			# extract just the values of the first (and only) unit
+			singleUnit = list(addressData["units"])[0]
+			addressData = list(addressData["units"].values())[0]
+			print(addressData)
+			return render_template("properties.html", searchString=searchString,
+								   addressData=addressData, singleUnit=singleUnit)
 		else:
-			return render_template("properties.html", search_string=search_string, addressData=addressData)
+			return render_template("properties.html", searchString=searchString,
+								   addressData=addressData, jsonUnitData=jsonUnitData)
 	else:
-		return render_template("properties.html", search_string=search_string)
+		return render_template("properties.html", searchString=searchString)
 
 
 # for just viewing the json results of querying the database
