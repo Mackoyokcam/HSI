@@ -45,3 +45,16 @@ window.initMap = function() {
 		});
 	}
 }
+
+// var addressData = JSON.parse(addressDataJSON.replace(/'&#34;'/, '"'));
+
+function newUnitSelected () {
+	var unitList = id("unit-list");
+	var selectedUnit = unitList.options[unitList.selectedIndex].text;
+	console.log(selectedUnit);
+	console.log(addressDataJSON);
+}
+
+window.onload = function () {
+	id("unit-list").onchange = newUnitSelected;
+};
