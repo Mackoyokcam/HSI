@@ -176,9 +176,9 @@ def simpleadd():
 			"compost" : request.args.get('compost')
 		}
 		res = requests.post('http://140.160.142.77:5000/utilDB/add', data=data)
-		return render_template("simplesearch.html", res=res)
+		return render_template("simpleseadd.html", res=res)
 	else:
-		return render_template("simplesearch.html")
+		return render_template("simplesadd.html")
 
 @app.route('/compare', methods=['GET'])
 def compare():
