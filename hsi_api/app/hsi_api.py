@@ -167,6 +167,8 @@ class Hsi_Api:
         data = {}
         j = 0
         if (origins is not None):
+            if self.MAX_COMPARES < len(origins):
+                return '{"error":"Max compares exceeded. Only '+str(self.MAX_COMPARES)+' allowed per request"}'
             for i in origins:
                 if ('status' in i):
                     data.update({'addr'+str(j):i['status']})
@@ -213,7 +215,7 @@ class Hsi_Api:
                 unit.update({'long':geo['lng']})
                 unit.update({'lat':geo['lat']})
                 try:
-                    db.util.find(unit, { "_id":0, "heating":0}).sort("updateDate", -1).limit(1)
+                    db.util.find(unit, { "_id":0, "heating":0, "apt":0, "address":0, "state":0, "city":0, "zip":0}).sort("updateDate", -1).limit(1)
                     cursor = next(cursor, None)
                     jcur = dumps(cursor)
                 except mongoerrors.PyMongoError:
