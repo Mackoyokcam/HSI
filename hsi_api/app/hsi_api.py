@@ -188,7 +188,7 @@ class Hsi_Api:
                             new_i.update({"apt":k})
                             cursor = 0
                             try:
-                                cursor = db.util.find(new_i, { "_id":0, "apt":0, "address":0, "state":0, "city":0, "zip":0 }).sort("updateDate", -1).limit(1)
+                                cursor = db.util.find(new_i, { "_id":0 }).sort("updateDate", -1).limit(1)
                                 cursor = next(cursor, None)
                             except mongoerrors.PyMongoError:
                                 units.update({k:{"status":str(db.command("getLastError"))}})
@@ -215,7 +215,7 @@ class Hsi_Api:
                 unit.update({'long':geo['lng']})
                 unit.update({'lat':geo['lat']})
                 try:
-                    db.util.find(unit, { "_id":0, "heating":0, "apt":0, "address":0, "state":0, "city":0, "zip":0}).sort("updateDate", -1).limit(1)
+                    db.util.find(unit, { "_id":0}).sort("updateDate", -1).limit(1)
                     cursor = next(cursor, None)
                     jcur = dumps(cursor)
                 except mongoerrors.PyMongoError:
