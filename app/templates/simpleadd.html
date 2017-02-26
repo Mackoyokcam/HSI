@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>HSI</title>
+		<meta charset= "UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+	</head>
+	<body>
+		<form action="/simpleadd" method="get">
+			<div>
+				<p>address</p>
+				<input type="text" name="address">
+				<p>city:</p>
+				<input type="text" name="city">
+				<p>state:</p>
+				<input type="text" name="state">
+				<p>zip:</p>
+				<input type="text" name="zip">
+				<p>apt:</p>
+				<input type="text" name="apt">
+				<p>rent:</p>
+				<input type="text" name="rent">
+				<p>gas:</p>
+				<input type="text" name="gas">
+				<p>electrical:</p>
+				<input type="text" name="electrical">
+				<p>water:</p>
+				<input type="text" name="water">
+				<input type="checkbox" name="recycle">recycle?</input>
+				<input type="checkbox" name="compost">compost?</input>
+				<input type="submit" value="add">
+			</div>
+		</form>
+		{% if responseText %}
+			<p>{{ responseText }}</p>
+		{% endif %}
+	</body>
+</html>

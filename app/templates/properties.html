@@ -27,11 +27,13 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkC
 			</div>
 		</form>
 	</div>
-	<div id="address-text-box">
-		<h3 id="address-text">{{ search_string }}</h3>
-	</div>
 	<div id="address-data">
-		{% if addressData %}
+	{% if addressData %}
+		<div id="address-text-box">
+			<h3 id="address-text">{{ searchString }}</h3>
+		</div>
+		{% if singleUnit %}
+		<p>Apartment: {{ singleUnit }}</p>
 		<p>Updated: {{ addressData["updateDate"] }}</p>
 		<p>Rent: {{ addressData["rent"] }}</p>
 		<p>Heating: {{ addressData["heating"] }}</p>
@@ -41,8 +43,21 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkC
 		<p>Recycle: {% if addressData["recycle"]|string() == "True" %}yes{% else %}none{% endif %}</p>
 		<p>Compost: {% if addressData["compost"]|string() == "True" %}yes{% else %}none{% endif %}</p>
 		{% else %}
-		<p> Sorry, there's no data on this proprty, or we couldn't display it</p>
+		<script type="text/javascript">
+			// The address data is stored for later access by properties.js
+			var addressDataJSON = '{{ jsonUnitData }}';
+		</script>
+		<div>
+			<select id="unit-list">
+				{% for unit in addressData["units"] %}
+				<option value="{{unit}}">{{unit}}</option>
+				{% endfor %}
+			</select>
+		</div>
 		{% endif %}
+	{% else %}
+		<p> Sorry, there's no data on this proprty, or we couldn't display it</p>
+	{% endif %}
 	</div>
 </div>
 <div id="map"> <!-- filled with js --> </div>
