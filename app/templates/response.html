@@ -5,5 +5,14 @@
 {% block content  %}
 <h1>Response Page</h1>
 <hr>
-{{ util_add.text }}
+<p> JSON text <p><br>
+  {{ result.text }}
+
+<p> Test <p>
+  {% for key, value in result.items() %}
+  {{ key }}
+  {{ value }}
+  <br>
+  {% endfor %}
+
 {% endblock %}

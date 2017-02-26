@@ -8,3 +8,16 @@
 	display: table-cell;
 	text-align: center;
 }
+
+.originData {
+    color: green;
+    float: left;
+    border-style: solid;
+    border-width: 5px;
+}
+
+.destinationData {
+    color: blue;
+    border-style: solid;
+    border-width: 5px;
+}
