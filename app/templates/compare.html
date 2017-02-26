@@ -3,14 +3,37 @@
 	{% include "navbar.html" %}
 {% endblock %}
 {% block content %}
+    <!--
 	<link rel="stylesheet" type="text/css" href="../static/css/compare.css">
 	<h1>Property Comparisons</h1>
 	<hr></hr>
 	<div id="property-columns">
-	{% for property in properties %}
 		<div class="property-column">
 			<h3>{{ property }}</h3>
 		</div>
-	{% endfor %}
-	</div>
+	</div> -->
+    <h1>Property Comparisons</h1>
+    <hr>
+    <form name="compare_data" action="{{ url_for('compare') }}" method="POST">
+
+            <div id="comparedata">
+                {{  form.hidden_tag()  }}
+                {%  for field in form if field.widget.input_type != 'hidden' %}
+
+                    {{ field.label }}
+
+                    {{ field }}
+
+                    {%  for error in field.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                    <br>
+                    <br>
+                {%  endfor  %}
+
+                <div id="buttonCenter">
+                    <button class="submitButton" type="submit">Submit</button>
+                </div>
+            </div>
+    </form>
 {% endblock %}
