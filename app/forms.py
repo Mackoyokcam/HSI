@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, FloatField, HiddenField, validators, DateField
-from wtforms.validators import DataRequired, Email, Length, EqualTo, Regexp
+from wtforms.validators import DataRequired, Email, Length, EqualTo, Regexp, InputRequired, ValidationError
 import time
 
 
@@ -34,13 +34,34 @@ class AddressForm(Form):
                                                                         message="Please use only alphanumeric characters.")])
     zip = StringField('Zip', validators=[DataRequired(), Regexp('^\d{5}(?:[-\s]\d{4})?$',
                                                                         message="Not a valid zip code.")])
-    rent = FloatField('Rent', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')])
-    gas = FloatField('Gas', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')])
-    water = FloatField('Water', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')])
-    electrical = FloatField('Electrical', validators=[DataRequired(message='Please enter a decimal value (ie 100, 100.0).')])
+    rent = FloatField('Rent', validators=[InputRequired()])
+    gas = FloatField('Gas', validators=[InputRequired()])
+    water = FloatField('Water', validators=[InputRequired()])
+    electrical = FloatField('Electrical', validators=[InputRequired()])
     recycle = BooleanField('Recycle?')
     compost = BooleanField('Compost?')
     updateDate = StringField('', render_kw={"value": time.strftime("%Y.%m.%d"), "hidden": True})
+
+
+class AddressCompareForm(Form):
+    address1 = StringField('Address', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
+                                                                        message="Please use only alphanumeric characters.")])
+    city1 = StringField('City', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
+                                                              message="Please use only alphanumeric characters.")])
+    state1 = StringField('State', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
+                                                                message="Please use only alphanumeric characters.")])
+    zip1 = StringField('Zip', validators=[DataRequired(), Regexp('^\d{5}(?:[-\s]\d{4})?$',
+                                                            message="Not a valid zip code.")])
+    address2 = StringField('Address', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
+                                                                        message="Please use only alphanumeric characters.")])
+    city2 = StringField('City', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
+                                                              message="Please use only alphanumeric characters.")])
+    state2 = StringField('State', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
+                                                                message="Please use only alphanumeric characters.")])
+    zip2 = StringField('Zip', validators=[DataRequired(), Regexp('^\d{5}(?:[-\s]\d{4})?$',
+                                                            message="Not a valid zip code.")])
+
+
 
 # not currently used
 class AddressSearchForm(Form):
