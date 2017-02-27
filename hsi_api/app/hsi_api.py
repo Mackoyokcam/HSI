@@ -27,8 +27,9 @@ class Hsi_Api:
             return '{"error":"origins and destinations must be in list form"}'
         elif len(home_addresses) > self.MAX_COMPARES or len(list_destinations) > self.MAX_COMPARES:
             return '{"error":"Max compares exceeded. Only '+str(self.MAX_COMPARES)+' allowed per request"}'
+        geo_code_data = self.multiple_geocode(home_addresses)
         return json.JSONEncoder().encode({"google":self.google_matrix(home_addresses,list_destinations), \
-                                          "walkscore": self.get_walkscore(home_addresses)})
+                "walkscore": self.get_walkscore(home_addresses), "hsi_db":self.utilQuery(origins=None,geocode=geo_code_data)})
     '''
     format = json
     address= ""
@@ -117,8 +118,14 @@ class Hsi_Api:
         return distance_matrix.distance_matrix(self.GOOGLE_CLIENT, origins, destinations, mode, language, avoid,
                                                units, departure_time, arrival_time, transit_mode,
                                                transit_routing_preference, traffic_model)
-    
-    
+
+
+    def multiple_geocode(self, addresses):
+        results = list()
+        for x in addresses:
+            results.append(self.get_location_data(x))
+        return results
+            
     '''
     
     
