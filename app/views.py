@@ -131,13 +131,14 @@ def properties():
 	# some data formatting issues with the back end
 	if addressData['addr0']['status'] == 'True':
 		addressData = addressData['addr0']
-		if len(addressData["units"]) == 1:
+		if len(addressData["units"]) > 1:
 			# extract just the values of the first (and only) unit
-			singleUnit = list(addressData["units"])[0]
-			addressData = list(addressData["units"].values())[0]
-			print(addressData)
+			# singleUnit = list(addressData["units"])[0]
+			# addressData = list(addressData["units"].values())[0]
+			# print(addressData)
+			multiUnit = "yep"
 			return render_template("properties.html", searchString=searchString,
-								   addressData=addressData, singleUnit=singleUnit)
+								   addressData=addressData, multiUnit=multiUnit, jsonUnitData=jsonUnitData)
 		else:
 			return render_template("properties.html", searchString=searchString,
 								   addressData=addressData, jsonUnitData=jsonUnitData)

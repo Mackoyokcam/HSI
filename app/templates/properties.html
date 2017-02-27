@@ -4,10 +4,6 @@
 {% endblock %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="../static/css/properties.css">
-<script
-async defer
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA&callback=initMap">
-</script>
 <div id="side-bar">
 	{% if not search_string %} <!-- checks for empty string -->
 	<!-- given empty string the image loaded is of downtown bellingham -->
@@ -32,22 +28,14 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkC
 		<div id="address-text-box">
 			<h3 id="address-text">{{ searchString }}</h3>
 		</div>
-		{% if singleUnit %}
-		<p>Apartment: {{ singleUnit }}</p>
-		<p>Updated: {{ addressData["updateDate"] }}</p>
-		<p>Rent: {{ addressData["rent"] }}</p>
-		<p>Heating: {{ addressData["heating"] }}</p>
-		<p>Gas: {{ addressData["gas"] }}</p>
-		<p>Electrical: {{ addressData["electrical"] }}</p>
-		<p>Water: {{ addressData["water"] }}</p>
-		<p>Recycle: {% if addressData["recycle"]|string() == "True" %}yes{% else %}none{% endif %}</p>
-		<p>Compost: {% if addressData["compost"]|string() == "True" %}yes{% else %}none{% endif %}</p>
-		{% else %}
+		<p>NOTE: currently the data presented is dummy data for testing, this page doesn't actually call query</p>
 		<script type="text/javascript">
 			// The address data is stored for later access by properties.js
-			var addressDataJSON = '{{ jsonUnitData }}';
+			var addressDataJSON = {{ jsonUnitData|tojson|safe }};
 		</script>
+		{% if multiUnit %}
 		<div>
+			<label for="labels">Units:</label>
 			<select id="unit-list">
 				{% for unit in addressData["units"] %}
 				<option value="{{unit}}">{{unit}}</option>
@@ -55,6 +43,17 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkC
 			</select>
 		</div>
 		{% endif %}
+		<div id="labels">
+			<p id="apartment"><!-- This and subsequent fields filled with js --></p>
+			<p id="update-date"></p>
+			<p id="rent"></p>
+			<p id="heating"></p>
+			<p id="gas"></p>
+			<p id="electrical"></p>
+			<p id="water"></p>
+			<p id="recycle"></p>
+			<p id="compost"></p>
+		</div>
 	{% else %}
 		<p> Sorry, there's no data on this proprty, or we couldn't display it</p>
 	{% endif %}
@@ -62,4 +61,8 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkC
 </div>
 <div id="map"> <!-- filled with js --> </div>
 <script type="text/javascript" src="../static/javascript/properties.js"></script>
+<script
+async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA&callback=initMap">
+</script>
 {% endblock %}

@@ -5,7 +5,7 @@ function id(element) {
 var geocoder;
 var map;
 
-window.initMap = function() {
+function initMap() {
 	geocoder = new google.maps.Geocoder();
 	var addressText = id("address-text").innerText;
 	if (addressText == null || addressText.trim() == '') {
@@ -46,15 +46,33 @@ window.initMap = function() {
 	}
 }
 
-// var addressData = JSON.parse(addressDataJSON.replace(/'&#34;'/, '"'));
+var addressData = JSON.parse(addressDataJSON);
 
 function newUnitSelected () {
 	var unitList = id("unit-list");
 	var selectedUnit = unitList.options[unitList.selectedIndex].text;
-	console.log(selectedUnit);
-	console.log(addressDataJSON);
+	var unitData = addressData[selectedUnit];
+	populateData(unitData, selectedUnit);
+}
+
+function populateData(unitData, apartment) {
+	id("apartment").innerHTML = "Apartment: ".concat(apartment);
+	id("update-date").innerHTML = "Last Updated: ".concat(unitData["updateDate"]);
+	id("rent").innerHTML = "Monthly Rent: ".concat(unitData["rent"]);
+	id("gas").innerHTML = "Gas: ".concat(unitData["gas"]);
+	id("electrical").innerHTML = "Electrical: ".concat(unitData["electrical"]);
+	id("water").innerHTML = "Water: ".concat(unitData["water"]);
+	id("recycle").innerHTML = "Recycle: ".concat((unitData["recycle"] === "True"?"yes":"no"));
+	id("compost").innerHTML = "Compost: ".concat((unitData["compost"] === "True"?"yes":"no"));
 }
 
 window.onload = function () {
-	id("unit-list").onchange = newUnitSelected;
+	if (id("unit-list") !== null) {
+		id("unit-list").onchange = newUnitSelected;
+		id("unit-list")[0].selected = "selected";
+		newUnitSelected();
+	} else {
+		var apartment = Object.keys(addressData)[0]
+		populateData(addressData[apartment], apartment)
+	}
 };
