@@ -212,6 +212,8 @@ class Hsi_Api:
                     if 'subpremise' in l['types']:
                         unit.update({'apt':l['short_name']})
                         break
+                if 'apt' not in unit:
+                    unit.update({'apt': 'N/A'})
                 unit.update({'long':geo['lng']})
                 unit.update({'lat':geo['lat']})
                 try:
