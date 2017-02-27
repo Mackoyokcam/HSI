@@ -43,7 +43,7 @@ class AddressForm(Form):
     updateDate = StringField('', render_kw={"value": time.strftime("%Y.%m.%d"), "hidden": True})
 
 
-class AddressCompareForm(Form):
+class OriginCompareForm(Form):
     address1 = StringField('Address', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
                                                                         message="Please use only alphanumeric characters.")])
     city1 = StringField('City', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
@@ -52,6 +52,9 @@ class AddressCompareForm(Form):
                                                                 message="Please use only alphanumeric characters.")])
     zip1 = StringField('Zip', validators=[DataRequired(), Regexp('^\d{5}(?:[-\s]\d{4})?$',
                                                             message="Not a valid zip code.")])
+
+    
+class DestinationCompareForm(Form):
     address2 = StringField('Address', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
                                                                         message="Please use only alphanumeric characters.")])
     city2 = StringField('City', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
