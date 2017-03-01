@@ -62,7 +62,7 @@ def account():
 
 		# Add Info to UtilDB
 		string_result = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
-		util_add = json.loads(string_result)
+		util_add = string_result.json()
 
 		# test bin
 		# util_add = requests.post('http://requestb.in/16s31qr1', data=util_post_data)
@@ -204,7 +204,7 @@ def compare():
 
 		# Send compare request
 		string_result = requests.post('http://140.160.142.77:5000/compare', data=compare_post_data)
-		compare_result = json.loads(string_result)
+		compare_result = string_result.json()
 
 		# test bin
 		# compare_result = requests.post('http://requestb.in/13h5mjd1', data=compare_post_data)
