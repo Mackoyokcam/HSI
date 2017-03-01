@@ -61,7 +61,8 @@ def account():
 		# user_add = requests.post('http://140.160.142.77:5000/<insert user add call>', data=post_data)
 
 		# Add Info to UtilDB
-		util_add = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
+		string_result = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
+		util_add = json.loads(string_result)
 
 		# test bin
 		# util_add = requests.post('http://requestb.in/16s31qr1', data=util_post_data)
@@ -202,15 +203,15 @@ def compare():
 		compare_post_data['key'] = ''
 
 		# Send compare request
-		#string_result = requests.post('http://140.160.142.77:5000/compare', data=compare_post_data)
-		#compare_result = json.loads(string_result);
+		string_result = requests.post('http://140.160.142.77:5000/compare', data=compare_post_data)
+		compare_result = json.loads(string_result)
 
 		# test bin
 		# compare_result = requests.post('http://requestb.in/13h5mjd1', data=compare_post_data)
 
 		# test data
-		compare_result = {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'}
-		json.dumps(compare_result)
+		#compare_result = {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'}
+		#json.dumps(compare_result)
 
 		return render_template('response.html', result=compare_result)
 
