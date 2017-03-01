@@ -57,13 +57,13 @@ class OriginCompareForm(Form):
     
 class DestinationCompareForm(Form):
 
-    address1 = StringField('Address', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
+    address2 = StringField('Address', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
                                                                         message="Please use only alphanumeric characters.")])
-    city1 = StringField('City', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
+    city2 = StringField('City', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
                                                               message="Please use only alphanumeric characters.")])
-    state1 = StringField('State', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
+    state2 = StringField('State', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
                                                                 message="Please use only alphanumeric characters.")])
-    zip1 = StringField('Zip', validators=[DataRequired(), Regexp('^\d{5}(?:[-\s]\d{4})?$',
+    zip2 = StringField('Zip', validators=[DataRequired(), Regexp('^\d{5}(?:[-\s]\d{4})?$',
                                                             message="Not a valid zip code.")])
 
 
