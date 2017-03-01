@@ -185,30 +185,31 @@ def simpleadd():
 	else:
 		return render_template("simpleadd.html")
 
+
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():
 	# properties = request.args.get('properties').split(':')
 	compareForm1 = OriginCompareForm(csrf_enabled=False)
-        compareForm2 = DestinationCompareForm(csrf_enabled=False)
+	compareForm2 = DestinationCompareForm(csrf_enabled=False)
 	if compareForm1.validate_on_submit() & compareForm2.validate_on_submit():
 		compare_post_data = {}
 		compare_post_data['origins'] = compareForm1.address1.data + ' ' + compareForm1.city1.data + ' ' \
-									   + compareForm1.state1.data + ' ' + compareForm1.zip1.data
+										   + compareForm1.state1.data + ' ' + compareForm1.zip1.data
 
 		compare_post_data['destinations'] = compareForm2.address2.data + ' ' + compareForm2.city2.data + ' ' \
-											+ compareForm2.state2.data + ' ' + compareForm2.zip2.data
+												+ compareForm2.state2.data + ' ' + compareForm2.zip2.data
 
 		compare_post_data['key'] = ''
 
 		# Send compare request
-		# compare_result = requests.post('http://140.160.142.77:5000/compare', data=compare_post_data)
+		compare_result = requests.post('http://140.160.142.77:5000/compare', data=compare_post_data)
 
 		# test bin
 		# compare_result = requests.post('http://requestb.in/13h5mjd1', data=compare_post_data)
 
-                # test data
-                compare_result = {'key1':'value1', 'key2':'value2', 'key3':'value3'}
-                json.dumps(compare_result)
+		# test data
+		#compare_result = {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'}
+		#json.dumps(compare_result)
 
 		return render_template('response.html', result=compare_result)
 
