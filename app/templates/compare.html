@@ -12,13 +12,18 @@
 			<h3>{{ property }}</h3>
 		</div>
 	</div> -->
+    <link rel="stylesheet" type="text/css" href="../static/css/compare.css"/>
+    <script type="text/javascript" src="../static/javascript/compare.js"></script>
+    <script src="../static/javascript/jquery-3.1.1.min.js"></script>
+    
     <h1>Property Comparisons</h1>
     <hr>
+    <div id="main">
     <form name="compare_data" action="{{ url_for('compare') }}" method="POST">
 
-            <div id="comparedata">
-                {{  form.hidden_tag()  }}
-                {%  for field in form if field.widget.input_type != 'hidden' %}
+            <div class="originData">
+                {{  formOrigin.hidden_tag()  }}
+                {%  for field in formOrigin if field.widget.input_type != 'hidden' %}
 
                     {{ field.label }}
 
@@ -29,11 +34,30 @@
                     {% endfor %}
                     <br>
                     <br>
-                {%  endfor  %}
+                {%  endfor  %}      
+            </div>
+	    
+	    <div class="destinationData">
+                {{  formDestination.hidden_tag()  }}
+                {%  for field in formDestination if field.widget.input_type != 'hidden' %}
 
-                <div id="buttonCenter">
+                    {{ field.label }}
+
+                    {{ field }}
+
+                    {%  for error in field.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                    <br>
+                    <br>
+                {%  endfor  %}      
+            </div>
+	    
+
+	    <div id="submit">
                     <button class="submitButton" type="submit">Submit</button>
-                </div>
             </div>
     </form>
+    </div>
+    
 {% endblock %}

@@ -1,6 +1,6 @@
-from flask import render_template, request, flash, url_for, redirect
+from flask import render_template, request, flash, url_for, redirect, jsonify
 from app import app
-from .forms import AccountCreationForm, AddressForm, Login, AddressCompareForm
+from .forms import AccountCreationForm, AddressForm, Login, OriginCompareForm, DestinationCompareForm
 from flask_wtf.csrf import CSRFProtect
 from flask_login import login_user, login_required
 # from .redirects import get_redirect_target, redirect_back
@@ -131,13 +131,14 @@ def properties():
 	# some data formatting issues with the back end
 	if addressData['addr0']['status'] == 'True':
 		addressData = addressData['addr0']
-		if len(addressData["units"]) == 1:
+		if len(addressData["units"]) > 1:
 			# extract just the values of the first (and only) unit
-			singleUnit = list(addressData["units"])[0]
-			addressData = list(addressData["units"].values())[0]
-			print(addressData)
+			# singleUnit = list(addressData["units"])[0]
+			# addressData = list(addressData["units"].values())[0]
+			# print(addressData)
+			multiUnit = "yep"
 			return render_template("properties.html", searchString=searchString,
-								   addressData=addressData, singleUnit=singleUnit)
+								   addressData=addressData, multiUnit=multiUnit, jsonUnitData=jsonUnitData)
 		else:
 			return render_template("properties.html", searchString=searchString,
 								   addressData=addressData, jsonUnitData=jsonUnitData)
@@ -184,17 +185,19 @@ def simpleadd():
 	else:
 		return render_template("simpleadd.html")
 
+
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():
 	# properties = request.args.get('properties').split(':')
-	compareForm = AddressCompareForm(csrf_enabled=False)
-	if compareForm.validate_on_submit():
+	compareForm1 = OriginCompareForm(csrf_enabled=False)
+	compareForm2 = DestinationCompareForm(csrf_enabled=False)
+	if compareForm1.validate_on_submit() & compareForm2.validate_on_submit():
 		compare_post_data = {}
-		compare_post_data['origins'] = compareForm.address1.data + ' ' + compareForm.city1.data + ' ' \
-									   + compareForm.state1.data + ' ' + compareForm.zip1.data
+		compare_post_data['origins'] = compareForm1.address1.data + ' ' + compareForm1.city1.data + ' ' \
+										   + compareForm1.state1.data + ' ' + compareForm1.zip1.data
 
-		compare_post_data['destinations'] = compareForm.address2.data + ' ' + compareForm.city2.data + ' ' \
-											+ compareForm.state2.data + ' ' + compareForm.zip2.data
+		compare_post_data['destinations'] = compareForm2.address2.data + ' ' + compareForm2.city2.data + ' ' \
+												+ compareForm2.state2.data + ' ' + compareForm2.zip2.data
 
 		compare_post_data['key'] = ''
 
@@ -204,9 +207,13 @@ def compare():
 		# test bin
 		# compare_result = requests.post('http://requestb.in/13h5mjd1', data=compare_post_data)
 
-		return render_template('response.html', util_add=compare_result)
+		# test data
+		#compare_result = {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'}
+		#json.dumps(compare_result)
 
-	return render_template("compare.html", form=compareForm) #properties=properties
+		return render_template('response.html', result=compare_result)
+
+	return render_template("compare.html", formOrigin=compareForm1, formDestination=compareForm2) #properties=properties
 
 
 @app.route('/test', methods=['POST'])
