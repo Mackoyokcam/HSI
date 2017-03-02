@@ -51,7 +51,7 @@ function initMap() {
 	}
 }
 
-populates the map with nearby locations present in the db
+// populates the map with nearby locations present in the db
 function loadNearby(map) {
 	for (unit in nearbyData) {
 		loc = {lat:unit["lat"], lng:unit["long"]};
