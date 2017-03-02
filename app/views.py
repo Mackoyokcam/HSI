@@ -62,9 +62,11 @@ def account():
 
 		# Add Info to UtilDB
 		string_result = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
-		print(string_result)
+	 
+				
 		# util_add = string_result.json()
-		util_add = json.loads(string_result)[0]
+		temp_result = string_result.json()
+		util_add = json.dumps(temp_result)
 		# util_add = json.dumps(temp_result)
 
 		# test bin
@@ -207,7 +209,8 @@ def compare():
 
 		# Send compare request
 		string_result = requests.post('http://140.160.142.77:5000/compare', data=compare_post_data)
-		print(string_result)
+		print(string_result.text)
+	  		
 		# compare_result = string_result.json()
 
 		# test bin
@@ -248,8 +251,9 @@ def compare():
 								}, \
 							'status': 'True'}}}'''
 		# compare_result = OrderedDict({'walkscore': '{\'355 meadowbrook ct Bellingham WA 98226\': \'{"status": "Key is invalid"}\'}', 'google': {'destination_addresses': ['18113 31st Ave NE, Arlington, WA 98223, USA'], 'status': 'OK', 'rows': [{'elements': [{'status': 'OK', 'distance': {'value': 88050, 'text': '54.7 mi'}, 'duration': {'value': 65273, 'text': '18 hours 8 mins'}}]}], 'origin_addresses': ['355 Meadowbrook Ct, Bellingham, WA 98226, USA']}, 'hsi_db': {'addr': {'results': {'water': '30.0', 'lat': 48.8088895, 'updateDate': '2017.03.01', 'address': '355 Meadowbrook Ct', 'city': 'Bellingham', 'state': 'WA', 'compost': 'True', 'long': -122.5002452, 'electrical': '90.0', 'gas': '50.0', 'rent': '900.0', 'apt': 'N/A', 'zip': '98226', 'recycle': 'True'}, 'status': 'True'}}})
-		compare_result = json.loads(string_result)[0]
-		# compare_result = json.dumps(temp_result)
+		temp_result = string_result.json()
+
+		compare_result = json.dumps(temp_result)
 
 		return render_template('response.html', compareData=compare_result)
 
