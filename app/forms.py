@@ -1,16 +1,16 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, FloatField, HiddenField, validators, DateField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, Regexp, InputRequired, ValidationError
 import time
 
 
-class Login(Form):
+class Login(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=35)])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
     rememberMe = BooleanField('Remember me')
 
 
-class AccountCreationForm(Form):
+class AccountCreationForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(max=25),
                                                        Regexp('^[a-zA-Z0-9\s]*$',
                                                               message="Please use only alphanumeric characters.")])
@@ -23,7 +23,7 @@ class AccountCreationForm(Form):
     confirm = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=6)])
 
 
-class AddressForm(Form):
+class AddressForm(FlaskForm):
     address = StringField('Address', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
                                                                         message="Please use only alphanumeric characters.")])
     apt = StringField('Apartment', validators=[DataRequired(), Regexp('^[a-zA-Z0-9]*$',
@@ -43,7 +43,7 @@ class AddressForm(Form):
     updateDate = StringField('', render_kw={"value": time.strftime("%Y.%m.%d"), "hidden": True})
 
 
-class OriginCompareForm(Form):
+class OriginCompareForm(FlaskForm):
 
     address1 = StringField('Address', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
                                                                         message="Please use only alphanumeric characters.")])
@@ -55,7 +55,7 @@ class OriginCompareForm(Form):
                                                             message="Not a valid zip code.")])
 
     
-class DestinationCompareForm(Form):
+class DestinationCompareForm(FlaskForm):
 
     address2 = StringField('Address', validators=[DataRequired(), Regexp('^[a-zA-Z0-9\s]*$',
                                                                         message="Please use only alphanumeric characters.")])
@@ -68,5 +68,5 @@ class DestinationCompareForm(Form):
 
 
 # not currently used
-class AddressSearchForm(Form):
+class AddressSearchForm(FlaskForm):
     address = StringField('Address', validators=[DataRequired()], render_kw={"placeholder": "Search Address"})
