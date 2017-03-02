@@ -39,7 +39,8 @@ function initMap() {
 					map: map,
 					title: addressText
 				});
-				loadNearby(map);
+				//loadNearby(map);
+				console.log(nearbyData);
 			} else {
 				console.log("Geocode was not successful for the folowing reason:" + status);
 				var sorryMessage = document.createElement("p");
