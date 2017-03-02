@@ -7,9 +7,9 @@ from flask_login import login_user, login_required
 import requests
 import json
 import time
+from collections import OrderedDict
 
-
-# CSRFProtect(app)
+CSRFProtect(app)
 
 
 ''''
@@ -49,9 +49,9 @@ def contact():
 
 @app.route('/account', methods=['GET', 'POST'])
 def account():
-	userform = AccountCreationForm(csrf_enabled=False)
-	addressform = AddressForm(csrf_enabled=False)
-	loginform = Login(csrf_enabled=False)
+	userform = AccountCreationForm()
+	addressform = AddressForm()
+	loginform = Login()
 	if userform.validate_on_submit() & addressform.validate_on_submit():
 		user_post_data = {}
 		util_post_data = addressform.data
@@ -62,12 +62,14 @@ def account():
 
 		# Add Info to UtilDB
 		string_result = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
-		util_add = string_result.json()
+		# util_add = string_result.json()
+		temp_result = json.loads(string_result)
+		util_add = json.dumps(temp_result)
 
 		# test bin
 		# util_add = requests.post('http://requestb.in/16s31qr1', data=util_post_data)
 
-		return render_template('response.html', result=util_add) #add user_add=useradd
+		return render_template('add_response.html', utilData=util_add) #add user_add=useradd
 
 	return render_template("account_creation.html", form=userform, addressform=addressform, loginform=loginform)
 
@@ -190,8 +192,8 @@ def simpleadd():
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():
 	# properties = request.args.get('properties').split(':')
-	compareForm1 = OriginCompareForm(csrf_enabled=False)
-	compareForm2 = DestinationCompareForm(csrf_enabled=False)
+	compareForm1 = OriginCompareForm()
+	compareForm2 = DestinationCompareForm()
 	if compareForm1.validate_on_submit() & compareForm2.validate_on_submit():
 		compare_post_data = {}
 		compare_post_data['origins'] = compareForm1.address1.data + ' ' + compareForm1.city1.data + ' ' \
@@ -204,16 +206,50 @@ def compare():
 
 		# Send compare request
 		string_result = requests.post('http://140.160.142.77:5000/compare', data=compare_post_data)
-		compare_result = string_result.json()
+		# compare_result = string_result.json()
 
 		# test bin
 		# compare_result = requests.post('http://requestb.in/13h5mjd1', data=compare_post_data)
 
 		# test data
-		#compare_result = {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'}
-		#json.dumps(compare_result)
+		# compare_result = '{ "employees" : [''{ "firstName":"John" , "lastName":"Doe" },''{ "firstName":"Anna" , "lastName":"Smith" },' '{ "firstName":"Peter" , "lastName":"Jones" } ]}'
+		'''string_result = {'google': \
+							{'destination_addresses': ['18113 31st Ave NE, Arlington, WA 98223, USA'], \
+							'status': 'OK', \
+							'rows': [{'elements': \
+									[{'status': 'OK', \
+									'distance': {'value': 88050, \
+										'text': '54.7 mi'}, \
+ 									'duration': {'value': 65273, \
+										'text': '18 hours 8 mins'} \
+									}] \
+								}], \
+							'origin_addresses': ['355 Meadowbrook Ct, Bellingham, WA 98226, USA'] \
+							}, \
+						'hsi_db': \
+							{'addr': \
+								{'results': \
+									{'water': '30.0', \
+									'lat': 48.8088895, \
+									'updateDate': '2017.03.01', \
+									'address': '355 Meadowbrook Ct', \
+									'city': 'Bellingham', \
+									'state': 'WA', \
+									'compost': 'True', \
+									'long': -122.5002452, \
+									'electrical': '90.0', \
+									'gas': '50.0', \
+									'rent': '900.0', \
+									'apt': 'N/A', \
+									'zip': '98226', \
+									'recycle': 'True' \
+								}, \
+							'status': 'True'}}}'''
+		# compare_result = OrderedDict({'walkscore': '{\'355 meadowbrook ct Bellingham WA 98226\': \'{"status": "Key is invalid"}\'}', 'google': {'destination_addresses': ['18113 31st Ave NE, Arlington, WA 98223, USA'], 'status': 'OK', 'rows': [{'elements': [{'status': 'OK', 'distance': {'value': 88050, 'text': '54.7 mi'}, 'duration': {'value': 65273, 'text': '18 hours 8 mins'}}]}], 'origin_addresses': ['355 Meadowbrook Ct, Bellingham, WA 98226, USA']}, 'hsi_db': {'addr': {'results': {'water': '30.0', 'lat': 48.8088895, 'updateDate': '2017.03.01', 'address': '355 Meadowbrook Ct', 'city': 'Bellingham', 'state': 'WA', 'compost': 'True', 'long': -122.5002452, 'electrical': '90.0', 'gas': '50.0', 'rent': '900.0', 'apt': 'N/A', 'zip': '98226', 'recycle': 'True'}, 'status': 'True'}}})
+		temp_result = json.loads(string_result)
+		compare_result = json.dumps(temp_result)
 
-		return render_template('response.html', result=compare_result)
+		return render_template('response.html', compareData=compare_result)
 
 	return render_template("compare.html", formOrigin=compareForm1, formDestination=compareForm2) #properties=properties
 
