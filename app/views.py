@@ -141,7 +141,8 @@ def properties():
 	testingNearbyData = '{"lat":"48.722.849", "long":"-122.502782"}'
 	# addressData = testingDataSingleUnit
 	# addressData = testingDataMultiUnit
-	addressData = fromjson(res.text)
+	addressData = res.text
+	print(addressData)
 	if addressData["addr0"]["status"] == "True": # i.e. the db contained a valid entry
 		
 		data = {
