@@ -56,7 +56,7 @@ function loadNearby(map) {
 	for (unit in nearbyData) {
 		loc = {lat:unit["lat"], lng:unit["long"]};
 		var marker = new google.maps.Marker({
-			position = loc,
+			position: loc,
 			map: map,
 			title: unit["address"],
 			icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png" // to differentiate
