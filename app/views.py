@@ -103,7 +103,7 @@ def properties():
 		"key" : "",
 		"origins" : searchString
 	}
-	# res = requests.post("http://140.160.142.77:5000/utilDB/query", data=data)
+	res = requests.post("http://140.160.142.77:5000/utilDB/query", data=data)
 
 	# dummy data for offline testing
 	testingDataSingleUnit = {"addr0": {"walkscore": {"status": "Key is invalid"},
@@ -138,9 +138,10 @@ def properties():
 									   					 "recycle": "True",
 									   					 "water": "15.0"}}}}
 	
+	testingNearbyData = '{"lat":"48.722.849", "long":"-122.502782"}'
 	# addressData = testingDataSingleUnit
-	addressData = testingDataMultiUnit
-	# addressData = res.json()
+	# addressData = testingDataMultiUnit
+	addressData = res.text()
 	if addressData["addr0"]["status"] == "True": # i.e. the db contained a valid entry
 		
 		data = {
@@ -149,13 +150,14 @@ def properties():
 			"key" : ""
 		}
 		res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
-		
+		nearbyData = res.text
+		nearbyData = json.dumps(nearbyData)
 		multiUnit = "False"
 		if len(addressData["addr0"]["units"]) > 1:
 			multiUnit = "True"
 		addressData = json.dumps(addressData["addr0"]["units"])
 		return render_template("properties.html", searchString=searchString,
-								   addressData=addressData, multiUnit=multiUnit)
+								   addressData=addressData, nearbyData=nearbyData, multiUnit=multiUnit)
 	else:
 		return render_template("properties.html", searchString=searchString)
 

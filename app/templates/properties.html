@@ -32,6 +32,7 @@
 		<script type="text/javascript">
 			// The address data is stored for later access by properties.js
 			var addressDataJSON = {{ addressData|tojson|safe }};
+			var nearbyDataJSON = {{ nearbyData|tojson|safe }};
 		</script>
 		{% if multiUnit == "True" %}
 		<div>

@@ -2,6 +2,9 @@ function id(element) {
 	return document.getElementById(element);
 }
 
+var addressData = JSON.parse(addressDataJSON);
+var nearbyData = JSON.parse(nearbyDataJSON);
+
 var geocoder;
 var map;
 
@@ -36,6 +39,7 @@ function initMap() {
 					map: map,
 					title: addressText
 				});
+				loadNearby(map);
 			} else {
 				console.log("Geocode was not successful for the folowing reason:" + status);
 				var sorryMessage = document.createElement("p");
@@ -46,7 +50,18 @@ function initMap() {
 	}
 }
 
-var addressData = JSON.parse(addressDataJSON);
+// populates the map with nearby locations present in the db
+function loadNearby(map) {
+	for each (unit in nearbyData) {
+		loc = {lat:unit["lat"], lng:unit["long"]};
+		var marker = new google.maps.Marker({
+			position = loc,
+			map: map,
+			title: unit["address"],
+			icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png" // to differentiate
+		});
+	}
+}
 
 function newUnitSelected () {
 	var unitList = id("unit-list");
