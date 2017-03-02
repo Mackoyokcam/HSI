@@ -31,7 +31,7 @@ function initMap() {
 			if (status == "OK") {
 				var loc = results[0].geometry.location;
 				var map = new google.maps.Map(id('map'), {
-					zoom: 20,
+					zoom: 15,
 					center: loc
 				});
 				var marker = new google.maps.Marker({
@@ -54,7 +54,13 @@ function initMap() {
 // populates the map with nearby locations present in the db
 function loadNearby(map) {
 	for (unit in nearbyData) {
-		loc = {lat:unit["lat"], lng:unit["long"]};
+		var lati = unit["lat"];
+		var longi = unit["long"];
+		console.log("lati: " + lati);
+		console.log("longi: " + lati);
+		lati = parseFloat(lati);
+		longi = parseFloat(longi);
+		loc = {lat:lati, lng:longi};
 		var marker = new google.maps.Marker({
 			position: loc,
 			map: map,
