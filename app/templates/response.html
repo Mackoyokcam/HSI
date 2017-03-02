@@ -2,17 +2,17 @@
 {% block navbar %}
 	{% include "navbar.html" %}
 {% endblock %}
+{% block javascript %}
+    <script> var json_content = {{ compareData|tojson|safe }}; </script>
+    <script type="text/javascript" src="../static/javascript/response.js"></script>
+    <script type="text/javascript" src="../static/javascript/jquery-3.1.1.min.js"></script>
+{% endblock %}
 {% block content  %}
-<h1>Response Page</h1>
-<hr>
-<p> JSON text <p><br>
-  {{ result.text }}
 
-<p> Test <p>
-  {% for key, value in result.items() %}
-  {{ key }}
-  {{ value }}
-  <br>
-  {% endfor %}
+    <div id="origin"></div>
+    <div id="destination"></div>
+    
+   
+  
 
 {% endblock %}
