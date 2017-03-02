@@ -52,17 +52,17 @@ function initMap() {
 }
 
 // populates the map with nearby locations present in the db
-function loadNearby(map) {
-	for each (unit in nearbyData) {
-		loc = {lat:unit["lat"], lng:unit["long"]};
-		var marker = new google.maps.Marker({
-			position = loc,
-			map: map,
-			title: unit["address"],
-			icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png" // to differentiate
-		});
-	}
-}
+// function loadNearby(map) {
+// 	for each (unit in nearbyData) {
+// 		loc = {lat:unit["lat"], lng:unit["long"]};
+// 		var marker = new google.maps.Marker({
+// 			position = loc,
+// 			map: map,
+// 			title: unit["address"],
+// 			icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png" // to differentiate
+// 		});
+// 	}
+// }
 
 function newUnitSelected () {
 	var unitList = id("unit-list");
