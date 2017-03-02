@@ -31,7 +31,7 @@ function initMap() {
 			if (status == "OK") {
 				var loc = results[0].geometry.location;
 				var map = new google.maps.Map(id('map'), {
-					zoom: 12,
+					zoom: 20,
 					center: loc
 				});
 				var marker = new google.maps.Marker({
@@ -39,7 +39,7 @@ function initMap() {
 					map: map,
 					title: addressText
 				});
-				//loadNearby(map);
+				loadNearby(map);
 				console.log(nearbyData);
 			} else {
 				console.log("Geocode was not successful for the folowing reason:" + status);
@@ -51,18 +51,18 @@ function initMap() {
 	}
 }
 
-// populates the map with nearby locations present in the db
-// function loadNearby(map) {
-// 	for each (unit in nearbyData) {
-// 		loc = {lat:unit["lat"], lng:unit["long"]};
-// 		var marker = new google.maps.Marker({
-// 			position = loc,
-// 			map: map,
-// 			title: unit["address"],
-// 			icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png" // to differentiate
-// 		});
-// 	}
-// }
+populates the map with nearby locations present in the db
+function loadNearby(map) {
+	for (unit in nearbyData) {
+		loc = {lat:unit["lat"], lng:unit["long"]};
+		var marker = new google.maps.Marker({
+			position = loc,
+			map: map,
+			title: unit["address"],
+			icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png" // to differentiate
+		});
+	}
+}
 
 function newUnitSelected () {
 	var unitList = id("unit-list");
