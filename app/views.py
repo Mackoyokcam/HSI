@@ -143,7 +143,7 @@ def properties():
 	# addressData = testingDataMultiUnit
 	addressData = fromjson(res.text.replace("'", '"'))
 	print(addressData)
-	if addressData["addr0"]["status"] == "True": # i.e. the db contained a valid entry
+	if addressData["status"] == "True": # i.e. the db contained a valid entry
 		
 		data = {
 			"lat" : addressData["lat"],
@@ -154,9 +154,9 @@ def properties():
 		nearbyData = res.text
 		nearbyData = json.dumps(nearbyData)
 		multiUnit = "False"
-		if len(addressData["addr0"]["units"]) > 1:
+		if len(addressData["units"]) > 1:
 			multiUnit = "True"
-		addressData = json.dumps(addressData["addr0"]["units"])
+		addressData = json.dumps(addressData["units"])
 		return render_template("properties.html", searchString=searchString,
 								   addressData=addressData, nearbyData=nearbyData, multiUnit=multiUnit)
 	else:
