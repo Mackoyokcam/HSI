@@ -89,44 +89,45 @@ def properties():
 		"key" : "",
 		"origins" : searchString
 	}
-	# res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
-	testingDataSingleUnit = {"addr0": {"walkscore": {"status": "Key is invalid"},
-									   "status": "True",
-									   "units": {"N/A": {"rent": "500.0",
-									   					 "gas": "10.0",
-									   					 "lat": 48.7228498,
-									   					 "compost": "False",
-									   					 "long": -122.4862003,
-									   					 "electrical": "10.0",
-									   					 "updateDate": "2017.02.14",
-									   					 "recycle": "False",
-									   					 "water": "10.0"}}}}
-	testingDataMultiUnit = {"addr0": {"walkscore": {"status": "Key is invalid"},
-									   "status": "True",
-									   "units": {"N/A": {"rent": "500.0",
-									   					 "gas": "10.0",
-									   					 "lat": 48.7228498,
-									   					 "compost": "False",
-									   					 "long": -122.4862003,
-									   					 "electrical": "10.0",
-									   					 "updateDate": "2017.02.14",
-									   					 "recycle": "False",
-									   					 "water": "10.0"},
-									   			 "B201" : {"rent": "350.0",
-									   					 "gas": "45.0",
-									   					 "lat": 48.7228498,
-									   					 "compost": "True",
-									   					 "long": -122.4862003,
-									   					 "electrical": "34.0",
-									   					 "updateDate": "2017.02.14",
-									   					 "recycle": "True",
-									   					 "water": "15.0"}}}}
+	res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
+	# testingDataSingleUnit = {"addr0": {"walkscore": {"status": "Key is invalid"},
+	# 								   "status": "True",
+	# 								   "units": {"N/A": {"rent": "500.0",
+	# 								   					 "gas": "10.0",
+	# 								   					 "lat": 48.7228498,
+	# 								   					 "compost": "False",
+	# 								   					 "long": -122.4862003,
+	# 								   					 "electrical": "10.0",
+	# 								   					 "updateDate": "2017.02.14",
+	# 								   					 "recycle": "False",
+	# 								   					 "water": "10.0"}}}}
+	# testingDataMultiUnit = {"addr0": {"walkscore": {"status": "Key is invalid"},
+	# 								   "status": "True",
+	# 								   "units": {"N/A": {"rent": "500.0",
+	# 								   					 "gas": "10.0",
+	# 								   					 "lat": 48.7228498,
+	# 								   					 "compost": "False",
+	# 								   					 "long": -122.4862003,
+	# 								   					 "electrical": "10.0",
+	# 								   					 "updateDate": "2017.02.14",
+	# 								   					 "recycle": "False",
+	# 								   					 "water": "10.0"},
+	# 								   			 "B201" : {"rent": "350.0",
+	# 								   					 "gas": "45.0",
+	# 								   					 "lat": 48.7228498,
+	# 								   					 "compost": "True",
+	# 								   					 "long": -122.4862003,
+	# 								   					 "electrical": "34.0",
+	# 								   					 "updateDate": "2017.02.14",
+	# 								   					 "recycle": "True",
+	# 								   					 "water": "15.0"}}}}
 	
-	# addressData = testingDataSingleUnit
-	addressData = testingDataMultiUnit
-	jsonUnitData = json.dumps(addressData["addr0"]["units"])
-	print(jsonUnitData)
-	# addressData = res.json()
+	# # addressData = testingDataSingleUnit
+	# addressData = testingDataMultiUnit
+	# jsonUnitData = json.dumps(addressData["addr0"]["units"])
+	# print(jsonUnitData)
+	addressData = res.json()
+	jsonUnitData = addressData["addr0"]["units"]
 	# NOTE: this is kind of hacky but it's only temporary until we figure out
 	# some data formatting issues with the back end
 	if addressData['addr0']['status'] == 'True':
