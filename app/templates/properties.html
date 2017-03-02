@@ -31,13 +31,13 @@
 		<p>NOTE: currently the data presented is dummy data for testing, this page doesn't actually call query</p>
 		<script type="text/javascript">
 			// The address data is stored for later access by properties.js
-			var addressDataJSON = {{ jsonUnitData|tojson|safe }};
+			var addressDataJSON = {{ addressData|tojson|safe }};
 		</script>
-		{% if multiUnit %}
+		{% if multiUnit == "True" %}
 		<div>
 			<label for="labels">Units:</label>
 			<select id="unit-list">
-				{% for unit in addressData["units"] %}
+				{% for unit in addressData|fromjson %}
 				<option value="{{unit}}">{{unit}}</option>
 				{% endfor %}
 			</select>
