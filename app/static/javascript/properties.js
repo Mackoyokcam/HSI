@@ -58,8 +58,6 @@ function loadNearby(map) {
 		var longi = unit["long"];
 		console.log("lati: " + lati);
 		console.log("longi: " + lati);
-		lati = parseFloat(lati);
-		longi = parseFloat(longi);
 		loc = {lat:lati, lng:longi};
 		var marker = new google.maps.Marker({
 			position: loc,
