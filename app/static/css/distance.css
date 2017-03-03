@@ -1,0 +1,23 @@
+
+#origin {
+    float: left;
+    margin-right: 2em;
+}
+
+#destination {
+    float: left;
+    margin-right: 1em;
+}
+
+#submitButton {
+    margin-top: 1em;
+}
+
+#addresses {
+    border-style: solid;
+    border-width: 1px;
+}
+
+#form {
+    margin-top: 1em;
+}

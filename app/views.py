@@ -192,6 +192,11 @@ def simpleadd():
 		return render_template("simpleadd.html")
 
 
+@app.route('/distance', methods=['GET', 'POST'])
+def distance():
+	return render_template('distance.html')
+
+
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():
 	# properties = request.args.get('properties').split(':')
@@ -208,17 +213,14 @@ def compare():
 		compare_post_data['key'] = ''
 
 		# Send compare request
-		string_result = requests.post('http://140.160.142.77:5000/compare', data=compare_post_data)
-		print(string_result.text)
-	  		
-		# compare_result = string_result.json()
+		# string_result = requests.post('http://140.160.142.77:5000/compare', data=compare_post_data)
+		# temp_result = string_result.json()
 
 		# test bin
 		# compare_result = requests.post('http://requestb.in/13h5mjd1', data=compare_post_data)
 
-		# test data
-		# compare_result = '{ "employees" : [''{ "firstName":"John" , "lastName":"Doe" },''{ "firstName":"Anna" , "lastName":"Smith" },' '{ "firstName":"Peter" , "lastName":"Jones" } ]}'
-		'''string_result = {'google': \
+		# dummy data
+		temp_result = {'google': \
 							{'destination_addresses': ['18113 31st Ave NE, Arlington, WA 98223, USA'], \
 							'status': 'OK', \
 							'rows': [{'elements': \
@@ -249,10 +251,7 @@ def compare():
 									'zip': '98226', \
 									'recycle': 'True' \
 								}, \
-							'status': 'True'}}}'''
-		# compare_result = OrderedDict({'walkscore': '{\'355 meadowbrook ct Bellingham WA 98226\': \'{"status": "Key is invalid"}\'}', 'google': {'destination_addresses': ['18113 31st Ave NE, Arlington, WA 98223, USA'], 'status': 'OK', 'rows': [{'elements': [{'status': 'OK', 'distance': {'value': 88050, 'text': '54.7 mi'}, 'duration': {'value': 65273, 'text': '18 hours 8 mins'}}]}], 'origin_addresses': ['355 Meadowbrook Ct, Bellingham, WA 98226, USA']}, 'hsi_db': {'addr': {'results': {'water': '30.0', 'lat': 48.8088895, 'updateDate': '2017.03.01', 'address': '355 Meadowbrook Ct', 'city': 'Bellingham', 'state': 'WA', 'compost': 'True', 'long': -122.5002452, 'electrical': '90.0', 'gas': '50.0', 'rent': '900.0', 'apt': 'N/A', 'zip': '98226', 'recycle': 'True'}, 'status': 'True'}}})
-		temp_result = string_result.json()
-
+							'status': 'True'}}}
 		compare_result = json.dumps(temp_result)
 
 		return render_template('response.html', compareData=compare_result)
