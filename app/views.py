@@ -60,26 +60,35 @@ def account():
 	addressform = AddressForm()
 	loginform = Login()
 	if userform.validate_on_submit() & addressform.validate_on_submit():
-		user_post_data = {}
+		user_post_data = userform.data
+		user_post_data['Street'] = addressform.address.data
+		user_post_data['City'] = addressform.city.data
+		user_post_data['State'] = addressform.state.data
+		user_post_data['Zip'] = addressform.zip.data
+		user_post_data['Apt'] = addressform.apt.data
 		util_post_data = addressform.data
+		user_post_data['key'] = ''
 		util_post_data['key'] = ''
 
 		# Add User to DB.
-		# user_add = requests.post('http://140.160.142.77:5000/<insert user add call>', data=post_data)
-
+		user_result = requests.post('http://140.160.142.77:5000/userDB/addUser', data=user_post_data)
+		# user_result = requests.post('http://requestb.in/1d62yzd1', data=user_post_data)
+		print(user_result)
 		# Add Info to UtilDB
-		string_result = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
+		# string_result = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
 	 
 				
 		# util_add = string_result.json()
-		temp_result = string_result.json()
-		util_add = json.dumps(temp_result)
+		# temp_result = string_result.json()
+		#user_temp_result = string_result.json()
+		# util_add = json.dumps(temp_result)
 		# util_add = json.dumps(temp_result)
 
 		# test bin
 		# util_add = requests.post('http://requestb.in/16s31qr1', data=util_post_data)
+		return render_template('search.html') #add user_add=useradd
 
-		return render_template('add_response.html', utilData=util_add) #add user_add=useradd
+		#return render_template('add_response.html', utilData=util_add) #add user_add=useradd
 
 	return render_template("account_creation.html", form=userform, addressform=addressform, loginform=loginform)
 
