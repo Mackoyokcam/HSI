@@ -18,7 +18,14 @@ def csrf_error(reason):
 	return render_template('csrf_error.html', reason=reason), 400
 '''
 
+# custom jinja2 filters:
 
+# reverse of the built in |tojson filter
+@app.template_filter()
+def fromjson(jsonString):
+	return json.loads(jsonString)
+
+# routes
 @app.route('/')
 @app.route('/index')
 @app.route('/search')
@@ -85,7 +92,8 @@ def account_view():
 	# If authenticated, show account info.
 	return render_template("account.html")
 
-
+# This is the main page for displaying map and utility data for a given
+# property
 @app.route('/properties', methods=['GET', 'POST'])
 def properties():
 	searchString = request.args.get('search_string')
@@ -95,7 +103,9 @@ def properties():
 		"key" : "",
 		"origins" : searchString
 	}
-	# res = requests.post('http://140.160.142.77:5000/utilDB/query', data=data)
+	res = requests.post("http://140.160.142.77:5000/utilDB/query", data=data)
+
+	# dummy data for offline testing
 	testingDataSingleUnit = {"addr0": {"walkscore": {"status": "Key is invalid"},
 									   "status": "True",
 									   "units": {"N/A": {"rent": "500.0",
@@ -128,26 +138,27 @@ def properties():
 									   					 "recycle": "True",
 									   					 "water": "15.0"}}}}
 	
+	testingNearbyData = '{"lat":"48.722.849", "long":"-122.502782"}'
 	# addressData = testingDataSingleUnit
-	addressData = testingDataMultiUnit
-	jsonUnitData = json.dumps(addressData["addr0"]["units"])
-	print(jsonUnitData)
-	# addressData = res.json()
-	# NOTE: this is kind of hacky but it's only temporary until we figure out
-	# some data formatting issues with the back end
-	if addressData['addr0']['status'] == 'True':
-		addressData = addressData['addr0']
+	# addressData = testingDataMultiUnit
+	addressData = fromjson(res.text.replace("'", '"'))
+	print(addressData)
+	if addressData["status"] == "True": # i.e. the db contained a valid entry
+		
+		data = {
+			"lat" : addressData["lat"],
+			"long" : addressData["long"],
+			"key" : ""
+		}
+		res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
+		nearbyData = res.text
+		nearbyData = json.dumps(nearbyData)
+		multiUnit = "False"
 		if len(addressData["units"]) > 1:
-			# extract just the values of the first (and only) unit
-			# singleUnit = list(addressData["units"])[0]
-			# addressData = list(addressData["units"].values())[0]
-			# print(addressData)
-			multiUnit = "yep"
-			return render_template("properties.html", searchString=searchString,
-								   addressData=addressData, multiUnit=multiUnit, jsonUnitData=jsonUnitData)
-		else:
-			return render_template("properties.html", searchString=searchString,
-								   addressData=addressData, jsonUnitData=jsonUnitData)
+			multiUnit = "True"
+		addressData = json.dumps(addressData["units"])
+		return render_template("properties.html", searchString=searchString,
+								   addressData=addressData, nearbyData=nearbyData, multiUnit=multiUnit)
 	else:
 		return render_template("properties.html", searchString=searchString)
 
@@ -213,14 +224,14 @@ def compare():
 		compare_post_data['key'] = ''
 
 		# Send compare request
-		# string_result = requests.post('http://140.160.142.77:5000/compare', data=compare_post_data)
-		# temp_result = string_result.json()
+		string_result = requests.post('http://140.160.142.77:5000/compare', data=compare_post_data)
+		temp_result = string_result.json()
 
 		# test bin
 		# compare_result = requests.post('http://requestb.in/13h5mjd1', data=compare_post_data)
 
 		# dummy data
-		temp_result = {'google': \
+		temp_result = '''{'google': \
 							{'destination_addresses': ['18113 31st Ave NE, Arlington, WA 98223, USA'], \
 							'status': 'OK', \
 							'rows': [{'elements': \
@@ -251,7 +262,8 @@ def compare():
 									'zip': '98226', \
 									'recycle': 'True' \
 								}, \
-							'status': 'True'}}}
+							'status': 'True'}}}'''
+
 		compare_result = json.dumps(temp_result)
 
 		return render_template('response.html', compareData=compare_result)
