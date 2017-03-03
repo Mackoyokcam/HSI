@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block navbar %}
+	{% include "navbar.html" %}
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript" src="../static/javascript/distance.js"></script>
+    <script type="text/javascript" src="../static/javascript/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/distance.css"/>
+{% endblock %}
+{% block content %}
+
+    <h1>Property Distance Comparisons</h1>
+    <hr>
+    <div id="main">
+        <div id="results"></div>
+        <div id="form">
+            <form action="">
+                <div id="origin">
+                    <label for="origin_address">Origin: </label>
+                    <input id="origin_address" type="text" />
+                </div>
+                <div id="destination">
+                    <label for="destination_address">Destination: </label>
+                    <input id="destination_address" type="text" />
+                </div>
+
+            </form>
+            <div id="add">
+                <button id="add_button" onclick="addFunction()">+</button>
+            </div>
+        </div>
+        <div id="addresses"></div>
+        <div id="submitButton">
+            <button class="submit-button" onclick="submitFunction()">Submit</button>
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -2,8 +2,17 @@
 {% block navbar %}
 	{% include "navbar.html" %}
 {% endblock %}
+{% block javascript %}
+    <script type="text/javascript" src="../static/javascript/compare.js"></script>
+    <script type="text/javascript" src="../static/javascript/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/compare.css"/>
+{% endblock %}
 {% block content %}
-    <!--
+
+    <h1>Property Utility Comparisons</h1>
+    <hr>
+    <div id="main">
+        <!--
 	<link rel="stylesheet" type="text/css" href="../static/css/compare.css">
 	<h1>Property Comparisons</h1>
 	<hr></hr>
@@ -12,19 +21,12 @@
 			<h3>{{ property }}</h3>
 		</div>
 	</div> -->
-    <link rel="stylesheet" type="text/css" href="../static/css/compare.css"/>
-    <script type="text/javascript" src="../static/javascript/compare.js"></script>
-    <script src="jquery-3.1.1.min.js"></script>
-    
-    <h1>Property Comparisons</h1>
-    <hr>
-    <div id="main">
-    <form name="compare_data" action="{{ url_for('compare') }}" method="POST">
+
+        <form name="compare_data" action="{{ url_for('compare') }}" method="POST">
 
             <div class="originData">
                 {{  formOrigin.hidden_tag()  }}
                 {%  for field in formOrigin if field.widget.input_type != 'hidden' %}
-
                     {{ field.label }}
 
                     {{ field }}
@@ -34,10 +36,10 @@
                     {% endfor %}
                     <br>
                     <br>
-                {%  endfor  %}      
+                {%  endfor  %}
             </div>
-	    
-	    <div class="destinationData">
+
+            <div class="destinationData">
                 {{  formDestination.hidden_tag()  }}
                 {%  for field in formDestination if field.widget.input_type != 'hidden' %}
 
@@ -50,19 +52,14 @@
                     {% endfor %}
                     <br>
                     <br>
-                {%  endfor  %}      
+                {%  endfor  %}
             </div>
-	    
 
-	    <div id="submit">
-                    <button class="submitButton" type="submit">Submit</button>
+
+            <div id="submit">
+                <button class="submitButton" type="submit">Submit</button>
             </div>
-    </form>
+        </form>
     </div>
-    
-    <div id="comparisons">
-      <button id="addButton" onclick="addCompare()">Add</button>
-      <button id="removeButton" onclick="removeCompare()">Remove</button>
-    </div>
-    
+
 {% endblock %}

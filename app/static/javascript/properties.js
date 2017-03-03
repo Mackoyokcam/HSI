@@ -2,10 +2,13 @@ function id(element) {
 	return document.getElementById(element);
 }
 
+var addressData = JSON.parse(addressDataJSON);
+var nearbyData = JSON.parse(nearbyDataJSON);
+
 var geocoder;
 var map;
 
-window.initMap = function() {
+function initMap() {
 	geocoder = new google.maps.Geocoder();
 	var addressText = id("address-text").innerText;
 	if (addressText == null || addressText.trim() == '') {
@@ -28,7 +31,7 @@ window.initMap = function() {
 			if (status == "OK") {
 				var loc = results[0].geometry.location;
 				var map = new google.maps.Map(id('map'), {
-					zoom: 12,
+					zoom: 15,
 					center: loc
 				});
 				var marker = new google.maps.Marker({
@@ -36,6 +39,8 @@ window.initMap = function() {
 					map: map,
 					title: addressText
 				});
+				loadNearby(map);
+				console.log(nearbyData);
 			} else {
 				console.log("Geocode was not successful for the folowing reason:" + status);
 				var sorryMessage = document.createElement("p");
@@ -46,15 +51,50 @@ window.initMap = function() {
 	}
 }
 
-// var addressData = JSON.parse(addressDataJSON.replace(/'&#34;'/, '"'));
+// populates the map with nearby locations present in the db
+function loadNearby(map) {
+	for (unit in nearbyData) {
+		var lati = unit["lat"];
+		var longi = unit["long"];
+		console.log("lati: " + lati);
+		console.log("longi: " + lati);
+		lati = parseFloat(lati);
+		longi = parseFloat(longi);
+		loc = {lat:lati, lng:longi};
+		var marker = new google.maps.Marker({
+			position: loc,
+			map: map,
+			title: unit["address"],
+			icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png" // to differentiate
+		});
+	}
+}
 
 function newUnitSelected () {
 	var unitList = id("unit-list");
 	var selectedUnit = unitList.options[unitList.selectedIndex].text;
-	console.log(selectedUnit);
-	console.log(addressDataJSON);
+	var unitData = addressData[selectedUnit];
+	populateData(unitData, selectedUnit);
+}
+
+function populateData(unitData, apartment) {
+	id("apartment").innerHTML = "Apartment: ".concat(apartment);
+	id("update-date").innerHTML = "Last Updated: ".concat(unitData["updateDate"]);
+	id("rent").innerHTML = "Monthly Rent: ".concat(unitData["rent"]);
+	id("gas").innerHTML = "Gas: ".concat(unitData["gas"]);
+	id("electrical").innerHTML = "Electrical: ".concat(unitData["electrical"]);
+	id("water").innerHTML = "Water: ".concat(unitData["water"]);
+	id("recycle").innerHTML = "Recycle: ".concat((unitData["recycle"] === "True"?"yes":"no"));
+	id("compost").innerHTML = "Compost: ".concat((unitData["compost"] === "True"?"yes":"no"));
 }
 
 window.onload = function () {
-	id("unit-list").onchange = newUnitSelected;
+	if (id("unit-list") !== null) {
+		id("unit-list").onchange = newUnitSelected;
+		id("unit-list")[0].selected = "selected";
+		newUnitSelected();
+	} else {
+		var apartment = Object.keys(addressData)[0]
+		populateData(addressData[apartment], apartment)
+	}
 };
