@@ -22,6 +22,7 @@ p {
 	text-decoration: none;
 	font-size: 18pt;
 	color: white;
+	margin: 1em;
 }
 
 #links {
@@ -29,7 +30,14 @@ p {
 }
 
 #tools {
-	float: right;
+	right: 20px;
+	position:absolute;
+}
+
+#tools p {
+	color: white;
+	float: left;
+	padding-top: 5px
 }
 
 #search-form {
@@ -63,7 +71,7 @@ input[type="text"] {
 	/*margin-right: 0;*/
 }
 
-input[type="submit"] {
+#search-form [type="submit"] {
 	width: 90px;
 	height: 46px;
 	font-family: sans-serif;
@@ -75,4 +83,56 @@ input[type="submit"] {
 
 #submit-button:hover {
 	color: white;
+	cursor: pointer;
+}
+
+#compareButton {
+	left: 150px;
+	bottom: 150px;
+	position: absolute;
+}
+
+#distanceButton {
+	right: 150px;
+	bottom: 150px;
+	position: absolute;
+}
+
+.compare-button {
+	padding: 30px;
+	background: rgb(204, 204, 204);
+	background: rgba(204, 204, 204, 0.55);
+	font-size: 18pt;
+	text-shadow: -2px 0 #000000,0 2px #000000, 2px 0 #000000,0 -2px #000000;
+	text-align: center;
+	font-family: sans-serif;
+	color: white;
+	border-radius: 25px;
+
+}
+
+.compare-button:hover {
+	background: rgba(34, 139, 34, 0.55);
+	cursor: pointer;
+}
+
+.distance-button {
+	padding: 30px;
+	background: rgb(204, 204, 204);
+	background: rgba(204, 204, 204, 0.55);
+	font-size: 18pt;
+	text-shadow: -2px 0 #000000,0 2px #000000, 2px 0 #000000,0 -2px #000000;
+	text-align: center;
+	font-family: sans-serif;
+	color: white;
+	border-radius: 25px;
+}
+
+.distance-button:hover {
+	background: rgba(34, 139, 34, 0.55);
+	cursor: pointer;
+}
+
+input[type="text"], textarea {
+	background-color: rgba(204, 204, 204, 0.75);
 }

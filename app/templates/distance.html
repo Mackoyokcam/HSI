@@ -12,7 +12,7 @@
     <h1>Property Distance Comparisons</h1>
     <hr>
     <div id="main">
-        <div id="addresses"></div>
+        <div id="results"></div>
         <div id="form">
             <form action="">
                 <div id="origin">
@@ -28,11 +28,12 @@
             <div id="add">
                 <button id="add_button" onclick="addFunction()">+</button>
             </div>
-            <div id="submitButton">
-                <button id="submit_button" onclick="submitFunction()">Submit</button>
-            </div>
         </div>
-        <div id="results"></div>
+        <div id="addresses"></div>
+        <div id="submitButton">
+            <button class="submit-button" onclick="submitFunction()">Submit</button>
+        </div>
+
     </div>
 
 {% endblock %}
