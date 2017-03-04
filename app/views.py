@@ -9,7 +9,7 @@ import json
 import time
 from collections import OrderedDict
 
-CSRFProtect(app)
+# CSRFProtect(app)
 
 
 ''''
@@ -293,10 +293,10 @@ def login():
 	loginform = Login(csrf_enabled=False)
 
 	if loginform.validate_on_submit():
-
+		#user_data = loginform.data
 		# requires user class import and API call function.
 		'''
-		user = requests.get('http://140.160.142.77:5000/<userdb function>', data=user_data)
+		user = requests.get('http://140.160.142.77:5000/login', data=user_data)
 		if get request for user successful...
 			login_user(user)
 			flash('Logged in successfully.')
@@ -315,3 +315,11 @@ def logout():
 	# logout(user)
 	return render_template("search.html")
 
+@app.route('/test2', methods=['GET', 'POST'])
+def test2():
+	#temp_data = json.loads(request.data)
+	#temp_result = requests.post('http://requestb.in/1d62yzd1', data=temp_data)
+	temp_result = requests.post('http://140.160.142.77:5000/compare', data=request.data)
+	compare_result = json.dumps(temp_result)
+
+	return compare_result
