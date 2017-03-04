@@ -40,17 +40,15 @@ function submitFunction() {
     data['Origins'] = origins_array;
     data['Destinations'] = destinations_array;
     data['Key'] = '';
-    
-  
+
 
     xhr = new XMLHttpRequest();
-    var url = "http://140.160.142.77:5000/compare";
+    var url = "/test2";
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             var content = JSON.parse(xhr.responseText);
-            console.log(content);
             var google = content['google'];
             var googleStatus = google['status'];
 
@@ -77,6 +75,7 @@ function submitFunction() {
     };
     
     var json_string_data = JSON.stringify(data);
+    alert(json_string_data);
     xhr.send(json_string_data);
     
 }
