@@ -315,13 +315,14 @@ def logout():
 	# logout(user)
 	return render_template("search.html")
 
+
 @app.route('/test2', methods=['GET', 'POST'])
 def test2():
-	temp_data = json.JSONEncoder().encode(request.get_json())
-	print temp_data
+	temp_data = request.get_json()
+	print(temp_data)
 	print(type(temp_data))
-	temp_result = requests.post('http://requestb.in/1d62yzd1', data=temp_data)
-	#temp_result = requests.post('http://140.160.142.77:5000/compare', data=request.data)
+	temp_result = requests.post('http://requestb.in/1cf0mp11', data=temp_data)
+	#temp_result = requests.post('http://140.160.142.77:5000/compare', data=temp_data)
 	#string_result = temp_result.json()
 	string_result = {'google': \
 								{'destination_addresses': ['18113 31st Ave NE, Arlington, WA 98223, USA'], \
@@ -355,5 +356,6 @@ def test2():
 										'recycle': 'True' \
 									}, \
 								'status': 'True'}}}
+
 	compare_result = json.dumps(string_result)
 	return compare_result

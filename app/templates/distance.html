@@ -13,25 +13,24 @@
     <hr>
     <div id="main">
         <div id="results"></div>
+        <div id="addresses"><ul></ul></div>
         <div id="form">
-            <form action="">
                 <div id="origin">
                     <label for="origin_address">Origin: </label>
                     <input id="origin_address" type="text" />
                 </div>
                 <div id="destination">
                     <label for="destination_address">Destination: </label>
-                    <input id="destination_address" type="text" />
+                    <input id="destination_address" type="text" onkeypress="checkFields()"/>
                 </div>
 
-            </form>
             <div id="add">
                 <button id="add_button" onclick="addFunction()">+</button>
             </div>
         </div>
-        <div id="addresses"></div>
         <div id="submitButton">
-            <button class="submit-button" onclick="submitFunction()">Submit</button>
+            <button id="submit" class="submit-button" onclick="submitFunction()">Submit</button>
+            <button id="clear" class="clear-button" onclick="clearChoices()">Clear</button>
         </div>
 
     </div>

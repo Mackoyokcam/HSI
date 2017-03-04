@@ -1,39 +1,53 @@
 var data = {};
 var origins_array = [];
 var destinations_array = [];
-var reference_array = [];
 var temp = {}
-var count = -1;
-var restore_height;
-var restore_width;
+var count = 0;
+var orig_text, dest_text;
+
 
 function addFunction() {
-    var origin = document.getElementById('origin_address');
-    var destination = document.getElementById('destination_address');
-    var addresses = document.getElementById('addresses');
-    var originValue = origin.value;
-    var destinationValue = destination.value;
+
+    if ((orig_text.value) == "" || (dest_text.value == "")) {
+        alert("Must have Origin and Destination entries.");
+    } else {
+
+        document.getElementById('submit').disabled = false;
+        document.getElementById('submit').style.opacity = "1";
+        document.getElementById('clear').disabled = false;
+        document.getElementById('clear').style.opacity = "1";
+
+        count++;
+        if (count == 3) {
+            document.getElementById('add_button').disabled = true;
+            document.getElementById('add_button').style.opacity = "0.5";
+
+        }
+
+        var origin = document.getElementById('origin_address');
+        var destination = document.getElementById('destination_address');
+        var addresses = document.getElementById('addresses');
+        var originValue = origin.value;
+        var destinationValue = destination.value;
 
 
-    origins_array.push(originValue);
-    destinations_array.push(destinationValue);
-
-    count++;
-
-    //restore_height = addresses.clientHeight;
-    //restore_width = addresses.clientWidth;
-
-    addresses.innerHTML = "<div>" + originValue + " to " + destinationValue +
-        "  <button class='removeButton' onclick='removeButtonFunction(event)'>X</button> </div><br>"
-        + addresses.innerHTML;
-
+        origins_array.push(originValue);
+        destinations_array.push(destinationValue);
+        addresses.innerHTML += "<li>From: " + originValue + " / To: " + destinationValue + "</li>"
+    }
 }
 
-function removeButtonFunction(event) {
-    var x = event.target;
-
-   // x.parentElement.parentElement.style.height = restore_height;
-    x.parentNode.remove();
+function clearChoices() {
+    document.getElementById('addresses').innerHTML = "";
+    origins_array = [];
+    destinations_array = [];
+    count = 0;
+    document.getElementById('add_button').disabled = false;
+    document.getElementById('add_button').style.opacity = "1";
+    document.getElementById('clear').disabled = true;
+    document.getElementById('clear').style.opacity = "0.5";
+    document.getElementById('submit').disabled = true;
+    document.getElementById('submit').style.opacity = "0.5";
 
 
 }
@@ -66,18 +80,40 @@ function submitFunction() {
             }
             
             if(elementStatus == 'OK') {
-                document.getElementById('results').innerHTML = "<p> Distance: " + distance +
-                "<br> Duration: " + duration +
+                document.getElementById('results').innerHTML = "<p> From: " + orig + "<br> To: " + dest +
+                    "<br>Distance: " + distance + "<br> Duration: " + duration +
                 "</p>";
 
             } else {
                 document.getElementById('results').innerHTML = "<p> No available data for this area. </p>";
             }
+            document.getElementById('addresses').innerHTML = "";
+            origins_array = [];
+            destinations_array = [];
+            count = 0;
+            document.getElementById('add_button').disabled = false;
+            document.getElementById('add_button').style.opacity = "1";
+            document.getElementById('clear').disabled = true;
+            document.getElementById('clear').style.opacity = "0.5";
+            document.getElementById('submit').disabled = true;
+            document.getElementById('submit').style.opacity = "0.5";
+
         }
     };
     
     var json_string_data = JSON.stringify(data);
     alert(json_string_data);
     xhr.send(json_string_data);
+    document.getElementById('results').innerHTML = "Requesting data...";
     
 }
+
+window.onload = function() {
+    orig_text = document.getElementById('origin_address');
+    dest_text = document.getElementById('destination_address');
+
+    document.getElementById('clear').disabled = true;
+    document.getElementById('clear').style.opacity = "0.5";
+    document.getElementById('submit').disabled = true;
+    document.getElementById('submit').style.opacity = "0.5";
+};
