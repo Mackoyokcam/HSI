@@ -4,7 +4,7 @@ import json
 import usaddress as usad
 from flask import request
 from werkzeug.datastructures import MultiDict
-from views2 import addUser
+import views2
 
 
 CONFIG_FILE_URL = "app/config.json"
