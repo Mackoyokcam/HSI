@@ -49,7 +49,8 @@ function submitFunction() {
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            var content = JSON.parse(xhr.responseText);
+            alert("Ready!");
+	    var content = JSON.parse(xhr.responseText);
             console.log(content);
             var google = content['google'];
             var googleStatus = google['status'];
