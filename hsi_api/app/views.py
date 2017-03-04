@@ -221,6 +221,7 @@ def valid(api_key):
 
 @app.route('/userDB/addUser', methods = ['POST'])
 def addUser():
+    return "test"
     #param_keys = MultiDict.to_dict(request.form)                                                                                                                                             
     #api = hsi_api.                                                                                                                                                                           
     Email = request.form['Email']
