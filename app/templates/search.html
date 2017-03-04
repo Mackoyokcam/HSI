@@ -15,20 +15,31 @@
 				<a href="">Contact Us</a>
 			</div>
 			<div id="tools">
-				<a href="account">My Account</a>
+                <p>Not a member?  </p>
+				<a href="account">Register/Login</a>
 			</div>
 		</div>
 		<div id="content-body">
 			<link rel="stylesheet" type="text/css" href="../static/css/search.css"/>
 			<div id="search-form">
 				<form action="/properties" method="get">
-					<div>
 						<h1>Search HSI</h1>
 						<input type="text" name="search_string">
 						<input id="submit-button" type="submit" value="search">
-					</div>
 				</form>
 			</div>
+
+            <div id="compareButton">
+                <form action="compare">
+                    <input type="submit" class="compare-button" value="Compare Properties">
+                </form>
+            </div>
+
+            <div id="distanceButton">
+                <form action="distance">
+                    <input type="submit" class="distance-button" value="Check Distances">
+                </form>
+            </div>
 		</div>
 	</body>
 </html>

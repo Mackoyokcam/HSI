@@ -9,7 +9,7 @@ import json
 import time
 from collections import OrderedDict
 
-CSRFProtect(app)
+# CSRFProtect(app)
 
 
 ''''
@@ -60,26 +60,35 @@ def account():
 	addressform = AddressForm()
 	loginform = Login()
 	if userform.validate_on_submit() & addressform.validate_on_submit():
-		user_post_data = {}
+		user_post_data = userform.data
+		user_post_data['Street'] = addressform.address.data
+		user_post_data['City'] = addressform.city.data
+		user_post_data['State'] = addressform.state.data
+		user_post_data['Zip'] = addressform.zip.data
+		user_post_data['Apt'] = addressform.apt.data
 		util_post_data = addressform.data
+		user_post_data['key'] = ''
 		util_post_data['key'] = ''
 
 		# Add User to DB.
-		# user_add = requests.post('http://140.160.142.77:5000/<insert user add call>', data=post_data)
-
+		user_result = requests.post('http://140.160.142.77:5000/userDB/addUser', data=user_post_data)
+		# user_result = requests.post('http://requestb.in/1d62yzd1', data=user_post_data)
+		print(user_result)
 		# Add Info to UtilDB
-		string_result = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
+		# string_result = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
 	 
 				
 		# util_add = string_result.json()
-		temp_result = string_result.json()
-		util_add = json.dumps(temp_result)
+		# temp_result = string_result.json()
+		#user_temp_result = string_result.json()
+		# util_add = json.dumps(temp_result)
 		# util_add = json.dumps(temp_result)
 
 		# test bin
 		# util_add = requests.post('http://requestb.in/16s31qr1', data=util_post_data)
+		return render_template('search.html') #add user_add=useradd
 
-		return render_template('add_response.html', utilData=util_add) #add user_add=useradd
+		#return render_template('add_response.html', utilData=util_add) #add user_add=useradd
 
 	return render_template("account_creation.html", form=userform, addressform=addressform, loginform=loginform)
 
@@ -203,6 +212,11 @@ def simpleadd():
 		return render_template("simpleadd.html")
 
 
+@app.route('/distance', methods=['GET', 'POST'])
+def distance():
+	return render_template('distance.html')
+
+
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():
 	# properties = request.args.get('properties').split(':')
@@ -220,16 +234,13 @@ def compare():
 
 		# Send compare request
 		string_result = requests.post('http://140.160.142.77:5000/compare', data=compare_post_data)
-		print(string_result.text)
-	  		
-		# compare_result = string_result.json()
+		temp_result = string_result.json()
 
 		# test bin
 		# compare_result = requests.post('http://requestb.in/13h5mjd1', data=compare_post_data)
 
-		# test data
-		# compare_result = '{ "employees" : [''{ "firstName":"John" , "lastName":"Doe" },''{ "firstName":"Anna" , "lastName":"Smith" },' '{ "firstName":"Peter" , "lastName":"Jones" } ]}'
-		'''string_result = {'google': \
+		# dummy data
+		temp_result = '''{'google': \
 							{'destination_addresses': ['18113 31st Ave NE, Arlington, WA 98223, USA'], \
 							'status': 'OK', \
 							'rows': [{'elements': \
@@ -261,8 +272,6 @@ def compare():
 									'recycle': 'True' \
 								}, \
 							'status': 'True'}}}'''
-		# compare_result = OrderedDict({'walkscore': '{\'355 meadowbrook ct Bellingham WA 98226\': \'{"status": "Key is invalid"}\'}', 'google': {'destination_addresses': ['18113 31st Ave NE, Arlington, WA 98223, USA'], 'status': 'OK', 'rows': [{'elements': [{'status': 'OK', 'distance': {'value': 88050, 'text': '54.7 mi'}, 'duration': {'value': 65273, 'text': '18 hours 8 mins'}}]}], 'origin_addresses': ['355 Meadowbrook Ct, Bellingham, WA 98226, USA']}, 'hsi_db': {'addr': {'results': {'water': '30.0', 'lat': 48.8088895, 'updateDate': '2017.03.01', 'address': '355 Meadowbrook Ct', 'city': 'Bellingham', 'state': 'WA', 'compost': 'True', 'long': -122.5002452, 'electrical': '90.0', 'gas': '50.0', 'rent': '900.0', 'apt': 'N/A', 'zip': '98226', 'recycle': 'True'}, 'status': 'True'}}})
-		temp_result = string_result.json()
 
 		compare_result = json.dumps(temp_result)
 
@@ -284,10 +293,10 @@ def login():
 	loginform = Login(csrf_enabled=False)
 
 	if loginform.validate_on_submit():
-
+		#user_data = loginform.data
 		# requires user class import and API call function.
 		'''
-		user = requests.get('http://140.160.142.77:5000/<userdb function>', data=user_data)
+		user = requests.get('http://140.160.142.77:5000/login', data=user_data)
 		if get request for user successful...
 			login_user(user)
 			flash('Logged in successfully.')
@@ -306,3 +315,47 @@ def logout():
 	# logout(user)
 	return render_template("search.html")
 
+
+@app.route('/test2', methods=['GET', 'POST'])
+def test2():
+	temp_data = request.get_json()
+	print(temp_data)
+	print(type(temp_data))
+	temp_result = requests.post('http://requestb.in/1cf0mp11', data=temp_data)
+	#temp_result = requests.post('http://140.160.142.77:5000/compare', data=temp_data)
+	#string_result = temp_result.json()
+	string_result = {'google': \
+								{'destination_addresses': ['18113 31st Ave NE, Arlington, WA 98223, USA'], \
+								'status': 'OK', \
+								'rows': [{'elements': \
+										[{'status': 'OK', \
+										'distance': {'value': 88050, \
+											'text': '54.7 mi'}, \
+	 									'duration': {'value': 65273, \
+											'text': '18 hours 8 mins'} \
+										}] \
+									}], \
+								'origin_addresses': ['355 Meadowbrook Ct, Bellingham, WA 98226, USA'] \
+								}, \
+							'hsi_db': \
+								{'addr': \
+									{'results': \
+										{'water': '30.0', \
+										'lat': 48.8088895, \
+										'updateDate': '2017.03.01', \
+										'address': '355 Meadowbrook Ct', \
+										'city': 'Bellingham', \
+										'state': 'WA', \
+										'compost': 'True', \
+										'long': -122.5002452, \
+										'electrical': '90.0', \
+										'gas': '50.0', \
+										'rent': '900.0', \
+										'apt': 'N/A', \
+										'zip': '98226', \
+										'recycle': 'True' \
+									}, \
+								'status': 'True'}}}
+
+	compare_result = json.dumps(string_result)
+	return compare_result
