@@ -317,9 +317,43 @@ def logout():
 
 @app.route('/test2', methods=['GET', 'POST'])
 def test2():
-	#temp_data = json.loads(request.data)
-	#temp_result = requests.post('http://requestb.in/1d62yzd1', data=temp_data)
-	temp_result = requests.post('http://140.160.142.77:5000/compare', data=request.data)
-	string_result = temp_result.json()
+	temp_data = json.JSONEncoder().encode(request.get_json())
+	print temp_data
+	print(type(temp_data))
+	temp_result = requests.post('http://requestb.in/1d62yzd1', data=temp_data)
+	#temp_result = requests.post('http://140.160.142.77:5000/compare', data=request.data)
+	#string_result = temp_result.json()
+	string_result = {'google': \
+								{'destination_addresses': ['18113 31st Ave NE, Arlington, WA 98223, USA'], \
+								'status': 'OK', \
+								'rows': [{'elements': \
+										[{'status': 'OK', \
+										'distance': {'value': 88050, \
+											'text': '54.7 mi'}, \
+	 									'duration': {'value': 65273, \
+											'text': '18 hours 8 mins'} \
+										}] \
+									}], \
+								'origin_addresses': ['355 Meadowbrook Ct, Bellingham, WA 98226, USA'] \
+								}, \
+							'hsi_db': \
+								{'addr': \
+									{'results': \
+										{'water': '30.0', \
+										'lat': 48.8088895, \
+										'updateDate': '2017.03.01', \
+										'address': '355 Meadowbrook Ct', \
+										'city': 'Bellingham', \
+										'state': 'WA', \
+										'compost': 'True', \
+										'long': -122.5002452, \
+										'electrical': '90.0', \
+										'gas': '50.0', \
+										'rent': '900.0', \
+										'apt': 'N/A', \
+										'zip': '98226', \
+										'recycle': 'True' \
+									}, \
+								'status': 'True'}}}
 	compare_result = json.dumps(string_result)
 	return compare_result

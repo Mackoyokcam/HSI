@@ -2,8 +2,12 @@
 {% block navbar %}
 	{% include "navbar.html" %}
 {% endblock %}
+{% block javascript %}
+	<script type="text/javascript" src="../static/javascript/account.js"> </script>
+{% endblock %}
 {% block content  %}
 <h1>My Account</h1>
 <hr>
-<p>Here is filler text to be replaced with the account page</p>
+<div id="userData"></div>
+
 {% endblock %}

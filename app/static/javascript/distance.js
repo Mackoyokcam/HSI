@@ -2,6 +2,7 @@ var data = {};
 var origins_array = [];
 var destinations_array = [];
 var reference_array = [];
+var temp = {}
 var count = -1;
 var restore_height;
 var restore_width;
@@ -12,6 +13,7 @@ function addFunction() {
     var addresses = document.getElementById('addresses');
     var originValue = origin.value;
     var destinationValue = destination.value;
+
 
     origins_array.push(originValue);
     destinations_array.push(destinationValue);
