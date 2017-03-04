@@ -102,6 +102,21 @@ def login(email, password):
             }
         )
         return 1
+def getUserInfo(email):
+    checker = list(users.find({"Email" : email},{"Last_Login":0, "_id":0}))
+    if (checker == list()):
+        #print("unsuccessful login attempt")
+        return -1
+    else:
+        info = list()
+        user = json.loads(getUserEmail(email))
+        street = json.loads(getUserStreet(email))
+        city = json.loads(getUserCity(email))
+        state = json.loads(getUserState(email))
+        zipCode = json.loads(getUserZip(email))
+        apt = json.loads(getUserApt(email))
+        info.append(user) ; info.append(street); info.append(city) ; info.append(state) ; info.append(zipCode) ; info.append(apt)
+        return info
 def getUserEmail(email):
     checker = list(users.find({"Email" : email},{"Email": email, "_id":0}))
     if (checker == list()):
@@ -175,5 +190,3 @@ def getUserApt(email):
         conversion2 = json.dumps(conversion1[1])
         JSONapt = json.loads(conversion2)
         return JSONapt
-
-              
