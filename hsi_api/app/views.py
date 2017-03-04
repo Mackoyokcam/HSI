@@ -4,6 +4,8 @@ import json
 import usaddress as usad
 from flask import request
 from werkzeug.datastructures import MultiDict
+from views2 import addUser
+
 
 CONFIG_FILE_URL = "app/config.json"
 VALIDATION_ERROR = '{"error": "validation failed, make sure you are not above your api request limit and that your key is valid"}'
