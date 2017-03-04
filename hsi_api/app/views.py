@@ -219,11 +219,10 @@ def valid(api_key):
     return True
 
 
+
 @app.route('/userDB/addUser', methods = ['POST'])
 def addUser():
-    return "test"
-    #param_keys = MultiDict.to_dict(request.form)                                                                                                                                             
-    #api = hsi_api.                                                                                                                                                                           
+    #param_keys = MultiDict.to_dict(request.form)
     Email = request.form['Email']
     Password = request.form['Password']
     Street = request.form['Street']
@@ -238,3 +237,33 @@ def addUser():
         return "address already in database"
     else
         return "user added to database"
+    
+@app.route('/userDB/getUserInfo', methods = ['POST'])
+def getUserInfo():
+    Email = request.form['Email']
+    res = hsi_api_user.getUserInfo(Email)
+    if (res == -1):
+        return "unsuccessful login attempt"
+    else:
+        return res
+
+@app.route('/userDB/removeAccount', methods = ['POST'])
+def removeAccount():
+    Email = request.form['Email']
+    res = hsi_api_user.removeAccount(Email)
+    if (res == -1):
+        return -1
+    else:
+        return 1
+
+@app.route('/userDB/login', methods = ['POST'])
+def login():
+    Email = request.form['Email']
+    Password = request.form['Password']
+    res = hsi_api_user.login(Email, Password)
+    if (res == -1):
+        return -1
+    else:
+        return 1
+    
+    
