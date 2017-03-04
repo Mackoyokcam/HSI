@@ -317,9 +317,9 @@ def logout():
 
 @app.route('/test2', methods=['GET', 'POST'])
 def test2():
-	#temp_data = json.loads(request.data)
+	temp_data = json.JSONEncoder().encode(request.get_json())
 	#temp_result = requests.post('http://requestb.in/1d62yzd1', data=temp_data)
-	temp_result = requests.post('http://140.160.142.77:5000/compare', data=request.data)
+	temp_result = requests.post('http://140.160.142.77:5000/compare', data=temp_data)
 	string_result = temp_result.json()
 	compare_result = json.dumps(string_result)
 	return compare_result
