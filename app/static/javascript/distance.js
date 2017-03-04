@@ -53,9 +53,9 @@ function clearChoices() {
 }
 
 function submitFunction() {
-    data['Origins'] = origins_array;
-    data['Destinations'] = destinations_array;
-    data['Key'] = '';
+    data['origins'] = origins_array;
+    data['destinations'] = destinations_array;
+    data['key'] = '';
 
 
     xhr = new XMLHttpRequest();
