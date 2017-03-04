@@ -3,13 +3,26 @@ h1 {
 }
 
 #origin {
-    float: left;
     margin-right: 2em;
+    font-size: 18pt;
+}
+
+#origin input {
+    font-size: 18pt;
+    width: 15em;
+    border-radius: 5px;
+
 }
 
 #destination {
-    float: left;
     margin-right: 1em;
+    font-size: 18pt;
+}
+
+#destination input{
+    font-size: 18pt;
+    width: 15em;
+    border-radius: 5px;
 }
 
 #submitButton {
@@ -32,8 +45,30 @@ h1 {
 #addresses {
     text-align: center;
     margin-top: 5em;
+    font-size: 18pt;
 }
 
 #form {
     margin-top: 1em;
+    text-align: center;
+}
+
+
+#form div{
+    display:inline;
+}
+
+#add button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    font-size: 26pt;
+    font-weight: bold;
+    border-radius: 80%;
+}
+
+#results {
+    font-size: 18pt;
 }
