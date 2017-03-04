@@ -2,8 +2,10 @@ function id(element) {
 	return document.getElementById(element);
 }
 
-var addressData = JSON.parse(addressDataJSON);
-var nearbyData = JSON.parse(nearbyDataJSON);
+if (id("address-data") !== null) {
+	var addressData = JSON.parse(addressDataJSON);
+	var nearbyData = JSON.parse(nearbyDataJSON);
+}
 
 var geocoder;
 var map;
@@ -39,8 +41,10 @@ function initMap() {
 					map: map,
 					title: addressText
 				});
-				loadNearby(map);
-				console.log(nearbyData);
+				if (id("address-data") !== null) {
+					loadNearby(map);
+					console.log(nearbyData);
+				}
 			} else {
 				console.log("Geocode was not successful for the folowing reason:" + status);
 				var sorryMessage = document.createElement("p");
@@ -87,12 +91,15 @@ function populateData(unitData, apartment) {
 }
 
 window.onload = function () {
-	if (id("unit-list") !== null) {
-		id("unit-list").onchange = newUnitSelected;
-		id("unit-list")[0].selected = "selected";
-		newUnitSelected();
-	} else {
-		var apartment = Object.keys(addressData)[0]
-		populateData(addressData[apartment], apartment)
+	if (id("address-data") !== null) {
+		if (id("unit-list") !== null) {
+			id("unit-list").onchange = newUnitSelected;
+			id("unit-list")[0].selected = "selected";
+			newUnitSelected();
+		} else {
+			var apartment = Object.keys(addressData)[0]
+			populateData(addressData[apartment], apartment)
+		}
 	}
+
 };
