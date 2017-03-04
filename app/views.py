@@ -150,8 +150,8 @@ def properties():
 	testingNearbyData = '{"lat":"48.722.849", "long":"-122.502782"}'
 	# addressData = testingDataSingleUnit
 	# addressData = testingDataMultiUnit
-	addressData = fromjson(res.text.replace("'", '"'))
 	print (res.text)
+	addressData = fromjson(res.text.replace("'", '"'))
 	if "error" in addressData:
 		errorMessage = addressData["error"]
 		return render_template("errors.html", errorMessage=errorMessage)
