@@ -320,6 +320,6 @@ def test2():
 	#temp_data = json.loads(request.data)
 	#temp_result = requests.post('http://requestb.in/1d62yzd1', data=temp_data)
 	temp_result = requests.post('http://140.160.142.77:5000/compare', data=request.data)
-	compare_result = json.dumps(temp_result)
-
+	string_result = temp_result.json()
+	compare_result = json.dumps(string_result)
 	return compare_result
