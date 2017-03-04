@@ -152,26 +152,30 @@ def properties():
 	# addressData = testingDataMultiUnit
 	addressData = fromjson(res.text.replace("'", '"'))
 	print (res.text)
-	if addressData["status"] == "True": # i.e. the db contained a valid entry
-		
-		data = {
-			"lat" : testingNearbyData["lat"],
-			"long" : testingNearbyData["long"],
-			"key" : ""
-		}
-
-		res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
-		nearbyData = res.text
-		nearbyData = json.dumps(nearbyData)
-		print("nearby data:\n" + nearbyData)
-		multiUnit = "False"
-		if len(addressData["units"]) > 1:
-			multiUnit = "True"
-		addressData = json.dumps(addressData["units"])
-		return render_template("properties.html", searchString=searchString,
-								   addressData=addressData, nearbyData=nearbyData, multiUnit=multiUnit)
+	if "error" in addressData:
+		errorMessage = addressData["error"]
+		return render_template("errors.html", errorMessage=errorMessage)
 	else:
-		return render_template("properties.html", searchString=searchString)
+		if addressData["status"] == "True": # i.e. the db contained a valid entry
+			
+			data = {
+				"lat" : testingNearbyData["lat"],
+				"long" : testingNearbyData["long"],
+				"key" : ""
+			}
+
+			res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
+			nearbyData = res.text
+			nearbyData = json.dumps(nearbyData)
+			print("nearby data:\n" + nearbyData)
+			multiUnit = "False"
+			if len(addressData["units"]) > 1:
+				multiUnit = "True"
+			addressData = json.dumps(addressData["units"])
+			return render_template("properties.html", searchString=searchString,
+									   addressData=addressData, nearbyData=nearbyData, multiUnit=multiUnit)
+		else:
+			return render_template("properties.html", searchString=searchString)
 
 
 # for just viewing the json results of querying the database
