@@ -323,6 +323,6 @@ def test2():
 	print(type(temp_data))
 	#temp_result = requests.post('http://requestb.in/1cf0mp11', data=temp_data)
 	temp_result = requests.post('http://140.160.142.77:5000/compare', data=temp_data)
-	string_result = temp_result.json()
-	compare_result = json.dumps(string_result)
-	return compare_result
+	string_result = temp_result.text
+	#compare_result = json.loads(string_result)
+	return string_result
