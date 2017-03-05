@@ -24,11 +24,11 @@
 		</form>
 	</div>
 	<div id="address-data">
+	<div id="address-text-box">
+		<h3 id="address-text">{{ searchString }}</h3>
+	</div>
 	{% if addressData %}
-		<div id="address-text-box">
-			<h3 id="address-text">{{ searchString }}</h3>
-		</div>
-		<p>NOTE: currently the data presented is dummy data for testing, this page doesn't actually call query</p>
+		<div id="addressData"></div>
 		<script type="text/javascript">
 			// The address data is stored for later access by properties.js
 			var addressDataJSON = {{ addressData|tojson|safe }};
