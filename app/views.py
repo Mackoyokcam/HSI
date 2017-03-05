@@ -151,7 +151,6 @@ def properties():
 	# addressData = testingDataSingleUnit
 	# addressData = testingDataMultiUnit
 	addressData = fromjson(res.text.replace("'", '"'))
-	print("address data:\n" + addressData)
 	if addressData["status"] == "True": # i.e. the db contained a valid entry
 		
 		data = {
