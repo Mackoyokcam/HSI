@@ -157,7 +157,7 @@ def properties():
 		return render_template("errors.html", errorMessage=errorMessage)
 	else:
 		if addressData["status"] == "True": # i.e. the db contained a valid entry
-			
+			testingNearbyData = fromjson(testingNearbyData)
 			data = {
 				"lat" : testingNearbyData["lat"],
 				"long" : testingNearbyData["long"],
