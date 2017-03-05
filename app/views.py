@@ -147,7 +147,7 @@ def properties():
 									   					 "recycle": "True",
 									   					 "water": "15.0"}}}}
 	
-	testingNearbyData = '{"lat":"48.722.849", "long":"-122.502782"}'
+	testingNearbyData = '{"lat":"48.722849", "long":"-122.502782"}'
 	# addressData = testingDataSingleUnit
 	# addressData = testingDataMultiUnit
 	print (res.text)
@@ -158,12 +158,16 @@ def properties():
 	else:
 		if addressData["status"] == "True": # i.e. the db contained a valid entry
 			testingNearbyData = fromjson(testingNearbyData)
+			# data = {
+			# 	"lat" : testingNearbyData["lat"],
+			# 	"long" : testingNearbyData["long"],
+			# 	"key" : ""
+			# }
 			data = {
-				"lat" : testingNearbyData["lat"],
-				"long" : testingNearbyData["long"],
+				"lat" : "48.722849",
+				"long" : "-122.502782",
 				"key" : ""
 			}
-
 			res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
 			nearbyData = res.text
 			print("res.text:\n" + nearbyData)
