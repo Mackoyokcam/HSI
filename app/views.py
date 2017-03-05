@@ -105,6 +105,7 @@ def account_view():
 # property
 @app.route('/properties', methods=['GET', 'POST'])
 def properties():
+	DEBUG = True
 	searchString = request.args.get('search_string')
 	if (searchString == ""):
 		return render_template("properties.html", search_string=search_string)
@@ -150,7 +151,8 @@ def properties():
 	testingNearbyData = '{"lat":"48.722849", "long":"-122.502782"}'
 	# addressData = testingDataSingleUnit
 	# addressData = testingDataMultiUnit
-	print (res.text)
+	if DEBUG:
+		print (res.text)
 	addressData = fromjson(res.text.replace("'", '"'))
 	if "error" in addressData:
 		errorMessage = addressData["error"]
@@ -169,6 +171,8 @@ def properties():
 				"key" : ""
 			}
 			res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
+			if DEBUG:
+				print res.text
 			nearbyData = fromjson(res.text.replace("'", '"'))
 			nearbyData = json.dumps(nearbyData)
 			multiUnit = "False"
