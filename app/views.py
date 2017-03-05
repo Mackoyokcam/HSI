@@ -151,17 +151,19 @@ def properties():
 	# addressData = testingDataSingleUnit
 	# addressData = testingDataMultiUnit
 	addressData = fromjson(res.text.replace("'", '"'))
-	print(addressData)
+	print("address data:\n" + addressData)
 	if addressData["status"] == "True": # i.e. the db contained a valid entry
 		
 		data = {
-			"lat" : addressData["lat"],
-			"long" : addressData["long"],
+			"lat" : testingNearbyData["lat"],
+			"long" : testingNearbyData["long"],
 			"key" : ""
 		}
+
 		res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
 		nearbyData = res.text
 		nearbyData = json.dumps(nearbyData)
+		print("nearby data:\n" + nearbyData)
 		multiUnit = "False"
 		if len(addressData["units"]) > 1:
 			multiUnit = "True"
