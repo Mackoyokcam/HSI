@@ -58,17 +58,18 @@ function initMap() {
 // populates the map with nearby locations present in the db
 function loadNearby(map) {
 	for (unit in nearbyData) {
-		var lati = unit["lat"];
-		var longi = unit["long"];
-		console.log("lati: " + lati);
-		console.log("longi: " + lati);
-		loc = {lat:lati, lng:longi};
-		var marker = new google.maps.Marker({
-			position: loc,
-			map: map,
-			title: unit["address"],
-			icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png" // to differentiate
-		});
+		console.log(unit)
+		// var lati = unit["lat"];
+		// var longi = unit["long"];
+		// console.log("lati: " + lati);
+		// console.log("longi: " + lati);
+		// loc = {lat:lati, lng:longi};
+		// var marker = new google.maps.Marker({
+		// 	position: loc,
+		// 	map: map,
+		// 	title: unit["address"],
+		// 	icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png" // to differentiate
+		// });
 	}
 }
 
