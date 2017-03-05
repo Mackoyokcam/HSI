@@ -235,7 +235,7 @@ def addUser():
         return "user already in database"
     elif (res == -2):
         return "address already in database"
-    else
+    else:
         return "user added to database"
     
 @app.route('/userDB/getUserInfo', methods = ['POST'])
