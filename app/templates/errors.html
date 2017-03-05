@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block navbar %}
+	{% include "navbar.html" %}
+{% endblock %}
+{% block content %}
+<p>Sorry, something went wrong on our end. Here's the error:</p>
+<hr>
+<p>Error: {{ errorMessage }}</p>
+{% endblock %}
