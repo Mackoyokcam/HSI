@@ -159,17 +159,17 @@ def properties():
 		return render_template("errors.html", errorMessage=errorMessage)
 	else:
 		if addressData["status"] == "True": # i.e. the db contained a valid entry
-			testingNearbyData = fromjson(testingNearbyData)
-			# data = {
-			# 	"lat" : testingNearbyData["lat"],
-			# 	"long" : testingNearbyData["long"],
-			# 	"key" : ""
-			# }
+			# testingNearbyData = fromjson(testingNearbyData)
 			data = {
-				"lat" : "48.722849",
-				"long" : "-122.502782",
+				"lat" : addressData["lat"],
+				"long" : addressData["long"],
 				"key" : ""
 			}
+			# data = {
+			# 	"lat" : "48.722849",
+			# 	"long" : "-122.502782",
+			# 	"key" : ""
+			# }
 			res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
 			if DEBUG:
 				print (res.text)
