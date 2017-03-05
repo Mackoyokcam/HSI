@@ -170,7 +170,6 @@ def properties():
 			}
 			res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
 			nearbyData = fromjson(res.text.replace("'", '"'))
-			print("nearby data:\n" + nearbyData)
 			multiUnit = "False"
 			if len(addressData["units"]) > 1:
 				multiUnit = "True"
