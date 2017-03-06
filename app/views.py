@@ -236,7 +236,7 @@ def queryAddress(address):
 	}
 	res = requests.post("http://140.160.142.77:5000/utilDB/query", data=data)
 	addressData = fromjson(res.text.replace("'", '"'))
-	if addressData["status"] = True:
+	if addressData["status"] == True:
 		return addressData
 	else:
 		return None
