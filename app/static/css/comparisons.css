@@ -1,5 +1,6 @@
 #properties {
 	width: 1100px;
+	overflow: auto;
 }
 
 .data-column {
@@ -10,5 +11,4 @@
 
 #form {
 	margin-top: 10px;
-	clear: both;
 }
