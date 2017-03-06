@@ -108,7 +108,7 @@ def properties():
 	DEBUG = True
 	searchString = request.args.get('search_string')
 	if (searchString == ""):
-		return render_template("properties.html", search_string=search_string)
+		return render_template("properties.html", searchString=searchString)
 	data = {
 		"key" : "",
 		"origins" : searchString
