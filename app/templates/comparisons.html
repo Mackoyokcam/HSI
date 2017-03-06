@@ -12,15 +12,13 @@
     {% if addresses %}
     <div id="properties">
         {% for address in addresses %}
-            <div class="data-column">
-                {% if address|string() == "No Data Available" %}
+        <div class="data-column">
+            <div id="labels">
+                <p>{{ address["address"] }}</p>
+                <!-- TODO: implement multiple apartments -->
+                {% if address["data"]|string() == "No Data Available" %}
                 <p class="no-data">No Data Available</p>
                 {% else %}
-                <h2>{{ address["address"] }}</h2>
-                <!-- TODO: implement multiple apartments -->
-            </div>
-            <br>
-            <div id="labels">
                 <p id="apartment">{{ address["apartment"] }}</p>
                 <hr>
                 <p id="update-date">{{ address["data"]["updateDate"] }}</p>
@@ -38,8 +36,10 @@
                 <p id="compost">{% if address["data"]["compost"] == "True" %} yes {% else %} no {% endif %}</p>
             </div>
             {% endif %}
+        </div>
         {% endfor %}
     </div>
+    <br>
     {% endif %}
     <form id="comparison-form" action="/comparisons" method="get">
         <div id="inputs">
