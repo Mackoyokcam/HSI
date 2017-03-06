@@ -60,7 +60,9 @@ function loadNearby(map) {
 	for (unit in nearbyData) {
 		var lati = unit["lat"];
 		var longi = unit["long"];
-		loc = {lat:lati, lng:longi};
+		console.log(lati)
+		console.log(longi)
+		var loc = {lat: lati, lng: longi};
 		var marker = new google.maps.Marker({
 			position: loc,
 			map: map,
