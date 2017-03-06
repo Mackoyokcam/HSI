@@ -14,26 +14,27 @@
         {% for address in addresses %}
         <div class="data-column">
             <div id="labels">
-                <p>{{ address["address"] }}</p>
+                <p><strong>{{ address["address"] }}</strong></p>
+                <hr>
                 <!-- TODO: implement multiple apartments -->
                 {% if address["data"]|string() == "No Data Available" %}
                 <p class="no-data">No Data Available</p>
                 {% else %}
-                <p id="apartment">{{ address["apartment"] }}</p>
+                <p id="apartment">Apartment: {{ address["apartment"] }}</p>
                 <hr>
-                <p id="update-date">{{ address["data"]["updateDate"] }}</p>
+                <p id="update-date">Last updated: {{ address["data"]["updateDate"] }}</p>
                 <hr>
-                <p id="rent">{{ address["data"]["rent"] }}</p>
+                <p id="rent">Rent: {{ address["data"]["rent"] }}</p>
                 <hr>
-                <p id="gas">{{ address["data"]["gas"] }}</p>
+                <p id="gas">Gas: {{ address["data"]["gas"] }}</p>
                 <hr>
-                <p id="electrical">{{ address["data"]["electrical"] }}</p>
+                <p id="electrical">Electrical: {{ address["data"]["electrical"] }}</p>
                 <hr>
-                <p id="water">{{ address["data"]["water"] }}</p>
+                <p id="water">Water: {{ address["data"]["water"] }}</p>
                 <hr>
-                <p id="recycle">{% if address["data"]["recycle"] == "True" %} yes {% else %} no {% endif %}</p>
+                <p id="recycle">Recycle: {% if address["data"]["recycle"] == "True" %} yes {% else %} no {% endif %}</p>
                 <hr>
-                <p id="compost">{% if address["data"]["compost"] == "True" %} yes {% else %} no {% endif %}</p>
+                <p id="compost">Compost: {% if address["data"]["compost"] == "True" %} yes {% else %} no {% endif %}</p>
             </div>
             {% endif %}
         </div>
