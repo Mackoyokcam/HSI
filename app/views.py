@@ -257,6 +257,7 @@ def comparisons():
 					firstApt = next(iter(query["units"]))
 					unit = query["units"][firstApt]
 					addresses.append({"address": query["address"], "apartment": firstApt, "data": unit})
+	print(str(addresses))
 	if len(addresses) == 0:
 		return render_template("comparisons.html")
 	else:
