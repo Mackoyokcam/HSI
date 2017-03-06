@@ -241,8 +241,8 @@ def queryAddress(address):
 	else:
 		return None
 
-@app.route('/comparison', methods=['GET'])
-def comparison():
+@app.route('/comparisons', methods=['GET'])
+def comparisons():
 	addresses = [];
 	for i in range(1, 5):
 		field = "field-" + str(i)
