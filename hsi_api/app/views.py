@@ -5,7 +5,6 @@ import usaddress as usad
 from flask import request
 from werkzeug.datastructures import MultiDict
 
-
 CONFIG_FILE_URL = "app/config.json"
 VALIDATION_ERROR = '{"error": "validation failed, make sure you are not above your api request limit and that your key is valid"}'
 FORMAT_ERROR = '{"error": "Formatting is incorrect"}'
@@ -69,28 +68,24 @@ def utilQuery():
         return VALIDATION_ERROR
     if 'origins' in param_keys:
         origins = request.form['origins']
-        origins = origins.split(":")
-        if type(origins) is list and not None:
-            api = hsi_api.Hsi_Api(CONFIG_FILE_URL)
-            locations = list()
-            for i in origins:
-                coordinates = {}
-                geo = api.get_location_data(i)
-                geo = json.loads(geo)
-                if "status" in geo:
-                    coordinates.update({"status": geo["status"]})
-                else:
-                    addr = geo['results'][0]['address_components']
-                    coordinates.update({"address":geo['results'][0]['address']})
-                    for j in addr:
-                        if 'subpremise' in j['types']:
-                            coordinates.update({'apt':j['short_name']})
-                            break
-                    coordinates.update({"lat":geo['results'][0]["lat"]})
-                    coordinates.update({"long":geo['results'][0]["lng"]})
-                locations.append(coordinates)
-            result = str(api.utilQuery(locations, None)).replace('\'', '\"')
-            return result.replace('""', '"')
+        origins = origins.strip('.;\()"')
+        api = hsi_api.Hsi_Api(CONFIG_FILE_URL)
+        coordinates = {}
+        geo = api.get_location_data(origins)
+        geo = json.loads(geo)
+        if "status" in geo:
+            coordinates.update({"status": geo["status"]})
+        else:
+            addr = geo['results'][0]['address_components']
+            coordinates.update({"address":geo['results'][0]['address']})
+            for j in addr:
+                if 'subpremise' in j['types']:
+                    coordinates.update({'apt':j['short_name']})
+                    break
+            coordinates.update({"lat":geo['results'][0]["lat"]})
+            coordinates.update({"long":geo['results'][0]["lng"]})
+            return str(api.utilQuery(coordinates, None)).replace('\'', '\"')
+            #return result.replace('""', '"')
     return FORMAT_ERROR
 
 
@@ -101,14 +96,14 @@ A Sanity check is performed before utilCombine is called, so none is necessary h
 '''''
 def utilCombine(param_keys):
     data = {}
-    add = request.form['address'] + " "
+    add = request.form['address'].strip('.;\()"') + " "
     
-    apt = request.form['apt']
+    apt = request.form['apt'].strip('.;\()"')
     if apt != 'N/A':
         add += "apt " + apt + " "
-    add += request.form['city'] + " "
-    add += request.form['state'] + " "
-    add += request.form['zip']
+    add += request.form['city'].strip('.;\()"') + " "
+    add += request.form['state'].strip('.;\()"') + " "
+    add += request.form['zip'].strip('.;\()"')
 
     api = hsi_api.Hsi_Api(CONFIG_FILE_URL)    
     geo = json.loads(api.get_location_data(add))
@@ -175,7 +170,7 @@ def utilAdd():
             return '{"error": "' + util_info["status"] + '"}'
         res = api.utilAdd(util_info)
         if "error" in res:
-            return str(res) 
+            return '{"status":"'+res['error']+'"}'
         return '{"status":"True"}'
     return FORMAT_ERROR
 
@@ -198,6 +193,23 @@ def utilAddSanity(param_keys):
         return True
     return False
 
+'''
+utilArea
+Returns all unique lat/long combinations within ~4 nautical miles
+Does not include the lat/long combo included with the request
+'''
+@app.route('/utilDB/area', methods = ['POST'])
+def utilArea():
+    param_keys = MultiDict.to_dict(request.form).keys()
+    if 'lat' in param_keys and 'long' in param_keys:
+        try:
+            lat = float(request.form['lat'])
+            lng = float(request.form['long'])
+        except ValueError:
+            return [FORMAT_ERROR]
+        else:
+            api = hsi_api.Hsi_Api(CONFIG_FILE_URL)
+            return api.utilArea(lat,lng)
 '''
 valid
 

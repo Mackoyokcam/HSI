@@ -173,64 +173,72 @@ class Hsi_Api:
             return '{"status":"'+str(db.command("getLastError"))+'"}'
         data = {}
         j = 0
+        apt_data={}
         if (origins is not None):
-            if self.MAX_COMPARES < len(origins):
-                return '{"error":"Max compares exceeded. Only '+str(self.MAX_COMPARES)+' allowed per request"}'
-            for i in origins:
-                if ('status' in i):
-                    data.update({'addr'+str(j):i['status']})
-                else:    
-                    form_addr = i.pop('address')
-                    try:
-                        apt = db.util.distinct("apt", i)
-                    except mongoerrors.PyMongoError:
-                        return '{"status":"'+str(db.command("getLastError"))+'"}'
-                    if len(apt) is 0:
-                        data.update({"addr"+str(j):{"status":"ZERO DB RESULTS"}})
-                    else:
-                        units= {}
-                        apt_data={"status":'True'}                    
-                        for k in apt:
-                            new_i = i
-                            new_i.update({"apt":k})
-                            cursor = 0
-                            try:
-                                cursor = db.util.find(new_i, { "_id":0 }).sort("updateDate", -1).limit(1)
-                                cursor = next(cursor, None)
-                            except mongoerrors.PyMongoError:
-                                units.update({k:{"status":str(db.command("getLastError"))}})
-                            else:                            
-                                units.update({k: cursor})
-                        apt_data.update({'units':units})
-                        ws = json.loads(self.get_single_walkscore(form_addr, i['lat'], i['long']))
-                        if ws['status'] == 1:
-                            apt_data.update({'walkscore':{'status':1,'score':ws['walkscore'], 'description':ws['description']}})
-                        else:
-                            apt_data.update({'walkscore':{'status':ws['status']}})
-                        data.update({"addr"+str(j):apt_data})                    
-                j = j+1
+            print(origins)
+            if ('status' in origins):
+                data.update({'addr'+str(j):i['status']})
+            else:    
+                form_addr = origins.pop('address')
+                data.update({'address': form_addr})
+                try:
+                    apt = db.util.distinct("apt", origins)
+                except mongoerrors.PyMongoError:
+                    return '{"status":"'+str(db.command("getLastError")['code'])+'"}'
+                if len(apt) is 0:
+                    apt_data.update({"status":"ZERO DB RESULTS", "units":{}})
+                else:
+                    units= {}
+                    apt_data={"status":'True'}                    
+                    for k in apt:
+                        new_i = origins
+                        new_i.update({"apt":k})
+                        cursor = 0
+                        try:
+                            cursor = db.util.find(new_i, { "_id":0 , 'apt':0, 'address':0, 'lat':0, 'long':0}).sort("updateDate", -1).limit(1)
+                            cursor = next(cursor, None)
+                        except mongoerrors.PyMongoError:
+                            units.update({k:{"status":str(db.command("getLastError")['code'])}})
+                        else:                            
+                            units.update({k: cursor})
+                    apt_data.update({'units':units})
+                ws = json.loads(self.get_single_walkscore(form_addr, origins['lat'], origins['long']))
+                if ws['status'] == 1:
+                    apt_data.update({'walkscore':{'status':1,'score':ws['walkscore'], 'description':ws['description']}})
+                else:
+                    apt_data.update({'walkscore':{'status':ws['status']}})
+                data.update(apt_data)                    
+                
         elif (geocode is not None):
-            geocode = list(geocode)
             for g in geocode:
+                print(g)
                 unit = {}
                 apt_data = {}
-                geo = json.loads(g)             
+                geo = json.loads(g)['results'][0]
                 for l in geo['address_components']:
                     if 'subpremise' in l['types']:
                         unit.update({'apt':l['short_name']})
                         break
-                if 'apt' not in unit:
-                    unit.update({'apt': 'N/A'})
                 unit.update({'long':geo['lng']})
                 unit.update({'lat':geo['lat']})
                 try:
-                    db.util.find(unit, { "_id":0}).sort("updateDate", -1).limit(1)
-                    cursor = next(cursor, None)
-                    jcur = dumps(cursor)
+                    apt = db.util.distinct('apt', unit)
                 except mongoerrors.PyMongoError:
-                    apt_data.update({"status":str(db.command("getLastError"))})
+                    apt_data = {'status': str(db.command("getLastError")['code'])}
+                if len(apt) is 0:
+                    jcur = {'status': 'ZERO DB RESULTS'}
                 else:
-                    apt_data.update({k: jcur})
+                    for k in apt:
+                        t = {}
+                        unit_tmp = unit
+                        unit_tmp.update({'apt': k})
+                        try:
+                            cursor = db.util.find(unit_tmp, { "_id":0, 'apt':0, 'address':0}).sort("updateDate", -1).limit(1)
+                            cursor = next(cursor, None)
+                        except mongoerrors.PyMongoError:
+                            t.update({k:{"status":str(db.command("getLastError")['code'])}})
+                        else:
+                            apt_data.update({k: cursor})
                 data.update({"addr"+str(j):apt_data})    
                 j = j+1
         return data
@@ -245,5 +253,19 @@ class Hsi_Api:
             db = MDBclient.test
             result = db.util.insert_one(util_info)
         except mongoerrors.PyMongoError:
-            return {"error": str(db.command("getLastError")) }
-        return '{"status":"True}'
+            return {"error": "Error: "+str(db.command("getLastError")['code'])}
+        return '{"status":"True"}'
+
+    def utilArea(self, lat, lng):     
+        lat_bounds = .06
+        lng_bounds = .09
+        result = []
+        try:
+            MDBclient = MongoClient()
+            db = MDBclient.test
+            cursor = db.util.aggregate([{'$match': {'lat': {'$lt': lat + lat_bounds, '$gt': lat - lat_bounds, '$ne': lat}, 'long': {'$lt': lng + lng_bounds, '$gt': lng - lng_bounds, '$ne': lng}}}, {'$group': {'_id': {'address': '$address', 'lat': '$lat', 'long': '$long'}}}])
+            for i in cursor:
+                result.append(i)
+        except mongoerrors.PyMongoError:
+            return '[{"status": "Error: "'+str(db.command("getLastError")['code'])+'"}]'
+        return str(result)
