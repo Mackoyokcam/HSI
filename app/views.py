@@ -236,8 +236,7 @@ def queryAddress(address):
 		"origins" : address
 	}
 	res = requests.post("http://140.160.142.77:5000/utilDB/query", data=data)
-	print((res.text.replace("'", '"')))
-	addressData = json.loads(res.text.replace("'", '"'))
+	addressData = fromjson(res.text.replace("'", '"'))
 	if addressData["status"] == True:
 		return addressData
 	else:
@@ -248,16 +247,16 @@ def comparisons():
 	addresses = [];
 	for i in range(1, 5):
 		field = "field-" + str(i)
-		if field in request.args:
-			print("field: " + field)
-			print("resp: " + request.args.get(field))
-			query = queryAddress(request.args.get(field))
-			if query is None:
-				addresses.append("No Data Available")
-			else:
-				firstApt = next(iter(query["units"]))
-				unit = query["units"][firstApt]
-				addresses.append({"address": query["address"], "apartment": firstApt, "data": unit})
+		if field != "" in request.args:
+			param = request.args.get(field)
+			if param != "":
+				query = queryAddress(param)
+				if query is None:
+					addresses.append("No Data Available")
+				else:
+					firstApt = next(iter(query["units"]))
+					unit = query["units"][firstApt]
+					addresses.append({"address": query["address"], "apartment": firstApt, "data": unit})
 	if len(addresses) == 0:
 		return render_template("comparisons.html")
 	else:
