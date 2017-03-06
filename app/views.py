@@ -104,9 +104,10 @@ def account_view():
 # property
 @app.route('/properties', methods=['GET', 'POST'])
 def properties():
-	searchString = request.args.get('search_string')
+	DEBUG = True
+	searchString = request.args.get('searchString')
 	if (searchString == ""):
-		return render_template("properties.html", search_string=search_string)
+		return render_template("properties.html", searchString=searchString)
 	data = {
 		"key" : "",
 		"origins" : searchString
@@ -146,29 +147,41 @@ def properties():
 									   					 "recycle": "True",
 									   					 "water": "15.0"}}}}
 	
-	testingNearbyData = '{"lat":"48.722.849", "long":"-122.502782"}'
+	testingNearbyData = '{"lat":"48.722849", "long":"-122.502782"}'
 	# addressData = testingDataSingleUnit
 	# addressData = testingDataMultiUnit
+	if DEBUG:
+		print (res.text)
 	addressData = fromjson(res.text.replace("'", '"'))
-	print(addressData)
-	if addressData["status"] == "True": # i.e. the db contained a valid entry
-		
-		data = {
-			"lat" : addressData["lat"],
-			"long" : addressData["long"],
-			"key" : ""
-		}
-		res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
-		nearbyData = res.text
-		nearbyData = json.dumps(nearbyData)
-		multiUnit = "False"
-		if len(addressData["units"]) > 1:
-			multiUnit = "True"
-		addressData = json.dumps(addressData["units"])
-		return render_template("properties.html", searchString=searchString,
-								   addressData=addressData, nearbyData=nearbyData, multiUnit=multiUnit)
+	if "error" in addressData:
+		errorMessage = addressData["error"]
+		return render_template("errors.html", errorMessage=errorMessage)
 	else:
-		return render_template("properties.html", searchString=searchString)
+		if addressData["status"] == "True": # i.e. the db contained a valid entry
+			# testingNearbyData = fromjson(testingNearbyData)
+			data = {
+				"lat" : addressData["lat"],
+				"long" : addressData["long"],
+				"key" : ""
+			}
+			# data = {
+			# 	"lat" : "48.722849",
+			# 	"long" : "-122.502782",
+			# 	"key" : ""
+			# }
+			res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
+			if DEBUG:
+				print (res.text)
+			nearbyData = fromjson(res.text.replace("'", '"'))
+			nearbyData = json.dumps(nearbyData)
+			multiUnit = "False"
+			if len(addressData["units"]) > 1:
+				multiUnit = "True"
+			addressData = json.dumps(addressData["units"])
+			return render_template("properties.html", searchString=searchString,
+									   addressData=addressData, nearbyData=nearbyData, multiUnit=multiUnit)
+		else:
+			return render_template("properties.html", searchString=searchString)
 
 
 # for just viewing the json results of querying the database
@@ -215,6 +228,43 @@ def simpleadd():
 def distance():
 	return render_template('distance.html')
 
+def queryAddress(address):
+	data = {
+		"key" : "",
+		"origins" : address
+	}
+	res = requests.post("http://140.160.142.77:5000/utilDB/query", data=data)
+	addressData = fromjson(res.text.replace("'", '"'))
+	if "error" in addressData:
+		errorMessage = addressData["error"]
+		return render_template("errors.html", errorMessage=errorMessage)
+	if addressData["status"] == "True":
+		return addressData
+	else:
+		return None
+
+@app.route('/comparisons', methods=['GET'])
+def comparisons():
+	addresses = [];
+	for i in range(1, 4):
+		field = "field-" + str(i)
+		if field in request.args:
+			param = request.args.get(field)
+			if param != "":
+				print(param)
+				query = queryAddress(param)
+				if query is None:
+					addresses.append({"address": param, "apartment": "none", "data": "No Data Available"})
+				else:
+					firstApt = next(iter(query["units"]))
+					unit = query["units"][firstApt]
+					addresses.append({"address": param, "apartment": firstApt, "data": unit})
+				print(str(addresses))
+	print(str(addresses))
+	if len(addresses) == 0:
+		return render_template("comparisons.html")
+	else:
+		return render_template("comparisons.html", addresses=addresses)
 
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():

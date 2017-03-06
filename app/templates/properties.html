@@ -5,30 +5,30 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="../static/css/properties.css">
 <div id="side-bar">
-	{% if not search_string %} <!-- checks for empty string -->
+	{% if not searchString %} <!-- checks for empty string -->
 	<!-- given empty string the image loaded is of downtown bellingham -->
 	<img id="street-view" src="https://maps.googleapis.com/maps/api/streetview?size=600x600&location=48.7510528,-122.4812339
 	&heading=15
 	&fov=120
 	&key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA"></img>
 	{% else %}
-	<img id="street-view" src="https://maps.googleapis.com/maps/api/streetview?size=600x600&location={{search_string}}
+	<img id="street-view" src="https://maps.googleapis.com/maps/api/streetview?size=600x600&location={{searchString}}
 	&key=AIzaSyCb1JuqcxzEU3MPPJ3oaFN1GkCur7go-oA"></img>
 	{% endif %}
 	<div id="search-form">
 		<form action="/properties" method="get">
 			<div>
-				<input type="text" name="search_string">
+				<input type="text" name="searchString">
 				<input type="submit" value="search">
 			</div>
 		</form>
 	</div>
 	<div id="address-data">
+	<div id="address-text-box">
+		<h3 id="address-text">{{ searchString }}</h3>
+	</div>
 	{% if addressData %}
-		<div id="address-text-box">
-			<h3 id="address-text">{{ searchString }}</h3>
-		</div>
-		<p>NOTE: currently the data presented is dummy data for testing, this page doesn't actually call query</p>
+		<div id="addressData"></div>
 		<script type="text/javascript">
 			// The address data is stored for later access by properties.js
 			var addressDataJSON = {{ addressData|tojson|safe }};
@@ -46,15 +46,22 @@
 		{% endif %}
 		<div id="labels">
 			<p id="apartment"><!-- This and subsequent fields filled with js --></p>
+			<hr>
 			<p id="update-date"></p>
+			<hr>
 			<p id="rent"></p>
-			<p id="heating"></p>
+			<hr>
 			<p id="gas"></p>
+			<hr>
 			<p id="electrical"></p>
+			<hr>
 			<p id="water"></p>
+			<hr>
 			<p id="recycle"></p>
+			<hr>
 			<p id="compost"></p>
 		</div>
+		<div id="nearby"><img src="http://maps.google.com/mapfiles/ms/icons/purple-dot.png" alt="A purple pin icon"><p>nearby properties</p></div>
 	{% else %}
 		<p> Sorry, there's no data on this proprty, or we couldn't display it</p>
 	{% endif %}

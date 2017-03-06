@@ -2,8 +2,10 @@ function id(element) {
 	return document.getElementById(element);
 }
 
-var addressData = JSON.parse(addressDataJSON);
-var nearbyData = JSON.parse(nearbyDataJSON);
+if (id("address-data") !== null) {
+	var addressData = JSON.parse(addressDataJSON);
+	var nearbyData = JSON.parse(nearbyDataJSON);
+}
 
 var geocoder;
 var map;
@@ -39,8 +41,10 @@ function initMap() {
 					map: map,
 					title: addressText
 				});
-				loadNearby(map);
-				console.log(nearbyData);
+				if (id("address-data") !== null) {
+					loadNearby(map);
+					console.log(nearbyData);
+				}
 			} else {
 				console.log("Geocode was not successful for the folowing reason:" + status);
 				var sorryMessage = document.createElement("p");
@@ -53,19 +57,16 @@ function initMap() {
 
 // populates the map with nearby locations present in the db
 function loadNearby(map) {
-	for (unit in nearbyData) {
+	for (i in nearbyData) {
+		var unit = nearbyData[i];
 		var lati = unit["lat"];
 		var longi = unit["long"];
-		console.log("lati: " + lati);
-		console.log("longi: " + lati);
-		lati = parseFloat(lati);
-		longi = parseFloat(longi);
-		loc = {lat:lati, lng:longi};
+		var loc = {lat: lati, lng: longi};
 		var marker = new google.maps.Marker({
 			position: loc,
 			map: map,
 			title: unit["address"],
-			icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png" // to differentiate
+			icon: "http://maps.google.com/mapfiles/ms/icons/purple-dot.png" // to differentiate
 		});
 	}
 }
@@ -89,12 +90,15 @@ function populateData(unitData, apartment) {
 }
 
 window.onload = function () {
-	if (id("unit-list") !== null) {
-		id("unit-list").onchange = newUnitSelected;
-		id("unit-list")[0].selected = "selected";
-		newUnitSelected();
-	} else {
-		var apartment = Object.keys(addressData)[0]
-		populateData(addressData[apartment], apartment)
+	if (id("address-data") !== null) {
+		if (id("unit-list") !== null) {
+			id("unit-list").onchange = newUnitSelected;
+			id("unit-list")[0].selected = "selected";
+			newUnitSelected();
+		} else {
+			var apartment = Object.keys(addressData)[0]
+			populateData(addressData[apartment], apartment)
+		}
 	}
+
 };

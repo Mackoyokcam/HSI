@@ -16,8 +16,7 @@
 }
 
 #tools {
-	right: 10px;
-	position: absolute;
+	float: right;
 }
 
 #tools div {
