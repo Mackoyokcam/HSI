@@ -72,20 +72,19 @@ def account():
 
 		# Add User to DB.
 		user_result = requests.post('http://140.160.142.77:5000/userDB/addUser', data=user_post_data)
-		# user_result = requests.post('http://requestb.in/1d62yzd1', data=user_post_data)
+		# user_response = requests.post('http://requestb.in/1d62yzd1', data=user_post_data)
 		print(user_result)
 		# Add Info to UtilDB
-		# string_result = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
+		# util_response = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
 	 
 				
-		# util_add = string_result.json()
-		# temp_result = string_result.json()
-		#user_temp_result = string_result.json()
-		# util_add = json.dumps(temp_result)
-		# util_add = json.dumps(temp_result)
+		# util_result = util.response.json()
+		# user_result = user_response.json()
+		# util_add = json.dumps(util_result)
+		# user_add = json.dumps(user_result)
 
 		# test bin
-		# util_add = requests.post('http://requestb.in/16s31qr1', data=util_post_data)
+		# util_add = requests.post('http://requestb.in/16s31qr1', data=util_add)
 		return render_template('search.html') #add user_add=useradd
 
 		#return render_template('add_response.html', utilData=util_add) #add user_add=useradd
@@ -318,44 +317,19 @@ def logout():
 
 @app.route('/test2', methods=['GET', 'POST'])
 def test2():
-	temp_data = request.get_json()
-	print(temp_data)
-	print(type(temp_data))
-	temp_result = requests.post('http://requestb.in/1cf0mp11', data=temp_data)
+	response_data = request.get_json()
+	#print(response_data['origins'])
+	#print(type(temp_data))
+
+	temp_data = {}
+	temp_data['origins'] = ":".join(response_data['origins'])
+	temp_data['destinations'] = ":".join(response_data['destinations'])
+	temp_data['key'] = response_data['key']
+
+	temp_result = requests.post('http://requestb.in/198ah821', data=temp_data)
 	#temp_result = requests.post('http://140.160.142.77:5000/compare', data=temp_data)
 	#string_result = temp_result.json()
-	string_result = {'google': \
-								{'destination_addresses': ['18113 31st Ave NE, Arlington, WA 98223, USA'], \
-								'status': 'OK', \
-								'rows': [{'elements': \
-										[{'status': 'OK', \
-										'distance': {'value': 88050, \
-											'text': '54.7 mi'}, \
-	 									'duration': {'value': 65273, \
-											'text': '18 hours 8 mins'} \
-										}] \
-									}], \
-								'origin_addresses': ['355 Meadowbrook Ct, Bellingham, WA 98226, USA'] \
-								}, \
-							'hsi_db': \
-								{'addr': \
-									{'results': \
-										{'water': '30.0', \
-										'lat': 48.8088895, \
-										'updateDate': '2017.03.01', \
-										'address': '355 Meadowbrook Ct', \
-										'city': 'Bellingham', \
-										'state': 'WA', \
-										'compost': 'True', \
-										'long': -122.5002452, \
-										'electrical': '90.0', \
-										'gas': '50.0', \
-										'rent': '900.0', \
-										'apt': 'N/A', \
-										'zip': '98226', \
-										'recycle': 'True' \
-									}, \
-								'status': 'True'}}}
+	string_result = {"walkscore": "{'4625 Cordata Pky, Bellingham, WA 98226': '{\"status\": \"Key is invalid\"}', '355 Meadowbrook Ct, Bellingham, WA 98226': '{\"status\": \"Key is invalid\"}'}", "hsi_db": {"addr0": {"a": {"state": "WA", "address": "4625 Cordata Pkwy", "lat": 48.8083049, "water": "30.0", "gas": "50.0", "compost": "True", "recycle": "True", "zip": "98226", "city": "Bellingham", "electrical": "90.0", "updateDate": "2017.03.01", "long": -122.4981487, "rent": "900.0"}}, "addr1": {"N/A": {"state": "WA", "address": "355 Meadowbrook Ct", "water": "30.0", "lat": 48.8088895, "city": "Bellingham", "recycle": "True", "long": -122.5002452, "zip": "98226", "compost": "True", "electrical": "90.0", "updateDate": "2017.03.01", "gas": "50.0", "rent": "900.0"}}}, "google": {"status": "OK", "rows": [{"elements": [{"distance": {"value": 87435, "text": "54.3 mi"}, "status": "OK", "duration": {"value": 64815, "text": "18 hours 0 mins"}}, {"distance": {"value": 10736, "text": "6.7 mi"}, "status": "OK", "duration": {"value": 8152, "text": "2 hours 16 mins"}}]}, {"elements": [{"distance": {"value": 88050, "text": "54.7 mi"}, "status": "OK", "duration": {"value": 65273, "text": "18 hours 8 mins"}}, {"distance": {"value": 11351, "text": "7.1 mi"}, "status": "OK", "duration": {"value": 8610, "text": "2 hours 24 mins"}}]}], "destination_addresses": ["18113 31st Ave NE, Arlington, WA 98223, USA", "2303 Taylor Ave, Bellingham, WA 98225, USA"], "origin_addresses": ["4625 Cordata Pkwy, Bellingham, WA 98226, USA", "355 Meadowbrook Ct, Bellingham, WA 98226, USA"]}}
 
 	compare_result = json.dumps(string_result)
 	return compare_result
