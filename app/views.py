@@ -245,7 +245,7 @@ def queryAddress(address):
 @app.route('/comparisons', methods=['GET'])
 def comparisons():
 	addresses = [];
-	for i in range(1, 5):
+	for i in range(1, 4):
 		field = "field-" + str(i)
 		if field in request.args:
 			param = request.args.get(field)
