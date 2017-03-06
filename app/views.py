@@ -163,14 +163,13 @@ def properties():
 			# 	"long" : testingNearbyData["long"],
 			# 	"key" : ""
 			# }
+			# FIX THIS
 			data = {
 				"lat" : "48.722849",
 				"long" : "-122.502782",
 				"key" : ""
 			}
 			res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
-			nearbyData = res.text
-			print("res.text:\n" + nearbyData)
 			nearbyData = json.dumps(nearbyData)
 			print("nearby data:\n" + nearbyData)
 			multiUnit = "False"
