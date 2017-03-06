@@ -230,13 +230,20 @@ def addUser():
     State = request.form['State']
     Zip = request.form['Zip']
     Apt = request.form['Apt']
-    res = hsi_api_user.addUser(Email,Password, Street, City, State, Zip, Apt)
+    if (userAddSanity(Email, Password, Street, City, State, Zip, Apt)):
+        res = hsi_api_user.addUser(Email,Password, Street, City, State, Zip, Apt)
+    else:
+        return -3
+        #error with request forms 
     if (res == -1):
-        return "user already in database"
+        return -1
+        #return "user already in database"
     elif (res == -2):
-        return "address already in database"
-    else
-        return "user added to database"
+        return -2
+        #return "address already in database"
+    else:
+        return 1
+        #return "user added to database"
     
 @app.route('/userDB/getUserInfo', methods = ['POST'])
 def getUserInfo():
@@ -267,3 +274,8 @@ def login():
         return 1
     
     
+def userAddSanity(Email, Password, Street, City, State, Zip, Apt):
+    if (Email == None or Password == None or Street == None or City == None or State == None or Zip == None or Apt == None):
+        return False
+    else:
+        return True
