@@ -249,7 +249,8 @@ def comparisons():
 	for i in range(1, 5):
 		field = "field-" + str(i)
 		if field in request.args:
-			print(field)
+			print("field: " + field)
+			print("resp: " + request.args.get(field))
 			query = queryAddress(request.args.get(field))
 			if query is None:
 				addresses.append("No Data Available")
