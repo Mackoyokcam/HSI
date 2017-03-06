@@ -64,34 +64,35 @@ function submitFunction() {
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
-
-
-
-
-
+            document.getElementById('results').innerHTML = "";
             var content = JSON.parse(xhr.responseText);
-
             var google = content['google'];
             var googleStatus = google['status'];
 
             if (googleStatus == 'OK') {
-                orig = google['origin_addresses'];
-                dest = google['destination_addresses'];
-                elements = google['rows'][0]['elements'][0];
-                elementStatus = elements['status'];
-                if (elementStatus == 'OK') {
-                    distance = elements['distance']['text'];
-                    duration = elements['duration']['text'];
-                }
-            }
-            
-            if(elementStatus == 'OK') {
-                document.getElementById('results').innerHTML = "<p> From: " + orig + "<br> To: " + dest +
-                    "<br>Distance: " + distance + "<br> Duration: " + duration +
-                "</p>";
+                var orig = google['origin_addresses'];
+                var dest = google['destination_addresses'];
+                //var elements = google['rows'][0]['elements'][0];
+                var rows = google['rows'];
 
-            } else {
-                document.getElementById('results').innerHTML = "<p> No available data for this area. </p>";
+            }
+            var orig_address_count = orig.length;
+            var dest_address_count = dest.length;
+            for (var i = 0; i < orig_address_count; i++) {
+                for (var j = 0; j < dest_address_count; j++) {
+                    var start_address = rows[i]['elements'][j];
+                    if ((start_address['status'] == 'OK' )) {
+                        var distance = start_address['distance']['text'];
+                        var duration = start_address['duration']['text'];
+                        document.getElementById('results').innerHTML += "<p> From: " + orig[i] + "<br> To: " + dest[j] +
+                            "<br>Distance: " + distance + "<br> Duration: " + duration +
+                            "</p><br>";
+
+                    } else {
+                        document.getElementById('results').innerHTML += "<p> From: " + orig[i] + "<br> To: " + dest[j] +
+                            "<br>Distance: No available data. <br> Duration: No available data.</p><br>";
+                    }
+                }
             }
             document.getElementById('addresses').innerHTML = "";
             origins_array = [];

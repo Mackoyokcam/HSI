@@ -72,20 +72,19 @@ def account():
 
 		# Add User to DB.
 		user_result = requests.post('http://140.160.142.77:5000/userDB/addUser', data=user_post_data)
-		# user_result = requests.post('http://requestb.in/1d62yzd1', data=user_post_data)
+		# user_response = requests.post('http://requestb.in/1d62yzd1', data=user_post_data)
 		print(user_result)
 		# Add Info to UtilDB
-		# string_result = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
+		# util_response = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
 	 
 				
-		# util_add = string_result.json()
-		# temp_result = string_result.json()
-		#user_temp_result = string_result.json()
-		# util_add = json.dumps(temp_result)
-		# util_add = json.dumps(temp_result)
+		# util_result = util.response.json()
+		# user_result = user_response.json()
+		# util_add = json.dumps(util_result)
+		# user_add = json.dumps(user_result)
 
 		# test bin
-		# util_add = requests.post('http://requestb.in/16s31qr1', data=util_post_data)
+		# util_add = requests.post('http://requestb.in/16s31qr1', data=util_add)
 		return render_template('search.html') #add user_add=useradd
 
 		#return render_template('add_response.html', utilData=util_add) #add user_add=useradd
@@ -236,7 +235,9 @@ def queryAddress(address):
 	}
 	res = requests.post("http://140.160.142.77:5000/utilDB/query", data=data)
 	addressData = fromjson(res.text.replace("'", '"'))
-	print(addressData["status"])
+	if "error" in addressData:
+		errorMessage = addressData["error"]
+		return render_template("errors.html", errorMessage=errorMessage)
 	if addressData["status"] == "True":
 		return addressData
 	else:
@@ -367,13 +368,15 @@ def logout():
 @app.route('/test2', methods=['GET', 'POST'])
 def test2():
 	response_data = request.get_json()
+
 	temp_data = {}
 	temp_data['origins'] = ":".join(response_data['origins'])
-	temp_data['destinations'] = ":".join(response_data['destinations'])	
-	temp_data['key'] = response_data['key']	
-	#temp_result = requests.post('http://requestb.in/1cf0mp11', data=temp_data)
+	temp_data['destinations'] = ":".join(response_data['destinations'])
+	temp_data['key'] = response_data['key']
+
+	#temp_result = requests.post('http://requestb.in/198ah821', data=temp_data)
 	temp_result = requests.post('http://140.160.142.77:5000/compare', data=temp_data)
-	string_result = temp_result.text
-	print(string_result)	
-	#compare_result = json.loads(string_result)
-	return string_result
+	string_result = temp_result.json()
+
+	compare_result = json.dumps(string_result)
+	return compare_result
