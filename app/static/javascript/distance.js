@@ -109,7 +109,6 @@ function submitFunction() {
     };
     
     var json_string_data = JSON.stringify(data);
-    alert(json_string_data);
     xhr.send(json_string_data);
     document.getElementById('results').innerHTML = "Requesting data...";
     
