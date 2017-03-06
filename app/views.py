@@ -250,6 +250,7 @@ def comparisons():
 		if field != "" in request.args:
 			param = request.args.get(field)
 			if param != "":
+				print(param)
 				query = queryAddress(param)
 				if query is None:
 					addresses.append("No Data Available")
@@ -257,6 +258,7 @@ def comparisons():
 					firstApt = next(iter(query["units"]))
 					unit = query["units"][firstApt]
 					addresses.append({"address": query["address"], "apartment": firstApt, "data": unit})
+				print(str(addresses))
 	print(str(addresses))
 	if len(addresses) == 0:
 		return render_template("comparisons.html")
