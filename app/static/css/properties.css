@@ -56,8 +56,16 @@
 	margin-right: 30px; 
 }
 
+#nearby {
+	margin-top: 10px;
+}
+
 #nearby * {
 	float: left;
+}
+
+#nearby p {
+	margin-top: 10px;
 }
 
 #map {
