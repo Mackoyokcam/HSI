@@ -57,8 +57,8 @@ function initMap() {
 
 // populates the map with nearby locations present in the db
 function loadNearby(map) {
-	for (unit in nearbyData) {
-		console.log(unit);
+	for (i in nearbyData) {
+		var unit = nearbyData[i];
 		console.log(JSON.stringify(unit));
 		var lati = unit["lat"];
 		var longi = unit["long"];
