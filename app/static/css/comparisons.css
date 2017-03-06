@@ -2,3 +2,7 @@
 	float: left;
 	border-right: solid black 1px;
 }
+
+#comparison-form {
+	float: bottom;
+}
