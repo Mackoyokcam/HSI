@@ -166,6 +166,7 @@ def properties():
 
 			res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
 			nearbyData = res.text
+			print("res.text:\n" + nearbyData)
 			nearbyData = json.dumps(nearbyData)
 			print("nearby data:\n" + nearbyData)
 			multiUnit = "False"
