@@ -56,6 +56,10 @@
 	margin-right: 30px; 
 }
 
+#nearby * {
+	float: left;
+}
+
 #map {
 	border: solid 2px #444444;
 	float: right;
