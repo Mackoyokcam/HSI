@@ -23,6 +23,7 @@ def csrf_error(reason):
 # reverse of the built in |tojson filter
 @app.template_filter()
 def fromjson(jsonString):
+	print(jsonString)
 	return json.loads(jsonString)
 
 # routes
