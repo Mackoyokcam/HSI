@@ -324,11 +324,11 @@ def logout():
 
 @app.route('/test2', methods=['GET', 'POST'])
 def test2():
-	temp_data = request.get_json()
-	print(temp_data)
-	print(type(temp_data))
+	send_this = request.get_json()
+	print(send_this)
 	#temp_result = requests.post('http://requestb.in/1cf0mp11', data=temp_data)
-	temp_result = requests.post('http://140.160.142.77:5000/compare', data=temp_data)
+	temp_result = requests.post('http://140.160.142.77:5000/compare', data=send_this)
 	string_result = temp_result.text
+	print(string_result)	
 	#compare_result = json.loads(string_result)
 	return string_result
