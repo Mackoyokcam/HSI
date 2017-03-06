@@ -1,6 +1,11 @@
+#properties {
+	width: 1100px;
+}
+
 .data-column {
 	float: left;
 	border-right: solid black 1px;
+	padding: 5px;
 }
 
 #comparison-form {
