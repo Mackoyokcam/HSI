@@ -59,17 +59,14 @@ function initMap() {
 function loadNearby(map) {
 	for (i in nearbyData) {
 		var unit = nearbyData[i];
-		console.log(JSON.stringify(unit));
 		var lati = unit["lat"];
 		var longi = unit["long"];
-		console.log(lati);
-		console.log(longi);
 		var loc = {lat: lati, lng: longi};
 		var marker = new google.maps.Marker({
 			position: loc,
 			map: map,
 			title: unit["address"],
-			icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png" // to differentiate
+			icon: "http://maps.google.com/mapfiles/ms/icons/purple-dot.png" // to differentiate
 		});
 	}
 }
