@@ -1,5 +1,5 @@
 #properties {
-	width: 50%;
+	width: 100%;
 	overflow: auto;
 	margin: auto;
 }
@@ -12,7 +12,6 @@
 
 #form {
 	margin-top: 10px;
-	margin-bottom: 5px;
 	text-align: center;
 }
 
