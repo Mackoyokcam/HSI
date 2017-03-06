@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block navbar %}
+	{% include "navbar.html" %}
+{% endblock %}
+{% block javascript %}
+    <!-- <script type="text/javascript" src="../static/javascript/comparisons.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="../static/css/comparisons.css"/>
+{% endblock %}
+{% block content %}
+<h1>Property Utility Comparisons</h1>
+<div id="comparison-field">
+    {% if addresses %}
+    <div id="properties">
+        {% for address in addresses %}
+            <div class="data-column">
+                {% if address|string() == "No Data Available" %}
+                <p class="no-data">No Data Available</p>
+                {% else %}
+                <h2>{{ address["address"] }}</h2>
+                <!-- TODO: implement multiple apartments -->
+                <div id="labels">
+                    <p id="apartment">{{ address["apartment"] }}</p>
+                    <hr>
+                    <p id="update-date">{{ data["updateDate"] }}</p>
+                    <hr>
+                    <p id="rent">{{ data["rent"] }}</p>
+                    <hr>
+                    <p id="gas">{{ data["gas"] }}</p>
+                    <hr>
+                    <p id="electrical">{{ data["electrical"] }}</p>
+                    <hr>
+                    <p id="water">{{ data["water"] }}</p>
+                    <hr>
+                    <p id="recycle">{% if data["recycle"] == "True" %} yes {% else %} no {% endif %}</p>
+                    <hr>
+                    <p id="compost">{% if data["compost"] == "True" %} yes {% else %} no {% endif %}</p>
+                </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <form id="comparison-form">
+        <div id="inputs">
+            <input type="text" id="field-1" name="field-1"></input>
+            <input type="text" id="field-2" name="field-2"></input>
+            <input type="text" id="field-3" name="field-3"></input>
+            <input type="text" id="field-4" name="field-4"></input>
+            <input type="submit" value="compare"></input>
+        </div>
+    </form> 
+</div>
+{% endblock %}
