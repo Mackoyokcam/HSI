@@ -172,7 +172,7 @@ def properties():
 			}
 			res = requests.post("http://140.160.142.77:5000/utilDB/area", data=data)
 			if DEBUG:
-				print res.text
+				print (res.text)
 			nearbyData = fromjson(res.text.replace("'", '"'))
 			nearbyData = json.dumps(nearbyData)
 			multiUnit = "False"
