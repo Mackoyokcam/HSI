@@ -253,11 +253,11 @@ def comparisons():
 				print(param)
 				query = queryAddress(param)
 				if query is None:
-					addresses.append("No Data Available")
+					addresses.append({"address": param, "apartment": "none", "data": "No Data Available"})
 				else:
 					firstApt = next(iter(query["units"]))
 					unit = query["units"][firstApt]
-					addresses.append({"address": query["address"], "apartment": firstApt, "data": unit})
+					addresses.append({"address": param, "apartment": firstApt, "data": unit})
 				print(str(addresses))
 	print(str(addresses))
 	if len(addresses) == 0:
