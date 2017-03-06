@@ -58,12 +58,9 @@ function initMap() {
 // populates the map with nearby locations present in the db
 function loadNearby(map) {
 	for (unit in nearbyData) {
-		var lati = parseInt(unit["lat"]);
-		var longi = parseInt(unit["long"]);
-		console.log("lat: " + lati)
-		console.log("long: " + longi)
+		var lati = unit["lat"];
+		var longi = unit["long"];
 		loc = {lat:lati, lng:longi};
-		console.log(loc);
 		var marker = new google.maps.Marker({
 			position: loc,
 			map: map,
