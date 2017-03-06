@@ -106,7 +106,7 @@ def account_view():
 @app.route('/properties', methods=['GET', 'POST'])
 def properties():
 	DEBUG = True
-	searchString = request.args.get('search_string')
+	searchString = request.args.get('searchString')
 	if (searchString == ""):
 		return render_template("properties.html", searchString=searchString)
 	data = {
@@ -229,6 +229,35 @@ def simpleadd():
 def distance():
 	return render_template('distance.html')
 
+def queryAddress(address):
+	data = {
+		"key" : "",
+		"origins" : address
+	}
+	res = requests.post("http://140.160.142.77:5000/utilDB/query", data=data)
+	addressData = fromjson(res.text.replace("'", '"'))
+	if addressData["status"] = True:
+		return addressData
+	else:
+		return None
+
+@app.route('/comparison', methods=['GET'])
+def comparison():
+	addresses = [];
+	for i in range(1, 5):
+		field = "field-" + str(i)
+		if field in request.args:
+			query = queryAddress(request.args.get(field))
+			if query is None:
+				addresses.append("No Data Available")
+			else:
+				firstApt = next(iter(query["units"]))
+				unit = query["units"][firstApt]
+				addresses.append({"address": query["address"], "apartment": firstApt, "data": unit})
+	if len(addresses) == 0:
+		return render_template("comparison.html")
+	else:
+		return render_template("comparison.html", addresses=addresses)
 
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():
