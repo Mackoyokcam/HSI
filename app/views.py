@@ -255,9 +255,9 @@ def comparisons():
 				unit = query["units"][firstApt]
 				addresses.append({"address": query["address"], "apartment": firstApt, "data": unit})
 	if len(addresses) == 0:
-		return render_template("comparison.html")
+		return render_template("comparisons.html")
 	else:
-		return render_template("comparison.html", addresses=addresses)
+		return render_template("comparisons.html", addresses=addresses)
 
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():
