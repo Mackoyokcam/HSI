@@ -23,7 +23,6 @@ def csrf_error(reason):
 # reverse of the built in |tojson filter
 @app.template_filter()
 def fromjson(jsonString):
-	print(jsonString)
 	return json.loads(jsonString)
 
 # routes
@@ -237,7 +236,8 @@ def queryAddress(address):
 	}
 	res = requests.post("http://140.160.142.77:5000/utilDB/query", data=data)
 	addressData = fromjson(res.text.replace("'", '"'))
-	if addressData["status"] == True:
+	print(addressData["status"])
+	if addressData["status"] == "True":
 		return addressData
 	else:
 		return None
