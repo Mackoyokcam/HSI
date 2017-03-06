@@ -247,7 +247,7 @@ def comparisons():
 	addresses = [];
 	for i in range(1, 5):
 		field = "field-" + str(i)
-		if field != "" in request.args:
+		if field in request.args:
 			param = request.args.get(field)
 			if param != "":
 				print(param)
