@@ -71,23 +71,20 @@ def account():
 		util_post_data['key'] = ''
 
 		# Add User to DB.
-		user_result = requests.post('http://140.160.142.77:5000/userDB/addUser', data=user_post_data)
+		# user_result = requests.post('http://140.160.142.77:5000/userDB/addUser', data=user_post_data)
 		# user_response = requests.post('http://requestb.in/1d62yzd1', data=user_post_data)
-		print(user_result)
+		# print(user_result)
 		# Add Info to UtilDB
-		# util_response = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
-	 
-				
-		# util_result = util.response.json()
+		util_response = requests.post('http://140.160.142.77:5000/utilDB/add', data=util_post_data)
+		util_result = util_response.json()
 		# user_result = user_response.json()
-		# util_add = json.dumps(util_result)
+		util_add = json.dumps(util_result)
 		# user_add = json.dumps(user_result)
 
 		# test bin
 		# util_add = requests.post('http://requestb.in/16s31qr1', data=util_add)
-		return render_template('search.html') #add user_add=useradd
 
-		#return render_template('add_response.html', utilData=util_add) #add user_add=useradd
+		return render_template('add_response.html', utilData=util_add) #add user_add=useradd
 
 	return render_template("account_creation.html", form=userform, addressform=addressform, loginform=loginform)
 
