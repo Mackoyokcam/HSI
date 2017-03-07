@@ -85,12 +85,12 @@ function submitFunction() {
                         var distance = start_address['distance']['text'];
                         var duration = start_address['duration']['text'];
                         document.getElementById('results').innerHTML += "<p> From: " + orig[i] + "<br> To: " + dest[j] +
-                            "<br>Distance: " + distance + "<br> Duration: " + duration +
+                            "<br>Distance: " + distance + "<br> Walking Duration: " + duration +
                             "</p><br>";
 
                     } else {
                         document.getElementById('results').innerHTML += "<p> From: " + orig[i] + "<br> To: " + dest[j] +
-                            "<br>Distance: No available data. <br> Duration: No available data.</p><br>";
+                            "<br>Distance: No available data. <br> Walking Duration: No available data.</p><br>";
                     }
                 }
             }
