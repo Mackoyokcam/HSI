@@ -175,10 +175,10 @@ class Hsi_Api:
         j = 0
         apt_data={}
         if (origins is not None):
-            print(origins)
             if ('status' in origins):
                 data.update({'addr'+str(j):i['status']})
-            else:    
+            else:
+                print(origins)
                 form_addr = origins.pop('address')
                 data.update({'address': form_addr})
                 try:
@@ -186,7 +186,7 @@ class Hsi_Api:
                 except mongoerrors.PyMongoError:
                     return '{"status":"'+str(db.command("getLastError")['code'])+'"}'
                 if len(apt) is 0:
-                    apt_data.update({"status":"ZERO DB RESULTS", "units":{}})
+                    apt_data.update({"status":"ZERO DB RESULTS", "units":{}, 'lat':origins['lat'], 'long':origins['long']})
                 else:
                     units= {}
                     apt_data={"status":'True'}                    
@@ -195,11 +195,16 @@ class Hsi_Api:
                         new_i.update({"apt":k})
                         cursor = 0
                         try:
-                            cursor = db.util.find(new_i, { "_id":0 , 'apt':0, 'address':0, 'lat':0, 'long':0}).sort("updateDate", -1).limit(1)
+                            cursor = db.util.find(new_i, { "_id":0 , 'apt':0}).sort("updateDate", -1).limit(1)
                             cursor = next(cursor, None)
                         except mongoerrors.PyMongoError:
                             units.update({k:{"status":str(db.command("getLastError")['code'])}})
-                        else:                            
+                        else:
+                            if len(units) is 0:
+                                apt_data.update({'lat':cursor.pop('lat'), 'long':cursor.pop('long')})
+                            else:
+                                cursor.pop('lat')
+                                cursor.pop('long')
                             units.update({k: cursor})
                     apt_data.update({'units':units})
                 ws = json.loads(self.get_single_walkscore(form_addr, origins['lat'], origins['long']))
@@ -211,7 +216,7 @@ class Hsi_Api:
                 
         elif (geocode is not None):
             for g in geocode:
-                print(g)
+                
                 unit = {}
                 apt_data = {}
                 geo = json.loads(g)['results'][0]
@@ -233,11 +238,11 @@ class Hsi_Api:
                         unit_tmp = unit
                         unit_tmp.update({'apt': k})
                         try:
-                            cursor = db.util.find(unit_tmp, { "_id":0, 'apt':0, 'address':0}).sort("updateDate", -1).limit(1)
+                            cursor = db.util.find(unit_tmp, { "_id":0, 'apt':0}).sort("updateDate", -1).limit(1)
                             cursor = next(cursor, None)
                         except mongoerrors.PyMongoError:
                             t.update({k:{"status":str(db.command("getLastError")['code'])}})
-                        else:
+                        else:                            
                             apt_data.update({k: cursor})
                 data.update({"addr"+str(j):apt_data})    
                 j = j+1
@@ -263,9 +268,24 @@ class Hsi_Api:
         try:
             MDBclient = MongoClient()
             db = MDBclient.test
-            cursor = db.util.aggregate([{'$match': {'lat': {'$lt': lat + lat_bounds, '$gt': lat - lat_bounds, '$ne': lat}, 'long': {'$lt': lng + lng_bounds, '$gt': lng - lng_bounds, '$ne': lng}}}, {'$group': {'_id': {'address': '$address', 'lat': '$lat', 'long': '$long'}}}])
+            #aggregate formatted for readability
+            cursor = db.util.aggregate([\
+            {'$match': \
+             {'lat': \
+              {'$lt': lat + lat_bounds, '$gt': lat - lat_bounds},\
+              'long': \
+              {'$lt': lng + lng_bounds, '$gt': lng - lng_bounds}\
+             }\
+            },\
+            {'$group': \
+             {'_id': \
+              {'address': '$address', 'lat': '$lat', 'long': '$long'}\
+             }\
+            }])
             for i in cursor:
-                result.append(i)
+                t = i['_id']
+                if (t['lat'] != lat) or (t['long'] != lng):
+                    result.append(t)
         except mongoerrors.PyMongoError:
             return '[{"status": "Error: "'+str(db.command("getLastError")['code'])+'"}]'
         return str(result)

@@ -201,12 +201,14 @@ Does not include the lat/long combo included with the request
 @app.route('/utilDB/area', methods = ['POST'])
 def utilArea():
     param_keys = MultiDict.to_dict(request.form).keys()
+    if 'key' not in param_keys or ('key' in param_keys and valid(request.form['key']) == False):
+        return str([VALIDATION_ERROR])
     if 'lat' in param_keys and 'long' in param_keys:
         try:
             lat = float(request.form['lat'])
             lng = float(request.form['long'])
         except ValueError:
-            return [FORMAT_ERROR]
+            return str([FORMAT_ERROR])
         else:
             api = hsi_api.Hsi_Api(CONFIG_FILE_URL)
             return api.utilArea(lat,lng)
